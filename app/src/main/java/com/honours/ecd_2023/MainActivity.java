@@ -99,6 +99,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void ShowVideo(View view) {
+
+        Intent intent = new Intent(MainActivity.this,ShowVideo.class);
+        startActivity(intent);
+
+
     }
 
     private void UploadVideo(){
