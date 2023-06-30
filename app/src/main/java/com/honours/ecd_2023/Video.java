@@ -1,12 +1,12 @@
 package com.honours.ecd_2023;
 
-public class Member {
+public class Video {
 
     private String name;
     private String Videourl;
     private String search;
 
-    public Member(){
+    public Video(){
 
 
     }

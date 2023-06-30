@@ -15,7 +15,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.MediaController;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
@@ -28,7 +27,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-public class MainActivity extends AppCompatActivity {
+public class VideoContent extends AppCompatActivity {
 
     private static final int PICK_VIDEO = 1;
     VideoView videoView;
@@ -39,15 +38,15 @@ public class MainActivity extends AppCompatActivity {
     MediaController mediaController;
     StorageReference storageReference;
     DatabaseReference databaseReference;
-    Member member;
+    Video video;
     UploadTask uploadTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_video_content);
 
-        member = new Member();
+        video = new Video();
         storageReference = FirebaseStorage.getInstance().getReference("Video");
         databaseReference = FirebaseDatabase.getInstance().getReference("video");
 
@@ -100,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void ShowVideo(View view) {
 
-        Intent intent = new Intent(MainActivity.this,ShowVideo.class);
+        Intent intent = new Intent(VideoContent.this,ShowVideo.class);
         startActivity(intent);
 
 
@@ -132,15 +131,15 @@ public class MainActivity extends AppCompatActivity {
                     if(task.isSuccessful()){
                     Uri downloadUrl = task.getResult();
                     progressBar.setVisibility(View.INVISIBLE);
-                        Toast.makeText(MainActivity.this, "Data Saved ", Toast.LENGTH_SHORT).show();
-                    member.setName(videoName);
-                    member.setVideourl(downloadUrl.toString());
-                    member.setSearch(search);
+                        Toast.makeText(VideoContent.this, "Data Saved ", Toast.LENGTH_SHORT).show();
+                    video.setName(videoName);
+                    video.setVideourl(downloadUrl.toString());
+                    video.setSearch(search);
 
                     String i = databaseReference.push().getKey();
-                    databaseReference.child(i).setValue(member);
+                    databaseReference.child(i).setValue(video);
                     }else{
-                        Toast.makeText(MainActivity.this, "Failed", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(VideoContent.this, "Failed", Toast.LENGTH_SHORT).show();
                     }
                 }
             });

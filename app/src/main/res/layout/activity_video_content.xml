@@ -6,7 +6,7 @@
     android:layout_margin="10dp"
     android:orientation="vertical"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".VideoContent">
 
    <VideoView
        android:layout_width="match_parent"
