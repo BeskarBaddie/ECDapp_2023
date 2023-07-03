@@ -143,4 +143,17 @@ public class Articles extends AppCompatActivity {
         });
 
     }
+
+    public void retrievePDF(View view)
+    {
+        startActivity(new Intent(Articles.this,ViewPDF.class));
+
+        @Override
+        public void onBackPressed(){
+            super.OnBackPressed();
+    }
+
+
+
+    }
 }
