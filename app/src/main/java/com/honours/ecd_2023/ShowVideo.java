@@ -1,6 +1,5 @@
 package com.honours.ecd_2023;
 
-import android.graphics.HardwareRenderer;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,13 +41,13 @@ public class ShowVideo extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        FirebaseRecyclerOptions<Member> options = new FirebaseRecyclerOptions.Builder<Member>()
-                .setQuery(databaseReference,Member.class)
+        FirebaseRecyclerOptions<Video> options = new FirebaseRecyclerOptions.Builder<Video>()
+                .setQuery(databaseReference, Video.class)
                 .build();
 
-        FirebaseRecyclerAdapter<Member,ViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Member, ViewHolder>(options) {
+        FirebaseRecyclerAdapter<Video,ViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Video, ViewHolder>(options) {
             @Override
-            protected void onBindViewHolder(@NonNull ViewHolder holder, int position, @NonNull Member model) {
+            protected void onBindViewHolder(@NonNull ViewHolder holder, int position, @NonNull Video model) {
 
                 holder.setExoplayer(getApplication(),model.getName(),model.getVideourl());
 

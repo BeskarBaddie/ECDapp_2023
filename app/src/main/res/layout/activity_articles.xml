@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Articles"
+    android:orientation="vertical">
+
+
+    <Button
+        android:id="@+id/button_upload_pdf"
+        android:layout_width="match_parent"
+        android:layout_height="37dp"
+        android:layout_margin="20dp"
+        android:text="Upload" />
+
+    <Button
+        android:id="@+id/button_retrieve_pdf"
+        android:layout_width="match_parent"
+        android:layout_height="37dp"
+        android:layout_margin="20dp"
+        android:text="Show"
+        android:onClick="retrievePDF"/>
+
+    <EditText
+        android:id="@+id/edittext"
+        android:layout_width="138dp"
+        android:layout_height="match_parent"
+        android:layout_marginTop="60dp"
+        android:layout_marginBottom="20dp"
+        android:height="10dp"
+        android:hint="@string/press_here_to_upload" />
+
+
+</LinearLayout>
