@@ -10,6 +10,10 @@ public class pdfFile {
         this.url = url;
     }
 
+    public pdfFile() {
+        // Default constructor required for Firebase deserialization
+    }
+
     public String getFileName() {
         return fileName;
     }

@@ -64,7 +64,7 @@ public class Articles extends AppCompatActivity {
         Intent intent = new Intent();
         intent.setType("application/pdf");
         intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Select pdf file to upload"),101);
+        startActivityForResult(Intent.createChooser(intent, "Select pdf file to upload"), 101);
 
     }
 
@@ -72,7 +72,7 @@ public class Articles extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == 101 && resultCode == RESULT_OK && data != null && data.getData() != null){
+        if (requestCode == 101 && resultCode == RESULT_OK && data != null && data.getData() != null) {
 
             Uri uri = data.getData();
             String uriString = uri.toString();
@@ -80,18 +80,18 @@ public class Articles extends AppCompatActivity {
             String path = myFile.getAbsolutePath();
             String displayName = null;
 
-            if(uriString.startsWith("content://")){
+            if (uriString.startsWith("content://")) {
 
                 Cursor cursor = null;
                 try {
-                    cursor = this.getContentResolver().query(uri, null,null, null, null);
-                    if (cursor != null && cursor.moveToFirst()){
+                    cursor = this.getContentResolver().query(uri, null, null, null, null);
+                    if (cursor != null && cursor.moveToFirst()) {
                         displayName = cursor.getString(cursor.getColumnIndexOrThrow(OpenableColumns.DISPLAY_NAME));
                     }
-                }finally{
+                } finally {
                     cursor.close();
                 }
-            }else if (uriString.startsWith("file://")){
+            } else if (uriString.startsWith("file://")) {
                 displayName = myFile.getName();
             }
 
@@ -105,7 +105,7 @@ public class Articles extends AppCompatActivity {
                 }
             });
 
-        }else{
+        } else {
             Toast.makeText(this, "failed to upload", Toast.LENGTH_SHORT).show();
         }
     }
@@ -116,18 +116,18 @@ public class Articles extends AppCompatActivity {
         pd.setTitle("pdf uploading");
         pd.show();
 
-        final StorageReference reference = storageReference.child("articleUploads"+ System.currentTimeMillis()
-        + ".pdf");
+        final StorageReference reference = storageReference.child("articleUploads" + System.currentTimeMillis()
+                + ".pdf");
         reference.putFile(data).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
-                while(!uriTask.isComplete());
+                while (!uriTask.isComplete()) ;
                 Uri uri = uriTask.getResult();
 
-                pdfFile fileinModel = new pdfFile(edit.getText().toString(),uri.toString());
+                pdfFile fileinModel = new pdfFile(edit.getText().toString(), uri.toString());
                 databaseReference.child(databaseReference.push().getKey()).setValue(fileinModel);
-                Toast.makeText(Articles.this, "File uploaded succesfully",Toast.LENGTH_SHORT).show();
+                Toast.makeText(Articles.this, "File uploaded succesfully", Toast.LENGTH_SHORT).show();
                 pd.dismiss();
 
 
@@ -136,24 +136,19 @@ public class Articles extends AppCompatActivity {
             @Override
             public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
 
-                float percent = (100* snapshot.getBytesTransferred()/snapshot.getTotalByteCount());
-                pd.setMessage("Uploaded "+ (int) percent + "%");
+                float percent = (100 * snapshot.getBytesTransferred() / snapshot.getTotalByteCount());
+                pd.setMessage("Uploaded " + (int) percent + "%");
 
             }
         });
 
     }
 
-    public void retrievePDF(View view)
-    {
-        startActivity(new Intent(Articles.this,ViewPDF.class));
-
-        @Override
-        public void onBackPressed(){
-            super.OnBackPressed();
-    }
-
+    public void retrievePDF(View view) {
+        startActivity(new Intent(Articles.this, ViewPDF.class));
 
 
     }
+
+
 }

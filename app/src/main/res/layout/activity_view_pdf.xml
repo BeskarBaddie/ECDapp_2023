@@ -20,7 +20,8 @@
         app:layout_constraintEnd_toEndOf="@+id/recyclerview_showPDF"
         app:layout_constraintStart_toStartOf="@+id/recyclerview_showPDF"
         app:layout_constraintTop_toTopOf="parent"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        android:id="@+id/progressBarTwo"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
