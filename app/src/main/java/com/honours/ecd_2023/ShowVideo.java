@@ -1,5 +1,6 @@
 package com.honours.ecd_2023;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -26,6 +27,8 @@ public class ShowVideo extends AppCompatActivity {
     DatabaseReference databaseReference;
     RecyclerView recyclerView;
     FirebaseDatabase database;
+
+    String name, url;
 
 
     @Override
@@ -56,6 +59,25 @@ public class ShowVideo extends AppCompatActivity {
             protected void onBindViewHolder(@NonNull ViewHolder holder, int position, @NonNull Video model) {
 
                 holder.setExoplayer(getApplication(),model.getName(),model.getVideourl());
+
+                holder.setOnClickListener(new ViewHolder.clicklistener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+
+                        name = getItem(position).getName();
+                        url = getItem(position).getVideourl();
+                        Intent intent = new Intent(ShowVideo.this, FullscreenVideo.class);
+                        intent.putExtra("nm" , name);
+                        intent.putExtra("ur",url);
+                        startActivity(intent);
+
+                    }
+
+                    @Override
+                    public void onItemLongClick(View view, int position) {
+
+                    }
+                });
 
             }
 
@@ -91,6 +113,26 @@ public class ShowVideo extends AppCompatActivity {
             protected void onBindViewHolder(@NonNull ViewHolder holder, int position, @NonNull Video model) {
 
                 holder.setExoplayer(getApplication(),model.getName(),model.getVideourl());
+
+                holder.setOnClickListener(new ViewHolder.clicklistener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        name = getItem(position).getName();
+                        url = getItem(position).getVideourl();
+                        Intent intent = new Intent(ShowVideo.this, FullscreenVideo.class);
+                        intent.putExtra("nm" , name);
+                        intent.putExtra("ur",url);
+                        startActivity(intent);
+
+                    }
+
+                    @Override
+                    public void onItemLongClick(View view, int position) {
+
+                    }
+                });
+
+
 
             }
 
