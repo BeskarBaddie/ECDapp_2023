@@ -6,42 +6,110 @@
     android:layout_height="match_parent"
     tools:context=".Dashboard">
 
-
-    <Button
-        android:id="@+id/buttonVideos"
-        android:layout_width="150dp"
-        android:layout_height="50dp"
-        android:layout_weight="1"
-        android:width="79dp"
-
-
-        android:text="Videos"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.816" />
-
-    <Button
-        android:id="@+id/buttonArticles"
-        android:layout_width="150dp"
-        android:layout_height="50dp"
-        android:layout_weight="1"
-        android:width="79dp"
-
-
-        android:text="Articles"
-        app:layout_constraintBottom_toTopOf="@+id/buttonVideos"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
-
-        app:layout_constraintVertical_bias="0.441" />
-
-    <androidx.recyclerview.widget.RecyclerView
+    <LinearLayout
+        android:layout_height="match_parent"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        android:id="@+id/video_widget"/>
+        android:orientation="vertical"
+        android:paddingBottom="30dp">
+
+        <com.google.android.flexbox.FlexboxLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:backgroundTint="@color/black"
+            app:alignContent="flex_start"
+            app:alignItems="center"
+            app:flexDirection="column"
+            app:flexWrap="wrap"
+            app:justifyContent="flex_start">
+
+            <com.google.android.flexbox.FlexboxLayout
+                android:layout_width="match_parent"
+                android:layout_height="140dp"
+                android:layout_marginBottom="12dp"
+
+                android:bottomLeftRadius="70dp"
+                android:bottomRightRadius="70dp"
+                app:alignContent="center"
+                app:alignItems="center"
+                app:flexDirection="row"
+                app:flexWrap="wrap"
+                app:justifyContent="center">
+
+
+                <TextView
+                    android:id="@+id/tvGreeting"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:paddingLeft="30dp"
+                    android:paddingRight="30dp"
+                    android:layout_marginBottom="12dp"
+                    android:text="@string/home_ecd_app"
+                    android:textColor="@color/black"
+                    android:textSize="30sp" />
+
+                <Button
+                    android:id="@+id/buttonVideos"
+                    android:layout_width="150dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:width="79dp"
+
+
+                    android:text="Videos"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.061"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.69" />
+
+                <Button
+                    android:id="@+id/buttonArticles"
+                    android:layout_width="150dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:width="79dp"
+
+
+                    android:text="Articles"
+                    app:layout_constraintBottom_toTopOf="@+id/buttonVideos"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+
+            </com.google.android.flexbox.FlexboxLayout>
+
+            <com.google.android.flexbox.FlexboxLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#FAFAFA"
+                app:alignContent="center"
+                app:alignItems="center"
+                app:flexDirection="row"
+                app:flexWrap="wrap"
+                app:justifyContent="center"
+                app:layout_flexBasisPercent="100%">
+
+
+
+
+            </com.google.android.flexbox.FlexboxLayout>
+
+
+
+
+        </com.google.android.flexbox.FlexboxLayout>
+
+
+
+
+
+
+
+
+
+    </LinearLayout>
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
