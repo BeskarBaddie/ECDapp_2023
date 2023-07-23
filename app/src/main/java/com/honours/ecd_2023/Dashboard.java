@@ -14,8 +14,7 @@ import android.widget.Button;
 
 public class Dashboard extends AppCompatActivity {
 
-    Button buttonVideo;
-    Button buttonArticles;
+
 
     CardView videoCard;
 
@@ -53,7 +52,7 @@ public class Dashboard extends AppCompatActivity {
 
     public void goToVideoContent() {
 
-        Intent intent = new Intent(Dashboard.this,VideoContent.class);
+        Intent intent = new Intent(Dashboard.this,ShowVideo.class);
         startActivity(intent);
 
 
