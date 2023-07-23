@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">ECD_2023</string>
     <string name="press_here_to_upload">press here to upload</string>
+    <string name="home_ecd_app">ECD APP</string>
 </resources>

@@ -2,6 +2,7 @@ package com.honours.ecd_2023;
 
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,21 +14,20 @@ import android.widget.Button;
 
 public class Dashboard extends AppCompatActivity {
 
-    Button buttonVideo;
-    Button buttonArticles;
 
+
+    CardView videoCard;
+
+    CardView articlesCard;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
 
-        buttonVideo = findViewById(R.id.buttonVideos);
-        buttonArticles = findViewById(R.id.buttonArticles);
+        articlesCard = findViewById(R.id.cardArticle);
+        videoCard = findViewById(R.id.cardContent);
 
-
-
-
-        buttonVideo.setOnClickListener(new View.OnClickListener() {
+        videoCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -36,14 +36,13 @@ public class Dashboard extends AppCompatActivity {
             }
         });
 
-        buttonArticles.setOnClickListener(new View.OnClickListener() {
+        articlesCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 goToArticles();
-
             }
         });
+
 
 
 
@@ -53,7 +52,7 @@ public class Dashboard extends AppCompatActivity {
 
     public void goToVideoContent() {
 
-        Intent intent = new Intent(Dashboard.this,VideoContent.class);
+        Intent intent = new Intent(Dashboard.this,ShowVideo.class);
         startActivity(intent);
 
 
