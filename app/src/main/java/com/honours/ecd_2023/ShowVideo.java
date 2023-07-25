@@ -17,6 +17,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.android.exoplayer2.ExoPlayer;
+import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -33,6 +35,9 @@ public class ShowVideo extends AppCompatActivity {
 
     String name, url;
 
+    PlayerView playerView;
+
+    public ExoPlayer player;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +53,9 @@ public class ShowVideo extends AppCompatActivity {
         database = FirebaseDatabase.getInstance();
         databaseReference = database.getReference("video");
         toUpload = findViewById(R.id.uploadVideoScreen);
+
+
+
 
 
         toUpload.setOnClickListener(new View.OnClickListener() {
@@ -109,6 +117,27 @@ public class ShowVideo extends AppCompatActivity {
 
 
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        for (int i = 0; i < recyclerView.getChildCount(); i++) {
+            RecyclerView.ViewHolder viewHolder = recyclerView.getChildViewHolder(recyclerView.getChildAt(i));
+            if (viewHolder instanceof ViewHolder) {
+                ViewHolder exoViewHolder = (ViewHolder) viewHolder;
+                if (exoViewHolder.player != null) {
+                    exoViewHolder.player.stop();
+                    exoViewHolder.player.release();
+                }
+            }
+        }
+
+        final Intent intent = new Intent();
+        setResult(RESULT_OK, intent);
+        finish();
+    }
+
 
 
     public void goToUpload() {

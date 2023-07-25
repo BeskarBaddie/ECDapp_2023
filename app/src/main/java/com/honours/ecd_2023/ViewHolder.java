@@ -20,6 +20,11 @@ public class ViewHolder extends RecyclerView.ViewHolder {
     //PlayerControlView playerView;
     PlayerView playerView;
     Video video;
+    public ExoPlayer player;
+
+    public void setExoPlayer(ExoPlayer player) {
+        this.player = player;
+    }
 
 
     public ViewHolder(@NonNull View itemView) {
@@ -69,6 +74,7 @@ public class ViewHolder extends RecyclerView.ViewHolder {
             playerView.setPlayer(exoPlayer);
             MediaItem mediaItem = MediaItem.fromUri(Videourl);
             exoPlayer.addMediaItems(Collections.singletonList(mediaItem));
+            exoPlayer.setVideoScalingMode(C.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING);
             exoPlayer.prepare();
             exoPlayer.setPlayWhenReady(false);
 
@@ -95,4 +101,5 @@ public class ViewHolder extends RecyclerView.ViewHolder {
     public void setOnClickListener(ViewHolder.clicklistener clicklistener){
         mClickListener = clicklistener;
     }
+
 }

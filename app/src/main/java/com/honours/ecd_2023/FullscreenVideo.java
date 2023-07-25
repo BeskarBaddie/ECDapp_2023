@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.source.MediaSource;
@@ -72,6 +73,7 @@ public class FullscreenVideo extends AppCompatActivity {
         MediaItem mediaItem = MediaItem.fromUri(url);//might be a problem
         player.addMediaItems(Collections.singletonList(mediaItem));
         //player.prepare();
+        player.setVideoScalingMode(C.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING);
         player.setPlayWhenReady(playwhenready);
         player.seekTo(currentwindow,playbackposition);
         player.prepare();
@@ -121,5 +123,15 @@ public class FullscreenVideo extends AppCompatActivity {
             currentwindow = player.getCurrentWindowIndex();
             player = null;
         }
+    }
+    public void onBackPressed(){
+        super.onBackPressed();
+
+        player.stop();
+        releasePlayer();
+
+        final Intent intent = new Intent();
+        setResult(RESULT_OK,intent);
+        finish();
     }
 }
