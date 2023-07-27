@@ -22,9 +22,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-
+import android.os.SystemClock;
+import com.google.firebase.analytics.FirebaseAnalytics;
 public class ViewPDF extends AppCompatActivity {
-
+    private FirebaseAnalytics mFirebaseAnalytics;
     RecyclerView pdfRecyclerView;
     private DatabaseReference pdfReference;
     Query query;
@@ -34,7 +35,7 @@ public class ViewPDF extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_pdf);
-
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         displayPDFs();
     }
 
@@ -103,7 +104,10 @@ public class ViewPDF extends AppCompatActivity {
                             intent.setType("application/pdf");
                             intent.setData(Uri.parse(model.getUrl()));
                             startActivity(intent);
-
+                            Bundle params = new Bundle();
+                            params.putString(FirebaseAnalytics.Param.ITEM_NAME, "PDF Opened");
+                            params.putString("pdf_title", model.getFileName());
+                            mFirebaseAnalytics.logEvent("pdf_opened", params);
 
                         }
                     });

@@ -26,9 +26,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-
+import com.google.firebase.analytics.FirebaseAnalytics;
 public class VideoContent extends AppCompatActivity {
-
+    private FirebaseAnalytics mFirebaseAnalytics;
     private static final int PICK_VIDEO = 1;
     VideoView videoView;
     Button button;
@@ -45,7 +45,7 @@ public class VideoContent extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_content);
-
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         video = new Video();
         storageReference = FirebaseStorage.getInstance().getReference("Video");
         databaseReference = FirebaseDatabase.getInstance().getReference("video");
@@ -138,6 +138,8 @@ public class VideoContent extends AppCompatActivity {
 
                     String i = databaseReference.push().getKey();
                     databaseReference.child(i).setValue(video);
+                    logVideoUploadedEvent(videoName, downloadUrl.toString());
+
                     }else{
                         Toast.makeText(VideoContent.this, "Failed", Toast.LENGTH_SHORT).show();
                     }
@@ -150,5 +152,12 @@ public class VideoContent extends AppCompatActivity {
             Toast.makeText(this, "All fields are required", Toast.LENGTH_SHORT).show();
         }
 
+    }
+    private void logVideoUploadedEvent(String videoName, String downloadUrl) {
+        Bundle params = new Bundle();
+        params.putString(FirebaseAnalytics.Param.ITEM_NAME, "Video Uploaded");
+        params.putString("video_name", videoName);
+        params.putString("download_url", downloadUrl);
+        mFirebaseAnalytics.logEvent("video_uploaded", params);
     }
 }
