@@ -3,6 +3,7 @@ package com.honours.ecd_2023;
 import android.app.Application;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -22,14 +23,23 @@ public class ViewHolder extends RecyclerView.ViewHolder {
     Video video;
     public ExoPlayer player;
 
+    ImageButton downloadBtn;
+
     public void setExoPlayer(ExoPlayer player) {
         this.player = player;
+    }
+
+    public void setButton(){
+        downloadBtn = itemView.findViewById(R.id.download_button_viewholder);
     }
 
 
     public ViewHolder(@NonNull View itemView) {
 
         super(itemView);
+
+        downloadBtn = itemView.findViewById(R.id.download_button_viewholder);
+
 
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,6 +62,7 @@ public class ViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void setExoplayer(Application application, String name, String Videourl){
+
 
         TextView textView = itemView.findViewById(R.id.tv_item);
         playerView = itemView.findViewById(R.id.exoplayer_item);

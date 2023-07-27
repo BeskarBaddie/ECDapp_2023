@@ -26,7 +26,17 @@
         android:id="@+id/exoplayer_item"
         android:layout_margin="3dp"
         app:use_controller="true"
-        app:resize_mode="fill"/>
+        app:resize_mode="fill">
+
+        <ImageButton
+            android:id="@+id/download_button_viewholder"
+            android:layout_width="wrap_content"
+            android:layout_height="17dp"
+            android:layout_marginLeft="80dp"
+            android:background="@android:color/transparent"
+            android:padding="5dp"
+            android:src="@drawable/baseline_cloud_download_24" />
+    </com.google.android.exoplayer2.ui.PlayerView>
 
     </LinearLayout>
 
