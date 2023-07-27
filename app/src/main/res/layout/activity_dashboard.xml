@@ -11,7 +11,7 @@
     <com.google.android.flexbox.FlexboxLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
+        android:background="#FFFFE0"
         app:alignContent="center"
         app:alignItems="center"
         app:flexDirection="column"
@@ -55,13 +55,13 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Articles and Posters"
+                        android:text="Videos"
                         android:textColor="@color/white"
                         android:textSize="18sp" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Find articles and posters with information to help you
+                        android:text="Find videos with information to help you
                         raise your child"
                         android:textColor="@color/white"
                         android:padding="10dp"
