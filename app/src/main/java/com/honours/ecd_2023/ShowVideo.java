@@ -2,6 +2,7 @@ package com.honours.ecd_2023;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,14 +24,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.Query;
-
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 public class ShowVideo extends AppCompatActivity {
 
     DatabaseReference databaseReference;
     RecyclerView recyclerView;
     FirebaseDatabase database;
-
+    private FirebaseAnalytics mFirebaseAnalytics;
     Button toUpload;
 
     String name, url;
@@ -43,7 +44,7 @@ public class ShowVideo extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_video);
-
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
 
 
@@ -112,10 +113,7 @@ public class ShowVideo extends AppCompatActivity {
         };
         firebaseRecyclerAdapter.startListening();
         recyclerView.setAdapter(firebaseRecyclerAdapter);
-
-
-
-
+        logVideoSearchedEvent(searchText);
     }
 
     @Override
@@ -145,7 +143,7 @@ public class ShowVideo extends AppCompatActivity {
         Intent intent = new Intent(ShowVideo.this,VideoContent.class);
         startActivity(intent);
 
-
+        logVideoUploadedEvent();
     }
 
 
@@ -172,7 +170,7 @@ public class ShowVideo extends AppCompatActivity {
                         intent.putExtra("nm" , name);
                         intent.putExtra("ur",url);
                         startActivity(intent);
-
+                        logVideoSelectedEvent(name);
                     }
 
                     @Override
@@ -180,7 +178,6 @@ public class ShowVideo extends AppCompatActivity {
 
                     }
                 });
-
 
 
             }
@@ -221,5 +218,21 @@ public class ShowVideo extends AppCompatActivity {
         });
 
         return super.onCreateOptionsMenu(menu);
+    }
+    private void logVideoSearchedEvent(String searchQuery) {
+        Bundle params = new Bundle();
+        params.putString(FirebaseAnalytics.Param.SEARCH_TERM, searchQuery);
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SEARCH, params);
+    }
+    private void logVideoSelectedEvent(String videoName) {
+        Bundle params = new Bundle();
+        params.putString(FirebaseAnalytics.Param.ITEM_NAME, "Video Selected");
+        params.putString("video_name", videoName); // Replace with the actual video name
+        mFirebaseAnalytics.logEvent("video_selected", params);
+    }
+    private void logVideoUploadedEvent(){
+        Bundle params = new Bundle();
+        params.putString(FirebaseAnalytics.Param.ITEM_NAME, "Video Uploaded");
+        mFirebaseAnalytics.logEvent("video_uploaded", params);
     }
 }

@@ -26,7 +26,6 @@ public class Dashboard extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
-        // Obtain the FirebaseAnalytics instance.
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         articlesCard = findViewById(R.id.cardArticle);
         videoCard = findViewById(R.id.cardContent);
@@ -39,7 +38,6 @@ public class Dashboard extends AppCompatActivity {
                 Bundle bundle = new Bundle();
                 bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "video_card");
                 bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "video_button");
-                Log.d("FirebaseEvent", "Article card clicked" + bundle.toString());
                 mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
             }
         });
@@ -51,7 +49,6 @@ public class Dashboard extends AppCompatActivity {
                 Bundle bundle = new Bundle();
                 bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "articles_card");
                 bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "articles_button");
-                Log.d("FirebaseEvent", "Video card clicked" + bundle.toString());
                 mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
             }
         });
