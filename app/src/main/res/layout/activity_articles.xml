@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/rounded_rectangle"
     tools:context=".Articles"
     android:orientation="vertical">
 
@@ -11,26 +12,32 @@
     <Button
         android:id="@+id/button_upload_pdf"
         android:layout_width="match_parent"
-        android:layout_height="37dp"
+        android:layout_height="wrap_content"
         android:layout_margin="20dp"
-        android:color="@color/black"
+        android:padding="10dp"
+        android:background="@drawable/rounded_rectangle"
+        android:textSize="17sp"
         android:text="Upload" />
 
     <Button
         android:id="@+id/button_retrieve_pdf"
         android:layout_width="match_parent"
-        android:layout_height="37dp"
+        android:layout_height="wrap_content"
         android:layout_margin="20dp"
+        android:padding="10dp"
+        android:background="@drawable/rounded_rectangle"
+        android:textSize="17sp"
         android:text="Show"
         android:onClick="retrievePDF"/>
 
     <EditText
         android:id="@+id/edittext"
-        android:layout_width="138dp"
-        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_height="338dp"
         android:layout_marginTop="60dp"
         android:layout_marginBottom="20dp"
         android:height="10dp"
+        android:gravity="center"
         android:hint="@string/press_here_to_upload" />
 
 

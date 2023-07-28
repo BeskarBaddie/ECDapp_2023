@@ -6,6 +6,7 @@
     android:layout_margin="10dp"
     android:orientation="vertical"
     android:layout_height="match_parent"
+    android:background="@drawable/rounded_rectangle"
     tools:context=".VideoContent">
 
    <VideoView
@@ -46,6 +47,8 @@
         android:layout_height="wrap_content"
         android:id="@+id/button_upload_main"
         android:layout_margin="20dp"
+        android:textSize="17sp"
+        android:background="@drawable/rounded_rectangle"
         android:text="Upload"/>
     <ProgressBar
         android:layout_width="match_parent"
