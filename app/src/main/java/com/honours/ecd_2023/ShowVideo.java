@@ -116,21 +116,28 @@ public class ShowVideo extends AppCompatActivity {
                     }
                 });
                 holder.setButton();
-                holder.downloadBtn.setOnClickListener(v -> {
-                    Toast.makeText(ShowVideo.this, "button clicked", Toast.LENGTH_SHORT).show();
-                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-                        if (checkCallingOrSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)==
-                                PackageManager.PERMISSION_DENIED){
-                            String permission = (Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                downloadBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(ShowVideo.this, "button clicked", Toast.LENGTH_SHORT).show();
+                        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                            if (checkCallingOrSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)==
+                                    PackageManager.PERMISSION_DENIED){
+                                String permission = (Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
-                            requestPermissions(new String[]{permission},PERMISSION_STORAGE_CODE);
+                                requestPermissions(new String[]{permission},PERMISSION_STORAGE_CODE);
+                            }else{
+                                downloadurl = getItem(position).getVideourl();
+                                startDownloading(downloadurl);
+                            }
                         }else{
                             downloadurl = getItem(position).getVideourl();
                             startDownloading(downloadurl);
                         }
-                    }else{
-                        downloadurl = getItem(position).getVideourl();
-                        startDownloading(downloadurl);
+
+
+
+
                     }
                 });
 
