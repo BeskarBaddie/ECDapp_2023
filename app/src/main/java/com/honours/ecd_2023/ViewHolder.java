@@ -45,19 +45,6 @@ public class ViewHolder extends RecyclerView.ViewHolder {
 
         super(itemView);
 
-        downloadBtn = itemView.findViewById(R.id.download_button_viewholder);
-
-        downloadBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-
-
-
-            }
-        });
-
-
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
