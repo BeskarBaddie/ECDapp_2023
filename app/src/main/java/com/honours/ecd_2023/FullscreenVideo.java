@@ -2,11 +2,16 @@ package com.honours.ecd_2023;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import android.app.Application;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.exoplayer2.C;
@@ -30,6 +35,8 @@ public class FullscreenVideo extends AppCompatActivity {
     private boolean playwhenready = false;
     private int currentwindow= 0;
     private long playbackposition =0;
+    boolean fullscreen = false;
+    ImageView fullscreenButton;
 
 
 
@@ -51,7 +58,48 @@ public class FullscreenVideo extends AppCompatActivity {
         url = intent.getExtras().getString("ur");
         String title = intent.getExtras().getString("nm");
 
+        fullscreenButton = playerView.findViewById(R.id.exo_fullscreen_icon);
+
         textView.setText(title);
+
+        fullscreenButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(fullscreen){
+                    fullscreenButton.setImageDrawable(ContextCompat.getDrawable(FullscreenVideo.this,R.drawable.baseline_fullscreen_24)
+                            );
+                    getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
+                    if (getSupportActionBar() != null){
+                        getSupportActionBar().show();
+                    }
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                    LinearLayout.LayoutParams params = (LinearLayout.LayoutParams)playerView.getLayoutParams();
+                    params.width = params.MATCH_PARENT;
+                    params.height = (int) (200 * getApplicationContext().getResources().getDisplayMetrics().density);
+                    playerView.setLayoutParams(params);
+                    fullscreen = false;
+                }else{
+                    fullscreenButton.setImageDrawable(ContextCompat.getDrawable(FullscreenVideo.this,R.drawable.baseline_fullscreen_exit_24)
+                    );
+
+                    getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN
+                    | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+                    if (getSupportActionBar() != null){
+                        getSupportActionBar().hide();
+                    }
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                    LinearLayout.LayoutParams params = (LinearLayout.LayoutParams)playerView.getLayoutParams();
+                    params.width = params.MATCH_PARENT;
+                    params.height = params.MATCH_PARENT;
+                    playerView.setLayoutParams(params);
+                    fullscreen = true;
+
+                }
+
+            }
+        });
+
+
 
 
 
