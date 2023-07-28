@@ -45,7 +45,7 @@ public class ShowVideo extends AppCompatActivity {
 
     ImageButton downloadBtn;
 
-    String name, url, downloadurl;
+    String name, url, downloadurl, tag;
 
     PlayerView playerView;
 
@@ -65,7 +65,7 @@ public class ShowVideo extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         database = FirebaseDatabase.getInstance();
-        databaseReference = database.getReference("video");
+        databaseReference = database.getReference("content");
         toUpload = findViewById(R.id.uploadVideoScreen);
 
 
@@ -95,17 +95,19 @@ public class ShowVideo extends AppCompatActivity {
             @Override
             protected void onBindViewHolder(@NonNull ViewHolder holder, int position, @NonNull Video model) {
 
-                holder.setExoplayer(getApplication(),model.getName(),model.getVideourl());
+                holder.setExoplayer(getApplication(),model.getTitle(),model.getFileURL(), model.getTags(), model.getTopics());
 
                 holder.setOnClickListener(new ViewHolder.clicklistener() {
                     @Override
                     public void onItemClick(View view, int position) {
 
-                        name = getItem(position).getName();
-                        url = getItem(position).getVideourl();
+                        name = getItem(position).getTitle();
+                        url = getItem(position).getFileURL();
+                        tag = getItem(position).getTags();
                         Intent intent = new Intent(ShowVideo.this, FullscreenVideo.class);
                         intent.putExtra("nm" , name);
                         intent.putExtra("ur",url);
+                        intent.putExtra("tg",tag);
                         startActivity(intent);
 
                     }
@@ -113,24 +115,6 @@ public class ShowVideo extends AppCompatActivity {
                     @Override
                     public void onItemLongClick(View view, int position) {
 
-                    }
-                });
-                holder.setButton();
-                holder.downloadBtn.setOnClickListener(v -> {
-                    Toast.makeText(ShowVideo.this, "button clicked", Toast.LENGTH_SHORT).show();
-                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-                        if (checkCallingOrSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)==
-                                PackageManager.PERMISSION_DENIED){
-                            String permission = (Manifest.permission.WRITE_EXTERNAL_STORAGE);
-
-                            requestPermissions(new String[]{permission},PERMISSION_STORAGE_CODE);
-                        }else{
-                            downloadurl = getItem(position).getVideourl();
-                            startDownloading(downloadurl);
-                        }
-                    }else{
-                        downloadurl = getItem(position).getVideourl();
-                        startDownloading(downloadurl);
                     }
                 });
 
@@ -150,26 +134,6 @@ public class ShowVideo extends AppCompatActivity {
 
 
     }
-
-    private void startDownloading(String downloadurl) {
-        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(downloadurl));
-        request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI |
-                DownloadManager.Request.NETWORK_MOBILE);
-        request.setTitle("Download");
-        request.setDescription("Downloading file...");
-        request.allowScanningByMediaScanner();
-        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS,""+System.currentTimeMillis());
-
-        DownloadManager manager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
-        manager.enqueue(request);
-
-
-
-
-
-    }
-
     @Override
     public void onBackPressed() {
         super.onBackPressed();
@@ -213,13 +177,13 @@ public class ShowVideo extends AppCompatActivity {
             @Override
             protected void onBindViewHolder(@NonNull ViewHolder holder, int position, @NonNull Video model) {
 
-                holder.setExoplayer(getApplication(),model.getName(),model.getVideourl());
+                holder.setExoplayer(getApplication(),model.getTitle(),model.getFileURL(), model.getTags(), model.getTopics());
 
                 holder.setOnClickListener(new ViewHolder.clicklistener() {
                     @Override
                     public void onItemClick(View view, int position) {
-                        name = getItem(position).getName();
-                        url = getItem(position).getVideourl();
+                        name = getItem(position).getTitle();
+                        url = getItem(position).getFileURL();
                         Intent intent = new Intent(ShowVideo.this, FullscreenVideo.class);
                         intent.putExtra("nm" , name);
                         intent.putExtra("ur",url);
@@ -273,20 +237,5 @@ public class ShowVideo extends AppCompatActivity {
         });
 
         return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode) {
-            case PERMISSION_STORAGE_CODE: {
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    startDownloading(downloadurl);
-                } else {
-                    Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
-                }
-
-            }
-        }
     }
 }

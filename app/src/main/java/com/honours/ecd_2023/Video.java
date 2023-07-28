@@ -2,29 +2,49 @@ package com.honours.ecd_2023;
 
 public class Video {
 
-    private String name;
-    private String Videourl;
+    private String Title;
+    private String FileURL;
     private String search;
+
+    private String Topics;
+
+    private String Tags;
+
+    public String getTopics() {
+        return Topics;
+    }
+
+    public void setTopics(String Topics) {
+        this.Topics = Topics;
+    }
+
+    public String getTags() {
+        return Tags;
+    }
+
+    public void setTags(String Tags) {
+        this.Tags = Tags;
+    }
 
     public Video(){
 
 
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return Title;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTitle(String title) {
+        this.Title = title;
     }
 
-    public String getVideourl() {
-        return Videourl;
+    public String getFileURL() {
+        return FileURL;
     }
 
-    public void setVideourl(String videourl) {
-        Videourl = videourl;
+    public void setFileURL(String FileURL) {
+        this.FileURL = FileURL;
     }
 
     public String getSearch() {

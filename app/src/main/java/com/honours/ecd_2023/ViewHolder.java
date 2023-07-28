@@ -1,10 +1,15 @@
 package com.honours.ecd_2023;
 
 import android.app.Application;
+import android.app.DownloadManager;
+import android.content.Context;
+import android.net.Uri;
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -25,6 +30,8 @@ public class ViewHolder extends RecyclerView.ViewHolder {
 
     ImageButton downloadBtn;
 
+
+
     public void setExoPlayer(ExoPlayer player) {
         this.player = player;
     }
@@ -39,6 +46,16 @@ public class ViewHolder extends RecyclerView.ViewHolder {
         super(itemView);
 
         downloadBtn = itemView.findViewById(R.id.download_button_viewholder);
+
+        downloadBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+
+
+            }
+        });
 
 
         itemView.setOnClickListener(new View.OnClickListener() {
@@ -61,13 +78,15 @@ public class ViewHolder extends RecyclerView.ViewHolder {
 
     }
 
-    public void setExoplayer(Application application, String name, String Videourl){
+    public void setExoplayer(Application application, String name, String Videourl, String tag, String Topics){
 
 
         TextView textView = itemView.findViewById(R.id.tv_item);
+        TextView tagView = itemView.findViewById(R.id.tag_item);
         playerView = itemView.findViewById(R.id.exoplayer_item);
 
         textView.setText(name);
+        tagView.setText(tag);
 
         try {
            // BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter.Builder(application).build();
