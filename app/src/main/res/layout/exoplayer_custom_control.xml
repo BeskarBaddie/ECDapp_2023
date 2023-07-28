@@ -29,6 +29,7 @@
             style="@style/ExoMediaButton.Rewind">
         </ImageButton>
 
+
         <ImageButton
             android:id="@+id/exo_play"
             android:layout_width="wrap_content"
