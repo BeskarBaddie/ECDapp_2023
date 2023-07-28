@@ -38,6 +38,15 @@ android:orientation="vertical">
         android:id="@+id/tv_item"
         android:textColor="@android:color/black"/>
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Tag"
+        android:textSize="20sp"
+        android:id="@+id/tag_item"
+        android:layout_marginLeft="200dp"
+        android:textColor="@android:color/black"/>
+
 </com.google.android.exoplayer2.ui.PlayerView>
 
 

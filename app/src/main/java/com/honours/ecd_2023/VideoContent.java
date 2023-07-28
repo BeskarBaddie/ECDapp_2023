@@ -48,7 +48,7 @@ public class VideoContent extends AppCompatActivity {
 
         video = new Video();
         storageReference = FirebaseStorage.getInstance().getReference("Video");
-        databaseReference = FirebaseDatabase.getInstance().getReference("video");
+        databaseReference = FirebaseDatabase.getInstance().getReference("content");
 
         videoView = findViewById(R.id.videoview_main);
         button = findViewById(R.id.button_upload_main);
@@ -84,7 +84,7 @@ public class VideoContent extends AppCompatActivity {
 
     public void ChooseVideo(View view) {
         Intent intent = new Intent();
-        intent.setType("video/*");
+        intent.setType("content/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(intent,PICK_VIDEO);
 
@@ -132,8 +132,8 @@ public class VideoContent extends AppCompatActivity {
                     Uri downloadUrl = task.getResult();
                     progressBar.setVisibility(View.INVISIBLE);
                         Toast.makeText(VideoContent.this, "Data Saved ", Toast.LENGTH_SHORT).show();
-                    video.setName(videoName);
-                    video.setVideourl(downloadUrl.toString());
+                    video.setTitle(videoName);
+                    video.setFileURL(downloadUrl.toString());
                     video.setSearch(search);
 
                     String i = databaseReference.push().getKey();

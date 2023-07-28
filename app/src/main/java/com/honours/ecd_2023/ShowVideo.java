@@ -45,7 +45,7 @@ public class ShowVideo extends AppCompatActivity {
 
     ImageButton downloadBtn;
 
-    String name, url, downloadurl;
+    String name, url, downloadurl, tag;
 
     PlayerView playerView;
 
@@ -65,7 +65,7 @@ public class ShowVideo extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         database = FirebaseDatabase.getInstance();
-        databaseReference = database.getReference("video");
+        databaseReference = database.getReference("content");
         toUpload = findViewById(R.id.uploadVideoScreen);
 
 
@@ -95,17 +95,19 @@ public class ShowVideo extends AppCompatActivity {
             @Override
             protected void onBindViewHolder(@NonNull ViewHolder holder, int position, @NonNull Video model) {
 
-                holder.setExoplayer(getApplication(),model.getName(),model.getVideourl());
+                holder.setExoplayer(getApplication(),model.getTitle(),model.getFileURL(), model.getTags(), model.getTopics());
 
                 holder.setOnClickListener(new ViewHolder.clicklistener() {
                     @Override
                     public void onItemClick(View view, int position) {
 
-                        name = getItem(position).getName();
-                        url = getItem(position).getVideourl();
+                        name = getItem(position).getTitle();
+                        url = getItem(position).getFileURL();
+                        tag = getItem(position).getTags();
                         Intent intent = new Intent(ShowVideo.this, FullscreenVideo.class);
                         intent.putExtra("nm" , name);
                         intent.putExtra("ur",url);
+                        intent.putExtra("tg",tag);
                         startActivity(intent);
 
                     }
@@ -175,13 +177,13 @@ public class ShowVideo extends AppCompatActivity {
             @Override
             protected void onBindViewHolder(@NonNull ViewHolder holder, int position, @NonNull Video model) {
 
-                holder.setExoplayer(getApplication(),model.getName(),model.getVideourl());
+                holder.setExoplayer(getApplication(),model.getTitle(),model.getFileURL(), model.getTags(), model.getTopics());
 
                 holder.setOnClickListener(new ViewHolder.clicklistener() {
                     @Override
                     public void onItemClick(View view, int position) {
-                        name = getItem(position).getName();
-                        url = getItem(position).getVideourl();
+                        name = getItem(position).getTitle();
+                        url = getItem(position).getFileURL();
                         Intent intent = new Intent(ShowVideo.this, FullscreenVideo.class);
                         intent.putExtra("nm" , name);
                         intent.putExtra("ur",url);
