@@ -30,6 +30,7 @@
         android:text="Choose video"
         android:clickable="true"
         android:onClick="ChooseVideo"
+        android:textColor="@color/black"
         android:layout_gravity="center"
         android:layout_marginTop="20dp"/>
 
@@ -39,6 +40,7 @@
         android:text="Show video"
         android:clickable="true"
         android:onClick="ShowVideo"
+        android:textColor="@color/black"
         android:layout_gravity="center"
         android:layout_marginTop="20dp"/>
     
