@@ -169,9 +169,11 @@ public class ShowVideo extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        Query query = databaseReference.orderByChild("Tags").equalTo("video");
+
 
         FirebaseRecyclerOptions<Video> options = new FirebaseRecyclerOptions.Builder<Video>()
-                .setQuery(databaseReference, Video.class)
+                .setQuery(query, Video.class)
                 .build();
 
         FirebaseRecyclerAdapter<Video,ViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Video, ViewHolder>(options) {
@@ -179,32 +181,27 @@ public class ShowVideo extends AppCompatActivity {
             protected void onBindViewHolder(@NonNull ViewHolder holder, int position, @NonNull Video model) {
 
 
+                holder.setExoplayer(getApplication(), model.getTitle(), model.getFileURL(), model.getTags(), model.getTopics());
 
-                    holder.setExoplayer(getApplication(), model.getTitle(), model.getFileURL(), model.getTags(), model.getTopics());
+                holder.setOnClickListener(new ViewHolder.clicklistener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        name = getItem(position).getTitle();
+                        url = getItem(position).getFileURL();
+                        tag = getItem(position).getTags();
+                        Intent intent = new Intent(ShowVideo.this, FullscreenVideo.class);
+                        intent.putExtra("nm", name);
+                        intent.putExtra("ur", url);
+                        intent.putExtra("tg", tag);
+                        startActivity(intent);
 
-                    holder.setOnClickListener(new ViewHolder.clicklistener() {
-                        @Override
-                        public void onItemClick(View view, int position) {
-                            name = getItem(position).getTitle();
-                            url = getItem(position).getFileURL();
-                            tag = getItem(position).getTags();
-                            Intent intent = new Intent(ShowVideo.this, FullscreenVideo.class);
-                            intent.putExtra("nm", name);
-                            intent.putExtra("ur", url);
-                            intent.putExtra("tg", tag);
-                            startActivity(intent);
+                    }
 
-                        }
+                    @Override
+                    public void onItemLongClick(View view, int position) {
 
-                        @Override
-                        public void onItemLongClick(View view, int position) {
-
-                        }
-                    });
-
-
-
-
+                    }
+                });
 
             }
 
@@ -222,6 +219,7 @@ public class ShowVideo extends AppCompatActivity {
 
 
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
