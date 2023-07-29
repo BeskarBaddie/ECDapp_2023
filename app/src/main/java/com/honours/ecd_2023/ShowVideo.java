@@ -14,8 +14,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -35,6 +38,9 @@ import com.google.firebase.database.Query;
 
 
 public class ShowVideo extends AppCompatActivity {
+
+    private Spinner spinnerTags;
+    private String selectedTopic;
 
     private static final int PERMISSION_STORAGE_CODE = 1000;
     DatabaseReference databaseReference;
@@ -59,8 +65,6 @@ public class ShowVideo extends AppCompatActivity {
         setContentView(R.layout.activity_show_video);
 
 
-
-
         recyclerView = findViewById(R.id.recyclerview_Showvideo);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -68,6 +72,29 @@ public class ShowVideo extends AppCompatActivity {
         databaseReference = database.getReference("content");
         toUpload = findViewById(R.id.uploadVideoScreen);
 
+        spinnerTags = findViewById(R.id.spinner_tags);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
+                this, R.array.tag_options, android.R.layout.simple_spinner_item
+        );
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerTags.setAdapter(adapter);
+
+        // Set up the Spinner listener
+        spinnerTags.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // Get the selected tag
+                selectedTopic = parent.getItemAtPosition(position).toString();
+
+                // Call the filterVideos method with the selected tag
+                filterVideos(selectedTopic);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Handle the case when nothing is selected (optional)
+            }
+        });
 
 
 
@@ -81,6 +108,68 @@ public class ShowVideo extends AppCompatActivity {
             }
         });
     }
+
+    private void filterVideos(String topic){
+        Query query;
+        if ("All".equals(topic)) {
+            // Fetch all videos if "All" is selected
+            query = databaseReference.orderByChild("tags").equalTo("video");
+        } else {
+            // Fetch videos with the selected tag
+            query = databaseReference.orderByChild("topics").equalTo(topic);
+        }
+
+
+        FirebaseRecyclerOptions<Video> options = new FirebaseRecyclerOptions.Builder<Video>()
+                .setQuery(query, Video.class)
+                .build();
+
+        FirebaseRecyclerAdapter<Video,ViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Video, ViewHolder>(options) {
+            @Override
+            protected void onBindViewHolder(@NonNull ViewHolder holder, int position, @NonNull Video model) {
+
+
+                holder.setExoplayer(getApplication(), model.getTitle(), model.getFileURL(), model.getTags(), model.getTopics());
+
+                holder.setOnClickListener(new ViewHolder.clicklistener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+
+                        name = getItem(position).getTitle();
+                        url = getItem(position).getFileURL();
+                        tag = getItem(position).getTags();
+                        Intent intent = new Intent(ShowVideo.this, FullscreenVideo.class);
+                        intent.putExtra("nm", name);
+                        intent.putExtra("ur", url);
+                        intent.putExtra("tg", tag);
+                        startActivity(intent);
+
+                    }
+
+                    @Override
+                    public void onItemLongClick(View view, int position) {
+
+                    }
+                });
+
+            }
+
+            @NonNull
+            @Override
+            public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item,parent,false);
+                return new ViewHolder(view);
+            }
+        };
+        firebaseRecyclerAdapter.startListening();
+        recyclerView.setAdapter(firebaseRecyclerAdapter);
+
+
+
+
+    }
+
+
 
     private void firebaseSearch(String searchText){
         String query = searchText.toLowerCase();
@@ -170,8 +259,12 @@ public class ShowVideo extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
+
+        Query query = databaseReference.orderByChild("tags").equalTo("video");
+
+
         FirebaseRecyclerOptions<Video> options = new FirebaseRecyclerOptions.Builder<Video>()
-                .setQuery(databaseReference, Video.class)
+                .setQuery(query, Video.class)
                 .build();
 
         FirebaseRecyclerAdapter<Video,ViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Video, ViewHolder>(options) {
@@ -179,32 +272,27 @@ public class ShowVideo extends AppCompatActivity {
             protected void onBindViewHolder(@NonNull ViewHolder holder, int position, @NonNull Video model) {
 
 
+                holder.setExoplayer(getApplication(), model.getTitle(), model.getFileURL(), model.getTags(), model.getTopics());
 
-                    holder.setExoplayer(getApplication(), model.getTitle(), model.getFileURL(), model.getTags(), model.getTopics());
+                holder.setOnClickListener(new ViewHolder.clicklistener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        name = getItem(position).getTitle();
+                        url = getItem(position).getFileURL();
+                        tag = getItem(position).getTags();
+                        Intent intent = new Intent(ShowVideo.this, FullscreenVideo.class);
+                        intent.putExtra("nm", name);
+                        intent.putExtra("ur", url);
+                        intent.putExtra("tg", tag);
+                        startActivity(intent);
 
-                    holder.setOnClickListener(new ViewHolder.clicklistener() {
-                        @Override
-                        public void onItemClick(View view, int position) {
-                            name = getItem(position).getTitle();
-                            url = getItem(position).getFileURL();
-                            tag = getItem(position).getTags();
-                            Intent intent = new Intent(ShowVideo.this, FullscreenVideo.class);
-                            intent.putExtra("nm", name);
-                            intent.putExtra("ur", url);
-                            intent.putExtra("tg", tag);
-                            startActivity(intent);
+                    }
 
-                        }
+                    @Override
+                    public void onItemLongClick(View view, int position) {
 
-                        @Override
-                        public void onItemLongClick(View view, int position) {
-
-                        }
-                    });
-
-
-
-
+                    }
+                });
 
             }
 
@@ -222,6 +310,7 @@ public class ShowVideo extends AppCompatActivity {
 
 
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

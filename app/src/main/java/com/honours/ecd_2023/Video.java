@@ -35,8 +35,8 @@ public class Video {
         return Title;
     }
 
-    public void setTitle(String title) {
-        this.Title = title;
+    public void setTitle(String Title) {
+        this.Title = Title;
     }
 
     public String getFileURL() {
