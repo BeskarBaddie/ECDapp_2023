@@ -84,7 +84,7 @@ public class VideoContent extends AppCompatActivity {
 
     public void ChooseVideo(View view) {
         Intent intent = new Intent();
-        intent.setType("content/*");
+        intent.setType("video/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(intent,PICK_VIDEO);
 
