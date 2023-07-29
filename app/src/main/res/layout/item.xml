@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="230dp"
+    android:layout_height="283dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardUseCompatPadding="true"
-    android:background="#FFFFE0"
-    app:cardCornerRadius="2dp">
-    
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+    app:cardCornerRadius="16dp"
+    app:cardElevation="4dp"
+    app:cardBackgroundColor="@android:color/white">
+
+<LinearLayout
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:orientation="vertical">
 
     <TextView
         android:layout_width="match_parent"
@@ -18,27 +19,30 @@
         android:text="Name"
         android:textSize="20sp"
         android:id="@+id/tv_item"
+        android:textColor="@android:color/black"
+        android:layout_marginLeft="10dp"/>
+
+<com.google.android.exoplayer2.ui.PlayerView
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    android:background="#FFFFE0"
+    android:id="@+id/exoplayer_item"
+    android:layout_margin="3dp"
+    app:use_controller="true"
+    app:resize_mode="fill">
+
+
+</com.google.android.exoplayer2.ui.PlayerView>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Tag"
+        android:textSize="20sp"
+        android:id="@+id/tag_item"
+        android:layout_marginLeft="10dp"
         android:textColor="@android:color/black"/>
 
-    <com.google.android.exoplayer2.ui.PlayerView
-        android:layout_width="match_parent"
-        android:layout_height="230dp"
-        android:id="@+id/exoplayer_item"
-        android:layout_margin="3dp"
-        app:use_controller="true"
-        app:resize_mode="fill">
+</LinearLayout>
 
-        <ImageButton
-            android:id="@+id/download_button_viewholder"
-            android:layout_width="wrap_content"
-            android:layout_height="17dp"
-            android:layout_marginLeft="80dp"
-            android:background="@android:color/transparent"
-            android:padding="5dp"
-            android:src="@drawable/baseline_cloud_download_24" />
-    </com.google.android.exoplayer2.ui.PlayerView>
-
-    </LinearLayout>
-
-
-</androidx.cardview.widget.CardView>
+    </androidx.cardview.widget.CardView>
