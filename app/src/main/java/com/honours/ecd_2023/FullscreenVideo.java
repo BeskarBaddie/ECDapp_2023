@@ -72,6 +72,7 @@ public class FullscreenVideo extends AppCompatActivity {
         if (videoName!= null) {
             textView.setText(videoName);
         }
+        Log.d("VIDEO NAME", videoName);
         player.addMediaItems(Collections.singletonList(mediaItem));
         //player.prepare();
         player.setVideoScalingMode(C.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING);
@@ -148,21 +149,21 @@ public class FullscreenVideo extends AppCompatActivity {
     private void logVideoStartedEvent(String videoName) {
         Bundle params = new Bundle();
         params.putString(FirebaseAnalytics.Param.ITEM_NAME, "Video Started");
-        params.putString("video_name", videoName); // Replace with the actual video name
+        params.putString("video_name", videoName);
         mFirebaseAnalytics.logEvent("video_started", params);
         Log.d("Video Started", "Video Started" +params.toString());
     }
     private void logVideoWatchedCompletelyEvent(String videoName) {
         Bundle params = new Bundle();
         params.putString(FirebaseAnalytics.Param.ITEM_NAME, "Video Watched Completely");
-        params.putString("video_name", videoName); // Replace with the actual video name
+        params.putString("video_name", videoName);
         mFirebaseAnalytics.logEvent("video_watched_completely", params);
         Log.d("Video Watched Completely", "Video Watched Completely" +params.toString());
     }
     private void logVideoWatchedPercentageEvent(float percentage, String videoName) {
         Bundle params = new Bundle();
         params.putString(FirebaseAnalytics.Param.ITEM_NAME, "Video Watched Percentage");
-        params.putString("video_name", videoName); // Replace with the actual video name
+        params.putString("video_name", videoName);
         params.putFloat("percentage_watched", percentage);
         mFirebaseAnalytics.logEvent("video_watched_percentage", params);
         Log.d("Video Watched Percentage", "Video Watched Percentage" +params.toString());
