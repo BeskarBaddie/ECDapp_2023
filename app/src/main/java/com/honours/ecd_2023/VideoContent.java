@@ -135,6 +135,8 @@ public class VideoContent extends AppCompatActivity {
                     video.setTitle(videoName);
                     video.setFileURL(downloadUrl.toString());
                     video.setSearch(search);
+                    video.setTags("video");
+                    video.setTopics("Community Content");
 
                     String i = databaseReference.push().getKey();
                     databaseReference.child(i).setValue(video);

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="tag_options">
+        <item>All</item>
+        <item>Baby Development</item>
+        <item>Baby Health</item>
+        <item>Child Entertainment</item>
+        <item>Parent Health</item>
+        <item>Community Content</item>
+    </string-array>
+</resources>
