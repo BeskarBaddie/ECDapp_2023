@@ -82,7 +82,7 @@ public class FullscreenVideo extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(fullscreen){
-                    fullscreenButton.setImageDrawable(ContextCompat.getDrawable(FullscreenVideo.this,R.drawable.baseline_fullscreen_24)
+                    fullscreenButton.setImageDrawable(ContextCompat.getDrawable(FullscreenVideo.this,R.drawable.ic_fullscreen_open)
                             );
                     getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
                     if (getSupportActionBar() != null){
@@ -95,7 +95,7 @@ public class FullscreenVideo extends AppCompatActivity {
                     playerView.setLayoutParams(params);
                     fullscreen = false;
                 }else{
-                    fullscreenButton.setImageDrawable(ContextCompat.getDrawable(FullscreenVideo.this,R.drawable.baseline_fullscreen_exit_24)
+                    fullscreenButton.setImageDrawable(ContextCompat.getDrawable(FullscreenVideo.this,R.drawable.ic_fullscreen_close)
                     );
 
                     getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN

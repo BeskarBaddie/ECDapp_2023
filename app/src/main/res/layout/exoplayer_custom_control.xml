@@ -103,7 +103,7 @@
                 android:layout_gravity="center"
                 android:adjustViewBounds="true"
                 android:scaleType="fitCenter"
-                android:src="@drawable/baseline_fullscreen_24"/>
+                android:src="@drawable/ic_fullscreen_open"/>
         </FrameLayout>
             
 

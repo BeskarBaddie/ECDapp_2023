@@ -41,16 +41,16 @@
         android:paddingTop="-100dp"
         tools:context=".ShowVideo">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerview_Showvideo"
-        android:layout_width="match_parent"
-        android:layout_height="540dp"
-        android:layout_marginTop="-100dp" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerview_Showvideo"
+            android:layout_width="match_parent"
+            android:layout_height="544dp" />
 
     <Button
         android:id="@+id/uploadVideoScreen"
         android:layout_width="60dp"
         android:layout_height="60dp"
+        android:layout_marginTop="10dp"
         android:drawableLeft="@drawable/upload_48px"
         android:padding="6dp"
         android:layout_marginStart="170dp"
