@@ -147,7 +147,7 @@ public class FullscreenVideo extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = getIntent();
-                Toast.makeText(FullscreenVideo.this, "button clicked", Toast.LENGTH_SHORT).show();
+                Toast.makeText(FullscreenVideo.this, "Video downloading", Toast.LENGTH_SHORT).show();
                 if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
                     if (checkCallingOrSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)==
                             PackageManager.PERMISSION_DENIED){

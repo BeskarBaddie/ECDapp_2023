@@ -84,7 +84,7 @@ public class VideoContent extends AppCompatActivity {
 
     public void ChooseVideo(View view) {
         Intent intent = new Intent();
-        intent.setType("content/*");
+        intent.setType("video/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(intent,PICK_VIDEO);
 
@@ -107,10 +107,10 @@ public class VideoContent extends AppCompatActivity {
 
     private void UploadVideo(){
 
-        String videoName = editText.getText().toString();
+        String Title = editText.getText().toString();
         String search = editText.getText().toString().toLowerCase();
 
-        if(videoUri != null || !TextUtils.isEmpty(videoName)){
+        if(videoUri != null || !TextUtils.isEmpty(Title)){
 
             progressBar.setVisibility(View.VISIBLE);
             final StorageReference reference = storageReference.child(System.currentTimeMillis() + "." + getExt(videoUri));
@@ -132,8 +132,10 @@ public class VideoContent extends AppCompatActivity {
                     Uri downloadUrl = task.getResult();
                     progressBar.setVisibility(View.INVISIBLE);
                         Toast.makeText(VideoContent.this, "Data Saved ", Toast.LENGTH_SHORT).show();
-                    video.setTitle(videoName);
+                    video.setTitle(Title);
                     video.setFileURL(downloadUrl.toString());
+                    video.setTags("video");
+                    video.setTopics("baby stuff");
                     video.setSearch(search);
 
                     String i = databaseReference.push().getKey();
