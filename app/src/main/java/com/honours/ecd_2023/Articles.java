@@ -10,6 +10,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.OpenableColumns;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,6 +24,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.io.File;
 
@@ -30,6 +32,7 @@ public class Articles extends AppCompatActivity {
 
     EditText edit;
     Button upload;
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     StorageReference storageReference;
     DatabaseReference databaseReference;
@@ -41,7 +44,7 @@ public class Articles extends AppCompatActivity {
 
         edit = findViewById(R.id.edittext);
         upload = findViewById(R.id.button_upload_pdf);
-
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this); // Initialize FirebaseAnalytics
         storageReference = FirebaseStorage.getInstance().getReference("Articles");
         databaseReference = FirebaseDatabase.getInstance().getReference("article");
 //should be disabled before you click a pdf
@@ -130,7 +133,7 @@ public class Articles extends AppCompatActivity {
                 Toast.makeText(Articles.this, "File uploaded succesfully", Toast.LENGTH_SHORT).show();
                 pd.dismiss();
 
-
+                logPdfUploadedEvent(edit.getText().toString(), uri.toString());
             }
         }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
             @Override
@@ -143,12 +146,28 @@ public class Articles extends AppCompatActivity {
         });
 
     }
-
+    private void logPdfUploadedEvent(String pdfTitle, String downloadUrl) {
+        Bundle params = new Bundle();
+        params.putString(FirebaseAnalytics.Param.ITEM_NAME, "PDF Uploaded");
+        params.putString("pdf_title", pdfTitle);
+        params.putString("download_url", downloadUrl);
+        mFirebaseAnalytics.logEvent("pdf_uploaded", params);
+    }
     public void retrievePDF(View view) {
+        String pdfTitle = edit.getText().toString();
         startActivity(new Intent(Articles.this, ViewPDF.class));
-
+        logPdfViewedEvent(pdfTitle);
 
     }
+
+    private void logPdfViewedEvent(String pdfTitle) {
+        Bundle params = new Bundle();
+        params.putString(FirebaseAnalytics.Param.ITEM_NAME, "PDF Viewed");
+        params.putString("pdf_title", pdfTitle);
+        mFirebaseAnalytics.logEvent("pdf_viewed", params);
+        Log.d("pdf_viewed", "PDF Viewed: " + pdfTitle);
+    }
+
 
 
 }
