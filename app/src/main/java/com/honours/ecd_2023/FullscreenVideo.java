@@ -17,6 +17,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -47,7 +48,7 @@ public class FullscreenVideo extends AppCompatActivity {
     boolean fullscreen = false;
     ImageView fullscreenButton;
 
-    ImageButton downloadBtn;
+    Button downloadBtn;
 
     String name, downloadurl;
 
@@ -147,7 +148,7 @@ public class FullscreenVideo extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = getIntent();
-                Toast.makeText(FullscreenVideo.this, "button clicked", Toast.LENGTH_SHORT).show();
+                Toast.makeText(FullscreenVideo.this, "Download Started", Toast.LENGTH_SHORT).show();
                 if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
                     if (checkCallingOrSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)==
                             PackageManager.PERMISSION_DENIED){
