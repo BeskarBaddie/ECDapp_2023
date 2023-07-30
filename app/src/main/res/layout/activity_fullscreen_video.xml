@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,48 +7,31 @@
     android:orientation="vertical"
     tools:context=".FullscreenVideo">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="name"
+        android:textSize="24dp"
+        android:textStyle="bold"
+        android:background="@color/white"
+        android:id="@+id/tv_fullscreen"/>
+
+    <com.google.android.exoplayer2.ui.PlayerView
+        android:layout_width="match_parent"
+        android:layout_height="230dp"
+        android:id="@+id/exoplayer_fullscreen"
+        app:controller_layout_id="@layout/exoplayer_custom_control"
+        android:layout_margin="3dp"
+        app:use_controller="true"
+        app:resize_mode="fill"/>
+
+    <Button
+        android:id="@+id/download_button_viewholder"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:text="Download"
+        android:backgroundTint="@color/purple_200"
+        android:layout_gravity="center"></Button>
 
 
-    <LinearLayout
-
-        android:layout_width="410dp"
-        android:layout_height="725dp"
-        android:orientation="vertical"
-        android:layout_margin="6dp"
-        android:gravity="center"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" >
-
-        <TextView
-            android:id="@+id/tv_fullscreen"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:background="@color/white"
-            android:text="Title"
-            android:textColor="@color/black"
-            android:textSize="20dp" />
-
-        <com.google.android.exoplayer2.ui.PlayerView
-            android:layout_width="match_parent"
-            android:layout_height="230dp"
-            android:id="@+id/exoplayer_fullscreen"
-            app:controller_layout_id="@layout/exoplayer_custom_control"
-            android:layout_margin="3dp"
-            app:use_controller="true"
-            app:resize_mode="fill">
-
-        </com.google.android.exoplayer2.ui.PlayerView>
-
-        <ImageButton
-            android:id="@+id/download_button_viewholder"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:paddingTop="200dp"
-            android:scaleType="fitCenter"
-            android:background="@drawable/circle_background_video"
-            android:padding="5dp"
-            android:src="@drawable/baseline_cloud_download_24" />
-
-    </LinearLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

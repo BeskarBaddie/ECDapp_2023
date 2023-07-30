@@ -48,7 +48,7 @@ public class FullscreenVideo extends AppCompatActivity {
     boolean fullscreen = false;
     ImageView fullscreenButton;
 
-    ImageButton downloadBtn;
+    Button downloadBtn;
 
     String name, downloadurl;
 
@@ -83,7 +83,7 @@ public class FullscreenVideo extends AppCompatActivity {
             public void onClick(View v) {
                 if(fullscreen){
                     fullscreenButton.setImageDrawable(ContextCompat.getDrawable(FullscreenVideo.this,R.drawable.ic_fullscreen_open)
-                            );
+                    );
                     getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
                     if (getSupportActionBar() != null){
                         getSupportActionBar().show();
@@ -99,7 +99,7 @@ public class FullscreenVideo extends AppCompatActivity {
                     );
 
                     getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN
-                    | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+                            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
                     if (getSupportActionBar() != null){
                         getSupportActionBar().hide();
                     }
