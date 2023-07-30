@@ -7,46 +7,11 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".FullscreenVideo">
-    <com.google.android.flexbox.FlexboxLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="140dp"
-        android:layout_marginBottom="12dp"
-        android:background="@drawable/oval"
-        android:bottomLeftRadius="70dp"
-        android:bottomRightRadius="70dp"
-        app:alignContent="center"
-        app:alignItems="center"
-        app:flexDirection="row"
-        app:flexWrap="wrap"
-        app:justifyContent="center"
-        app:layout_constraintTop_toTopOf="parent">
-        <com.google.android.flexbox.FlexboxLayout
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:background="@drawable/circle_background"
-            android:bottomLeftRadius="70dp"
-            android:bottomRightRadius="70dp"
-            app:alignContent="center"
-            app:alignItems="center"
-            app:flexDirection="row"
-            app:flexWrap="wrap"
-            app:justifyContent="center"
-            app:layout_constraintTop_toTopOf="parent">
-            <ImageView
-                android:paddingBottom="2dp"
-                android:layout_width="120dp"
-                android:layout_height="120dp"
-                android:src="@drawable/yayb_logo"
-                app:alignContent="center"
-                android:contentDescription="TODO"/>
-        </com.google.android.flexbox.FlexboxLayout>
-    </com.google.android.flexbox.FlexboxLayout>
+
+
 
     <LinearLayout
-        android:paddingTop="140dp"
+
         android:layout_width="410dp"
         android:layout_height="725dp"
         android:orientation="vertical"
@@ -61,20 +26,20 @@
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:background="@color/white"
-            android:paddingTop="200dp"
-            android:text="name"
+            android:text="Title"
             android:textColor="@color/black"
             android:textSize="20dp" />
 
         <com.google.android.exoplayer2.ui.PlayerView
             android:layout_width="match_parent"
             android:layout_height="230dp"
-            android:paddingTop="200dp"
             android:id="@+id/exoplayer_fullscreen"
             app:controller_layout_id="@layout/exoplayer_custom_control"
             android:layout_margin="3dp"
             app:use_controller="true"
-            app:resize_mode="fill"/>
+            app:resize_mode="fill">
+
+        </com.google.android.exoplayer2.ui.PlayerView>
 
         <ImageButton
             android:id="@+id/download_button_viewholder"

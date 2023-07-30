@@ -48,7 +48,7 @@ public class FullscreenVideo extends AppCompatActivity {
     boolean fullscreen = false;
     ImageView fullscreenButton;
 
-    Button downloadBtn;
+    ImageButton downloadBtn;
 
     String name, downloadurl;
 
