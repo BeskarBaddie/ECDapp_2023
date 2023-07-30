@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import com.google.firebase.analytics.FirebaseAnalytics;
+
 
 import android.Manifest;
 import android.app.Application;
@@ -51,6 +53,8 @@ public class FullscreenVideo extends AppCompatActivity {
     Button downloadBtn;
 
     String name, downloadurl;
+    private FirebaseAnalytics firebaseAnalytics;
+
 
 
 
@@ -64,7 +68,7 @@ public class FullscreenVideo extends AppCompatActivity {
         actionBar.setTitle("Fullscreen");
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
-
+        firebaseAnalytics = FirebaseAnalytics.getInstance(this);
         playerView = findViewById(R.id.exoplayer_fullscreen);
         textView = findViewById(R.id.tv_fullscreen);
 
@@ -183,6 +187,9 @@ public class FullscreenVideo extends AppCompatActivity {
 
         DownloadManager manager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
         manager.enqueue(request);
+        Bundle bundle = new Bundle();
+        bundle.putString("video_url", downloadurl);
+        firebaseAnalytics.logEvent("video_download", bundle);
 
     }
 
