@@ -33,6 +33,7 @@ import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSource;
 import com.google.android.exoplayer2.util.Util;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.util.Collections;
 
@@ -48,9 +49,11 @@ public class FullscreenVideo extends AppCompatActivity {
     boolean fullscreen = false;
     ImageView fullscreenButton;
 
+    private FirebaseAnalytics firebaseAnalytics;
+
     Button downloadBtn;
 
-    String name, downloadurl;
+    String title, downloadurl;
 
 
 
@@ -68,9 +71,11 @@ public class FullscreenVideo extends AppCompatActivity {
         playerView = findViewById(R.id.exoplayer_fullscreen);
         textView = findViewById(R.id.tv_fullscreen);
 
+        firebaseAnalytics = FirebaseAnalytics.getInstance(this);
+
         Intent intent = getIntent();
         url = intent.getExtras().getString("ur");
-        String title = intent.getExtras().getString("nm");
+        title = intent.getExtras().getString("nm");
 
         fullscreenButton = playerView.findViewById(R.id.exo_fullscreen_icon);
 
@@ -183,6 +188,10 @@ public class FullscreenVideo extends AppCompatActivity {
 
         DownloadManager manager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
         manager.enqueue(request);
+
+        Bundle bundle = new Bundle();
+        bundle.putString("title", title);
+        firebaseAnalytics.logEvent("video_download", bundle);
 
     }
 
