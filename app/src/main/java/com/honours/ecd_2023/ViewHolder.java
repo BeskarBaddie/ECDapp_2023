@@ -70,7 +70,7 @@ public class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView textView = itemView.findViewById(R.id.tv_item);
         TextView tagView = itemView.findViewById(R.id.tag_item);
-        playerView = itemView.findViewById(R.id.exoplayer_item);
+        //playerView = itemView.findViewById(R.id.exoplayer_item);
 
         textView.setText(name);
         tagView.setText(tag);
