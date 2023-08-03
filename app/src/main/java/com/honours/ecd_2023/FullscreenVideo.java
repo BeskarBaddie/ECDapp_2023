@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 
 import android.Manifest;
 import android.app.Application;
@@ -31,11 +32,23 @@ import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.ProgressiveMediaSource;
 import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.upstream.DataSource;
+import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSource;
 import com.google.android.exoplayer2.util.Util;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Collections;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class FullscreenVideo extends AppCompatActivity {
     private static final int PERMISSION_STORAGE_CODE = 1000;
@@ -53,7 +66,9 @@ public class FullscreenVideo extends AppCompatActivity {
 
     Button downloadBtn;
 
-    String title, downloadurl;
+    Button checkButton;
+
+    String title, downloadurl, check;
 
 
 
@@ -82,6 +97,15 @@ public class FullscreenVideo extends AppCompatActivity {
         textView.setText(title);
 
         downloadBtn = findViewById(R.id.download_button_viewholder);
+        checkButton = findViewById(R.id.check_button);
+
+        checkButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goToDownloads();
+            }
+        });
+
 
         fullscreenButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -130,10 +154,13 @@ public class FullscreenVideo extends AppCompatActivity {
         DataSource.Factory datasourcefactory =
                 new DefaultHttpDataSource.Factory();//might be a problem 13 mins
         return new ProgressiveMediaSource.Factory(datasourcefactory).createMediaSource(MediaItem.fromUri(uri));//problem
+
+        //DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(this,
+                //Util.getUserAgent(this, "YourAppName")); // Replace "YourAppName" with your app's name.
+        //return new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(MediaItem.fromUri(uri));
     }
 
     private void initializeplayer(){
-
 
 
 
@@ -146,6 +173,10 @@ public class FullscreenVideo extends AppCompatActivity {
         player.setPlayWhenReady(playwhenready);
         player.seekTo(currentwindow,playbackposition);
         player.prepare();
+
+
+
+
 
 
 
@@ -162,11 +193,11 @@ public class FullscreenVideo extends AppCompatActivity {
                         requestPermissions(new String[]{permission},PERMISSION_STORAGE_CODE);
                     }else{
                         downloadurl = intent.getExtras().getString("ur");
-                        startDownloading(downloadurl);
+                        startDownloading(downloadurl,title);
                     }
                 }else{
                     downloadurl = intent.getExtras().getString("ur");
-                    startDownloading(downloadurl);
+                    startDownloading(downloadurl,title);
                 }
 
 
@@ -176,22 +207,58 @@ public class FullscreenVideo extends AppCompatActivity {
         });
     }
 
-    private void startDownloading(String downloadurl) {
-        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(downloadurl));
-        request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI |
-                DownloadManager.Request.NETWORK_MOBILE);
-        request.setTitle("Download");
-        request.setDescription("Downloading file...");
-        request.allowScanningByMediaScanner();
-        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS,""+System.currentTimeMillis());
+    private void startDownloading(String downloadurl, String title) {
+        if (downloadurl == null) {
+            // Handle the case when download URL is null
+            Toast.makeText(this, "Download URL is not available", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-        DownloadManager manager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
-        manager.enqueue(request);
+        String fileName = title + ".mp4";
+        File internalStorageDir = getApplicationContext().getFilesDir();
+        File videoFile = new File(internalStorageDir, fileName);
 
-        Bundle bundle = new Bundle();
-        bundle.putString("title", title);
-        firebaseAnalytics.logEvent("video_download", bundle);
+        OkHttpClient okHttpClient = new OkHttpClient();
+
+        Request request = new Request.Builder()
+                .url(downloadurl)
+                .build();
+
+        okHttpClient.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                // Handle download failure
+                runOnUiThread(() -> Toast.makeText(FullscreenVideo.this, "Download failed", Toast.LENGTH_SHORT).show());
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful() && response.body() != null) {
+                    try (InputStream inputStream = response.body().byteStream();
+                         OutputStream outputStream = new FileOutputStream(videoFile)) {
+
+                        byte[] buffer = new byte[4096];
+                        int bytesRead;
+                        while ((bytesRead = inputStream.read(buffer)) != -1) {
+                            outputStream.write(buffer, 0, bytesRead);
+                        }
+
+                        runOnUiThread(() -> {
+                            // File downloaded successfully, do additional processing if needed
+                            Toast.makeText(FullscreenVideo.this, "Download completed", Toast.LENGTH_SHORT).show();
+                            // Now you can use the videoFile for offline playback within the app
+                            // E.g., you can pass the videoFile's path to the ExoPlayer to play the video.
+                        });
+                    } catch (IOException e) {
+                        // Handle download error
+                        runOnUiThread(() -> Toast.makeText(FullscreenVideo.this, "Error while saving the file", Toast.LENGTH_SHORT).show());
+                    }
+                } else {
+                    // Handle download error
+                    runOnUiThread(() -> Toast.makeText(FullscreenVideo.this, "Download failed", Toast.LENGTH_SHORT).show());
+                }
+            }
+        });
 
     }
 
@@ -251,12 +318,20 @@ public class FullscreenVideo extends AppCompatActivity {
         finish();
     }
 
+    public void goToDownloads() {
+
+        Intent intent = new Intent(FullscreenVideo.this,VideoListActivity.class);
+        startActivity(intent);
+
+
+    }
+
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
             case PERMISSION_STORAGE_CODE: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    startDownloading(downloadurl);
+                    startDownloading(downloadurl, title);
                 } else {
                     Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
                 }

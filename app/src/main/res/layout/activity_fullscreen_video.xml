@@ -35,5 +35,19 @@
         android:backgroundTint="@color/purple_200"
         android:layout_gravity="center"></Button>
 
+    <Button
+        android:id="@+id/check_button"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:text="check"
+        android:backgroundTint="@color/purple_200"
+        android:layout_gravity="center"></Button>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Downloaded"
+        android:id="@+id/check_text"></TextView>
+
 
 </LinearLayout>
