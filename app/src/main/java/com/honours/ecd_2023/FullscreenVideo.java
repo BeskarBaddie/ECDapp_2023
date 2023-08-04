@@ -66,7 +66,7 @@ public class FullscreenVideo extends AppCompatActivity {
 
     Button downloadBtn;
 
-    Button checkButton;
+
 
     String title, downloadurl, check;
 
@@ -97,14 +97,8 @@ public class FullscreenVideo extends AppCompatActivity {
         textView.setText(title);
 
         downloadBtn = findViewById(R.id.download_button_viewholder);
-        checkButton = findViewById(R.id.check_button);
 
-        checkButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goToDownloads();
-            }
-        });
+
 
 
         fullscreenButton.setOnClickListener(new View.OnClickListener() {

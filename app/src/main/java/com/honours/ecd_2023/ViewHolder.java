@@ -8,6 +8,7 @@ import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,6 +20,7 @@ import com.google.android.exoplayer2.ExoPlayer;
 
 import com.google.android.exoplayer2.ui.PlayerView;
 
+import java.io.File;
 import java.util.Collections;
 
 public class ViewHolder extends RecyclerView.ViewHolder {
@@ -28,7 +30,7 @@ public class ViewHolder extends RecyclerView.ViewHolder {
     Video video;
     public ExoPlayer player;
 
-    ImageButton downloadBtn;
+    ImageView downloadBtn;
 
 
 
@@ -36,14 +38,21 @@ public class ViewHolder extends RecyclerView.ViewHolder {
         this.player = player;
     }
 
-    public void setButton(){
-        downloadBtn = itemView.findViewById(R.id.download_button_viewholder);
-    }
 
 
     public ViewHolder(@NonNull View itemView) {
 
         super(itemView);
+
+        downloadBtn = itemView.findViewById(R.id.download_button_icon);
+
+        downloadBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+            }
+        });
 
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,6 +73,21 @@ public class ViewHolder extends RecyclerView.ViewHolder {
 
 
     }
+
+    public void setDownloadButtonIcon(Application application, String name) {
+        ImageView downloadBtn = itemView.findViewById(R.id.download_button_icon);
+        File internalStorageDir = application.getApplicationContext().getFilesDir();
+        File videoFile = new File(internalStorageDir, name + ".mp4");
+        if (videoFile.exists()) {
+            // If the video file exists in internal storage, show a different icon
+            downloadBtn.setImageResource(R.drawable.download_green);
+        } else {
+            // If the video file doesn't exist in internal storage, show the default download icon
+            downloadBtn.setImageResource(R.drawable.download_black);
+        }
+    }
+
+
 
     public void setExoplayer(Application application, String name, String Videourl, String tag, String Topics){
 
