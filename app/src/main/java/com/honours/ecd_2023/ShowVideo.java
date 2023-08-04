@@ -125,7 +125,7 @@ public class ShowVideo extends AppCompatActivity {
         Query query;
         if ("All".equals(topic)) {
             // Fetch all videos if "All" is selected
-            query = databaseReference.orderByChild("tags").equalTo("video");
+            query = databaseReference.orderByChild("tags");
         } else {
             // Fetch videos with the selected tag
             query = databaseReference.orderByChild("topics").equalTo(topic);
@@ -150,11 +150,24 @@ public class ShowVideo extends AppCompatActivity {
                         name = getItem(position).getTitle();
                         url = getItem(position).getFileURL();
                         tag = getItem(position).getTags();
-                        Intent intent = new Intent(ShowVideo.this, FullscreenVideo.class);
-                        intent.putExtra("nm", name);
-                        intent.putExtra("ur", url);
-                        intent.putExtra("tg", tag);
-                        startActivity(intent);
+                        if(tag.equals("video")){
+                            Intent intent = new Intent(ShowVideo.this, FullscreenVideo.class);
+                            intent.putExtra("nm", name);
+                            intent.putExtra("ur", url);
+                            intent.putExtra("tg", tag);
+                            startActivity(intent);
+
+                        }
+                        if(tag.equals("pdf")){
+                            Intent intent = new Intent(ShowVideo.this, PDFViewerActivity.class);
+                            intent.putExtra("nm", name);
+                            intent.putExtra("ur", url);
+                            intent.putExtra("tg", tag);
+                            startActivity(intent);
+
+                        }
+
+
 
                     }
 
@@ -206,11 +219,22 @@ public class ShowVideo extends AppCompatActivity {
                             name = getItem(position).getTitle();
                             url = getItem(position).getFileURL();
                             tag = getItem(position).getTags();
-                            Intent intent = new Intent(ShowVideo.this, FullscreenVideo.class);
-                            intent.putExtra("nm", name);
-                            intent.putExtra("ur", url);
-                            intent.putExtra("tg", tag);
-                            startActivity(intent);
+                            if(tag.equals("video")){
+                                Intent intent = new Intent(ShowVideo.this, FullscreenVideo.class);
+                                intent.putExtra("nm", name);
+                                intent.putExtra("ur", url);
+                                intent.putExtra("tg", tag);
+                                startActivity(intent);
+
+                            }
+                            if(tag.equals("pdf")){
+                                Intent intent = new Intent(ShowVideo.this, PDFViewerActivity.class);
+                                intent.putExtra("nm", name);
+                                intent.putExtra("ur", url);
+                                intent.putExtra("tg", tag);
+                                startActivity(intent);
+
+                            }
 
                         }
 
@@ -272,7 +296,7 @@ public class ShowVideo extends AppCompatActivity {
         super.onStart();
 
 
-        Query query = databaseReference.orderByChild("tags").equalTo("video");
+        Query query = databaseReference.orderByChild("tags");
 
 
         FirebaseRecyclerOptions<Video> options = new FirebaseRecyclerOptions.Builder<Video>()
@@ -283,7 +307,6 @@ public class ShowVideo extends AppCompatActivity {
             @Override
             protected void onBindViewHolder(@NonNull ViewHolder holder, int position, @NonNull Video model) {
 
-
                 holder.setExoplayer(getApplication(), model.getTitle(), model.getFileURL(), model.getTags(), model.getTopics());
                 holder.setDownloadButtonIcon(getApplication(), model.getTitle());
                 holder.setOnClickListener(new ViewHolder.clicklistener() {
@@ -292,11 +315,22 @@ public class ShowVideo extends AppCompatActivity {
                         name = getItem(position).getTitle();
                         url = getItem(position).getFileURL();
                         tag = getItem(position).getTags();
-                        Intent intent = new Intent(ShowVideo.this, FullscreenVideo.class);
-                        intent.putExtra("nm", name);
-                        intent.putExtra("ur", url);
-                        intent.putExtra("tg", tag);
-                        startActivity(intent);
+                        if(tag.equals("video")){
+                            Intent intent = new Intent(ShowVideo.this, FullscreenVideo.class);
+                            intent.putExtra("nm", name);
+                            intent.putExtra("ur", url);
+                            intent.putExtra("tg", tag);
+                            startActivity(intent);
+
+                        }
+                        if(tag.equals("pdf")){
+                            Intent intent = new Intent(ShowVideo.this, PDFViewerActivity.class);
+                            intent.putExtra("nm", name);
+                            intent.putExtra("ur", url);
+                            intent.putExtra("tg", tag);
+                            startActivity(intent);
+
+                        }
 
                     }
 
