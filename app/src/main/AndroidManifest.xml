@@ -23,9 +23,6 @@
         <activity
             android:name=".VideoListActivity"
             android:exported="false" />
-        <activity
-            android:name=".DownloadedVideos"
-            android:exported="false" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -51,10 +48,10 @@
             android:name=".VideoContent"
             android:exported="false" />
         <activity
-            android:name=".ShowVideo"
+            android:name=".Dashboard"
             android:exported="false" />
         <activity
-            android:name=".Dashboard"
+            android:name=".ShowVideo"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

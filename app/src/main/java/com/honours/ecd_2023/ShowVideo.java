@@ -36,6 +36,18 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.Query;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
 
 public class ShowVideo extends AppCompatActivity {
 
@@ -130,7 +142,7 @@ public class ShowVideo extends AppCompatActivity {
 
 
                 holder.setExoplayer(getApplication(), model.getTitle(), model.getFileURL(), model.getTags(), model.getTopics());
-
+                holder.setDownloadButtonIcon(getApplication(), model.getTitle());
                 holder.setOnClickListener(new ViewHolder.clicklistener() {
                     @Override
                     public void onItemClick(View view, int position) {
@@ -186,7 +198,7 @@ public class ShowVideo extends AppCompatActivity {
 
 
                     holder.setExoplayer(getApplication(), model.getTitle(), model.getFileURL(), model.getTags(), model.getTopics());
-
+                holder.setDownloadButtonIcon(getApplication(), model.getTitle());
                     holder.setOnClickListener(new ViewHolder.clicklistener() {
                         @Override
                         public void onItemClick(View view, int position) {
@@ -273,7 +285,7 @@ public class ShowVideo extends AppCompatActivity {
 
 
                 holder.setExoplayer(getApplication(), model.getTitle(), model.getFileURL(), model.getTags(), model.getTopics());
-
+                holder.setDownloadButtonIcon(getApplication(), model.getTitle());
                 holder.setOnClickListener(new ViewHolder.clicklistener() {
                     @Override
                     public void onItemClick(View view, int position) {
@@ -311,6 +323,61 @@ public class ShowVideo extends AppCompatActivity {
 
     }
 
+    private void startDownloading(String downloadurl, String title) {
+        if (downloadurl == null) {
+            // Handle the case when download URL is null
+            Toast.makeText(this, "Download URL is not available", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String fileName = title + ".mp4";
+        File internalStorageDir = getApplicationContext().getFilesDir();
+        File videoFile = new File(internalStorageDir, fileName);
+
+        OkHttpClient okHttpClient = new OkHttpClient();
+
+        Request request = new Request.Builder()
+                .url(downloadurl)
+                .build();
+
+        okHttpClient.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                // Handle download failure
+                runOnUiThread(() -> Toast.makeText(ShowVideo.this, "Download failed", Toast.LENGTH_SHORT).show());
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful() && response.body() != null) {
+                    try (InputStream inputStream = response.body().byteStream();
+                         OutputStream outputStream = new FileOutputStream(videoFile)) {
+
+                        byte[] buffer = new byte[4096];
+                        int bytesRead;
+                        while ((bytesRead = inputStream.read(buffer)) != -1) {
+                            outputStream.write(buffer, 0, bytesRead);
+                        }
+
+                        runOnUiThread(() -> {
+                            // File downloaded successfully, do additional processing if needed
+                            Toast.makeText(ShowVideo.this, "Download completed", Toast.LENGTH_SHORT).show();
+                            // Now you can use the videoFile for offline playback within the app
+                            // E.g., you can pass the videoFile's path to the ExoPlayer to play the video.
+                        });
+                    } catch (IOException e) {
+                        // Handle download error
+                        runOnUiThread(() -> Toast.makeText(ShowVideo.this, "Error while saving the file", Toast.LENGTH_SHORT).show());
+                    }
+                } else {
+                    // Handle download error
+                    runOnUiThread(() -> Toast.makeText(ShowVideo.this, "Download failed", Toast.LENGTH_SHORT).show());
+                }
+            }
+        });
+
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -329,6 +396,17 @@ public class ShowVideo extends AppCompatActivity {
             public boolean onQueryTextChange(String newText) {
                 firebaseSearch(newText);
                 return false;
+            }
+        });
+
+        MenuItem downloadsMenuItem = menu.findItem(R.id.settings_item);
+        downloadsMenuItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                // Open the activity where the downloads are saved
+                Intent downloadsIntent = new Intent(ShowVideo.this, VideoListActivity.class);
+                startActivity(downloadsIntent);
+                return true;
             }
         });
 

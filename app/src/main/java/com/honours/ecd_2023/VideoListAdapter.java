@@ -56,7 +56,7 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.Vide
 
         VideoViewHolder(@NonNull View itemView, final OnItemClickListener listener) {
             super(itemView);
-            videoTitle = itemView.findViewById(R.id.videotitle);
+            videoTitle = itemView.findViewById(R.id.video_title);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
