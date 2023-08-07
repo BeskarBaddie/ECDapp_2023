@@ -17,6 +17,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -79,7 +80,7 @@ public class FullscreenVideo extends AppCompatActivity {
         setContentView(R.layout.activity_fullscreen_video);
 
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle("Fullscreen");
+
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
 
@@ -91,6 +92,7 @@ public class FullscreenVideo extends AppCompatActivity {
         Intent intent = getIntent();
         url = intent.getExtras().getString("ur");
         title = intent.getExtras().getString("nm");
+        actionBar.setTitle(title);
 
         fullscreenButton = playerView.findViewById(R.id.exo_fullscreen_icon);
 
@@ -142,6 +144,17 @@ public class FullscreenVideo extends AppCompatActivity {
 
 
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            // This is the ID of the back button in the action bar
+            onBackPressed(); // Call the onBackPressed() method to handle the back button action
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private MediaSource buildMediaSource(Uri uri){

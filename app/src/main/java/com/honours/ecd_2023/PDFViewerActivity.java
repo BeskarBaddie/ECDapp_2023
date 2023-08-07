@@ -5,9 +5,11 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import com.github.barteksc.pdfviewer.PDFView;
 import com.github.barteksc.pdfviewer.listener.OnLoadCompleteListener;
@@ -33,6 +35,11 @@ public class PDFViewerActivity extends AppCompatActivity {
 
         pdfView = findViewById(R.id.pdfView);
 
+        ActionBar actionBar = getSupportActionBar();
+
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
 
         //loadPdfFromAssets("sample.pdf");
         String pdfUrl = getIntent().getExtras().getString("ur");
@@ -54,6 +61,18 @@ public class PDFViewerActivity extends AppCompatActivity {
             Toast.makeText(this, "No url passed", Toast.LENGTH_SHORT).show();
         }
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            // This is the ID of the back button in the action bar
+            onBackPressed(); // Call the onBackPressed() method to handle the back button action
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 
     private void downloadAndDisplayPdf(String pdfUrl) {
         new AsyncTask<String, Void, File>() {
