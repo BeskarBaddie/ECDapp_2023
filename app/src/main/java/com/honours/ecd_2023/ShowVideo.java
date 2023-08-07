@@ -22,6 +22,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.view.MenuItemCompat;
@@ -76,6 +77,11 @@ public class ShowVideo extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_video);
 
+        ActionBar actionBar = getSupportActionBar();
+
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
 
         recyclerView = findViewById(R.id.recyclerview_Showvideo);
         recyclerView.setHasFixedSize(true);
@@ -120,6 +126,18 @@ public class ShowVideo extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            // This is the ID of the back button in the action bar
+            onBackPressed(); // Call the onBackPressed() method to handle the back button action
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 
     private void filterVideos(String topic){
         Query query;
