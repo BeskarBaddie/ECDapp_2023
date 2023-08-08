@@ -288,7 +288,7 @@ public class ShowVideo extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        String table = "admin.Content";
+
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -297,10 +297,12 @@ public class ShowVideo extends AppCompatActivity {
 
                 if (connection != null) {
                     try {
-                        List<Video> videoList = new ArrayList<>();
                         Statement statement = connection.createStatement();
                         String query = "SELECT * FROM \"Content\"";
                         ResultSet resultSet = statement.executeQuery(query);
+
+                        List<Video> videoList = new ArrayList<>(); // Create the list here
+                        System.out.println("ello");
 
                         // Process the ResultSet and populate your RecyclerView as needed
                         while (resultSet.next()) {
@@ -310,16 +312,24 @@ public class ShowVideo extends AppCompatActivity {
                             String topics = resultSet.getString("topics");
 
                             // Create a Video object with retrieved data and add it to your RecyclerView
-                            // ...
                             Video video = new Video(title, fileURL, tags, topics);
+                            videoList.add(video); // Add to the list here
+                            System.out.println("hello");
 
-                            videoList.add(video);
-
+                            // ...
                         }
-                        adapter = new VideoListAdapter(this,videoList);
-                        recyclerView.setAdapter(adapter);
 
                         connection.close();
+
+                        // Update the adapter with the new videoList on the UI thread
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                //adapter = new VideoListAdapter(ShowVideo.this, videoList);
+                                recyclerView.setAdapter(adapter);
+                            }
+                        });
+
                     } catch (SQLException e) {
                         e.printStackTrace();
                     }
