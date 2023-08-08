@@ -49,6 +49,13 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
 
 public class ShowVideo extends AppCompatActivity {
 
@@ -86,8 +93,7 @@ public class ShowVideo extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerview_Showvideo);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        database = FirebaseDatabase.getInstance();
-        databaseReference = database.getReference("content");
+        Database db = new Database();
         toUpload = findViewById(R.id.uploadVideoScreen);
 
         spinnerTags = findViewById(R.id.spinner_tags);
@@ -127,6 +133,9 @@ public class ShowVideo extends AppCompatActivity {
         });
     }
 
+
+
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -140,76 +149,39 @@ public class ShowVideo extends AppCompatActivity {
 
 
     private void filterVideos(String topic){
-        Query query;
-        if ("All".equals(topic)) {
-            // Fetch all videos if "All" is selected
-            query = databaseReference.orderByChild("tags");
-        } else {
-            // Fetch videos with the selected tag
-            query = databaseReference.orderByChild("topics").equalTo(topic);
-        }
-
-
-        FirebaseRecyclerOptions<Video> options = new FirebaseRecyclerOptions.Builder<Video>()
-                .setQuery(query, Video.class)
-                .build();
-
-        FirebaseRecyclerAdapter<Video,ViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Video, ViewHolder>(options) {
+        String table = "admin.Content";
+        new Thread(new Runnable() {
             @Override
-            protected void onBindViewHolder(@NonNull ViewHolder holder, int position, @NonNull Video model) {
+            public void run() {
+                Database database = new Database();
+                Connection connection = database.getConnection();
 
+                if (connection != null) {
+                    try {
+                        Statement statement = connection.createStatement();
+                        String query = "SELECT * FROM "+ table;
+                        ResultSet resultSet = statement.executeQuery(query);
 
-                holder.setExoplayer(getApplication(), model.getTitle(), model.getFileURL(), model.getTags(), model.getTopics());
-                holder.setDownloadButtonIcon(getApplication(), model.getTitle());
-                holder.setOnClickListener(new ViewHolder.clicklistener() {
-                    @Override
-                    public void onItemClick(View view, int position) {
+                        // Process the ResultSet and populate your RecyclerView as needed
+                        while (resultSet.next()) {
+                            String title = resultSet.getString("title");
+                            String fileURL = resultSet.getString("file");
+                            String tags = resultSet.getString("tags");
+                            String topics = resultSet.getString("topics");
 
-                        name = getItem(position).getTitle();
-                        url = getItem(position).getFileURL();
-                        tag = getItem(position).getTags();
-                        if(tag.equals("video")){
-                            Intent intent = new Intent(ShowVideo.this, FullscreenVideo.class);
-                            intent.putExtra("nm", name);
-                            intent.putExtra("ur", url);
-                            intent.putExtra("tg", tag);
-                            startActivity(intent);
-
-                        }
-                        if(tag.equals("pdf")){
-                            Intent intent = new Intent(ShowVideo.this, PDFViewerActivity.class);
-                            intent.putExtra("nm", name);
-                            intent.putExtra("ur", url);
-                            intent.putExtra("tg", tag);
-                            startActivity(intent);
-
+                            // Create a Video object with retrieved data and add it to your RecyclerView
+                            // ...
                         }
 
-
-
+                        connection.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
                     }
-
-                    @Override
-                    public void onItemLongClick(View view, int position) {
-
-                    }
-                });
-
+                } else {
+                    // Handle connection error
+                }
             }
-
-            @NonNull
-            @Override
-            public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item,parent,false);
-                return new ViewHolder(view);
-            }
-        };
-        firebaseRecyclerAdapter.startListening();
-        recyclerView.setAdapter(firebaseRecyclerAdapter);
-
-
-
-
+        }).start();
     }
 
 
@@ -309,69 +281,43 @@ public class ShowVideo extends AppCompatActivity {
     }
 
 
+
     @Override
     protected void onStart() {
         super.onStart();
-
-
-        Query query = databaseReference.orderByChild("tags");
-
-
-        FirebaseRecyclerOptions<Video> options = new FirebaseRecyclerOptions.Builder<Video>()
-                .setQuery(query, Video.class)
-                .build();
-
-        FirebaseRecyclerAdapter<Video,ViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Video, ViewHolder>(options) {
+        String table = "admin.Content";
+        new Thread(new Runnable() {
             @Override
-            protected void onBindViewHolder(@NonNull ViewHolder holder, int position, @NonNull Video model) {
+            public void run() {
+                Database database = new Database();
+                Connection connection = database.getConnection();
 
-                holder.setExoplayer(getApplication(), model.getTitle(), model.getFileURL(), model.getTags(), model.getTopics());
-                holder.setDownloadButtonIcon(getApplication(), model.getTitle());
-                holder.setOnClickListener(new ViewHolder.clicklistener() {
-                    @Override
-                    public void onItemClick(View view, int position) {
-                        name = getItem(position).getTitle();
-                        url = getItem(position).getFileURL();
-                        tag = getItem(position).getTags();
-                        if(tag.equals("video")){
-                            Intent intent = new Intent(ShowVideo.this, FullscreenVideo.class);
-                            intent.putExtra("nm", name);
-                            intent.putExtra("ur", url);
-                            intent.putExtra("tg", tag);
-                            startActivity(intent);
+                if (connection != null) {
+                    try {
+                        Statement statement = connection.createStatement();
+                        String query = "SELECT * FROM " + table;
+                        ResultSet resultSet = statement.executeQuery(query);
 
-                        }
-                        if(tag.equals("pdf")){
-                            Intent intent = new Intent(ShowVideo.this, PDFViewerActivity.class);
-                            intent.putExtra("nm", name);
-                            intent.putExtra("ur", url);
-                            intent.putExtra("tg", tag);
-                            startActivity(intent);
+                        // Process the ResultSet and populate your RecyclerView as needed
+                        while (resultSet.next()) {
+                            String title = resultSet.getString("title");
+                            String fileURL = resultSet.getString("file");
+                            String tags = resultSet.getString("tags");
+                            String topics = resultSet.getString("topics");
 
+                            // Create a Video object with retrieved data and add it to your RecyclerView
+                            // ...
                         }
 
+                        connection.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
                     }
-
-                    @Override
-                    public void onItemLongClick(View view, int position) {
-
-                    }
-                });
-
+                } else {
+                    // Handle connection error
+                }
             }
-
-            @NonNull
-            @Override
-            public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item,parent,false);
-                return new ViewHolder(view);
-            }
-        };
-        firebaseRecyclerAdapter.startListening();
-        recyclerView.setAdapter(firebaseRecyclerAdapter);
-
-
-
+        }).start();
 
     }
 
