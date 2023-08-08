@@ -55,6 +55,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class ShowVideo extends AppCompatActivity {
@@ -67,6 +69,7 @@ public class ShowVideo extends AppCompatActivity {
     RecyclerView recyclerView;
     FirebaseDatabase database;
 
+    private VideoListAdapter adapter;
     Button toUpload;
 
     ImageButton downloadBtn;
@@ -159,7 +162,7 @@ public class ShowVideo extends AppCompatActivity {
                 if (connection != null) {
                     try {
                         Statement statement = connection.createStatement();
-                        String query = "SELECT * FROM "+ table;
+                        String query = "SELECT * FROM \"Content\"";
                         ResultSet resultSet = statement.executeQuery(query);
 
                         // Process the ResultSet and populate your RecyclerView as needed
@@ -294,8 +297,9 @@ public class ShowVideo extends AppCompatActivity {
 
                 if (connection != null) {
                     try {
+                        List<Video> videoList = new ArrayList<>();
                         Statement statement = connection.createStatement();
-                        String query = "SELECT * FROM " + table;
+                        String query = "SELECT * FROM \"Content\"";
                         ResultSet resultSet = statement.executeQuery(query);
 
                         // Process the ResultSet and populate your RecyclerView as needed
@@ -307,7 +311,13 @@ public class ShowVideo extends AppCompatActivity {
 
                             // Create a Video object with retrieved data and add it to your RecyclerView
                             // ...
+                            Video video = new Video(title, fileURL, tags, topics);
+
+                            videoList.add(video);
+
                         }
+                        adapter = new VideoListAdapter(this,videoList);
+                        recyclerView.setAdapter(adapter);
 
                         connection.close();
                     } catch (SQLException e) {

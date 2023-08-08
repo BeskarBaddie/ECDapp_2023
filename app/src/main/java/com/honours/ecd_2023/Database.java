@@ -16,11 +16,11 @@ public class Database {
     // For Local PostgreSQL
 
 
-    private final String database = "postgres";
+    private final String database = "yayb";
     private final int port = 5432;
     private final String user = "postgres";
     private final String pass = "youandyourbaby";
-    private String url = "jdbc:postgresql://database.cjg9ckuq0ifq.eu-north-1.rds.amazonaws.com:5432/postgres";
+    private String url = "jdbc:postgresql://database.cjg9ckuq0ifq.eu-north-1.rds.amazonaws.com:5432/yayb";
     private boolean status;
 
     public Database()

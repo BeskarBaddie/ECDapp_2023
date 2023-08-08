@@ -26,9 +26,11 @@ public class Video {
         this.Tags = Tags;
     }
 
-    public Video(){
-
-
+    public Video(String title, String fileURL, String tags, String topics) {
+        this.Title = title;
+        this.FileURL = fileURL;
+        this.Tags = tags;
+        this.Topics = topics;
     }
 
     public String getTitle() {
