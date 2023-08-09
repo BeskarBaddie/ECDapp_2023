@@ -29,7 +29,7 @@ public class VideoListActivity extends AppCompatActivity implements VideoListAda
         videoFilesList = getVideoFilesFromInternalStorage();
 
         // Initialize and set up the RecyclerView adapter
-        adapter = new VideoListAdapter(this, videoFilesList);
+        //adapter = new VideoListAdapter(this, videoFilesList);
         adapter.setOnItemClickListener(this);
         recyclerView.setAdapter(adapter);
     }

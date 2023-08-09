@@ -18,7 +18,7 @@ public class Database {
 
     private final String database = "yayb";
     private final int port = 5432;
-    private final String user = "postgres";
+    private final String user = "admin";
     private final String pass = "youandyourbaby";
     private String url = "jdbc:postgresql://database.cjg9ckuq0ifq.eu-north-1.rds.amazonaws.com:5432/yayb";
     private boolean status;

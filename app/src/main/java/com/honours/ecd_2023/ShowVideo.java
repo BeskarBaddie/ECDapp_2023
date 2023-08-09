@@ -136,6 +136,14 @@ public class ShowVideo extends AppCompatActivity {
         });
     }
 
+    private void openFullscreenActivity(Video video) {
+        Intent intent = new Intent(ShowVideo.this, FullscreenVideo.class);
+        intent.putExtra("nm", video.getTitle());
+        intent.putExtra("videoData", video.getFileURL());
+        // ... Add more data as needed
+        startActivity(intent);
+    }
+
 
 
 
@@ -169,7 +177,7 @@ public class ShowVideo extends AppCompatActivity {
                         while (resultSet.next()) {
                             String title = resultSet.getString("title");
                             String fileURL = resultSet.getString("file");
-                            String tags = resultSet.getString("tags");
+                            String tags = resultSet.getString("tag");
                             String topics = resultSet.getString("topics");
 
                             // Create a Video object with retrieved data and add it to your RecyclerView
@@ -189,70 +197,7 @@ public class ShowVideo extends AppCompatActivity {
 
 
 
-    private void firebaseSearch(String searchText){
-        String query = searchText.toLowerCase();
-        Query firebaseQuery = databaseReference.orderByChild("search").startAt(query)
-                .endAt(query + "\uf8ff");
 
-        FirebaseRecyclerOptions<Video> options = new FirebaseRecyclerOptions.Builder<Video>()
-                .setQuery(firebaseQuery, Video.class)
-                .build();
-
-        FirebaseRecyclerAdapter<Video,ViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Video, ViewHolder>(options) {
-            @Override
-            protected void onBindViewHolder(@NonNull ViewHolder holder, int position, @NonNull Video model) {
-
-
-                    holder.setExoplayer(getApplication(), model.getTitle(), model.getFileURL(), model.getTags(), model.getTopics());
-                holder.setDownloadButtonIcon(getApplication(), model.getTitle());
-                    holder.setOnClickListener(new ViewHolder.clicklistener() {
-                        @Override
-                        public void onItemClick(View view, int position) {
-
-                            name = getItem(position).getTitle();
-                            url = getItem(position).getFileURL();
-                            tag = getItem(position).getTags();
-                            if(tag.equals("video")){
-                                Intent intent = new Intent(ShowVideo.this, FullscreenVideo.class);
-                                intent.putExtra("nm", name);
-                                intent.putExtra("ur", url);
-                                intent.putExtra("tg", tag);
-                                startActivity(intent);
-
-                            }
-                            if(tag.equals("pdf")){
-                                Intent intent = new Intent(ShowVideo.this, PDFViewerActivity.class);
-                                intent.putExtra("nm", name);
-                                intent.putExtra("ur", url);
-                                intent.putExtra("tg", tag);
-                                startActivity(intent);
-
-                            }
-
-                        }
-
-                        @Override
-                        public void onItemLongClick(View view, int position) {
-
-                        }
-                    });
-
-            }
-
-            @NonNull
-            @Override
-            public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item,parent,false);
-                return new ViewHolder(view);
-            }
-        };
-        firebaseRecyclerAdapter.startListening();
-        recyclerView.setAdapter(firebaseRecyclerAdapter);
-
-
-
-
-    }
     @Override
     public void onBackPressed() {
         super.onBackPressed();
@@ -299,24 +244,30 @@ public class ShowVideo extends AppCompatActivity {
                     try {
                         Statement statement = connection.createStatement();
                         String query = "SELECT * FROM \"Content\"";
-                        ResultSet resultSet = statement.executeQuery(query);
+                        ResultSet resultSet = null;
+                        try{
+                            resultSet = statement.executeQuery(query);
 
-                        List<Video> videoList = new ArrayList<>(); // Create the list here
+                        }catch(Exception ex){
+                            System.out.println(ex);
+                        }
+
+
+
+                        List<Video> videoList = new ArrayList<>();
                         System.out.println("ello");
 
                         // Process the ResultSet and populate your RecyclerView as needed
                         while (resultSet.next()) {
+                            System.out.println("eello");
                             String title = resultSet.getString("title");
-                            String fileURL = resultSet.getString("file");
-                            String tags = resultSet.getString("tags");
+                            byte[] videoData = resultSet.getBytes("file");
+                            String tags = resultSet.getString("tag");
                             String topics = resultSet.getString("topics");
 
                             // Create a Video object with retrieved data and add it to your RecyclerView
-                            Video video = new Video(title, fileURL, tags, topics);
-                            videoList.add(video); // Add to the list here
-                            System.out.println("hello");
-
-                            // ...
+                            Video video = new Video(title, videoData, tags, topics);
+                            videoList.add(video);
                         }
 
                         connection.close();
@@ -325,19 +276,33 @@ public class ShowVideo extends AppCompatActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                //adapter = new VideoListAdapter(ShowVideo.this, videoList);
+                                // Create the VideoListAdapter and set it to the RecyclerView
+                                adapter = new VideoListAdapter(ShowVideo.this, videoList);
                                 recyclerView.setAdapter(adapter);
+
+                                adapter.setOnItemClickListener(new VideoListAdapter.OnItemClickListener() {
+                                    @Override
+                                    public void onItemClick(int position) {
+                                        Video video = videoList.get(position);
+                                        openFullscreenActivity(video);
+                                    }
+                                });
                             }
                         });
 
                     } catch (SQLException e) {
                         e.printStackTrace();
+                        System.out.println("ello" + e);
+
                     }
                 } else {
                     // Handle connection error
                 }
             }
         }).start();
+
+
+
 
     }
 
@@ -406,13 +371,13 @@ public class ShowVideo extends AppCompatActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                firebaseSearch(query);
+
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                firebaseSearch(newText);
+
                 return false;
             }
         });

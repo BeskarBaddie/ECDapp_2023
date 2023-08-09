@@ -1,9 +1,11 @@
 package com.honours.ecd_2023;
 
+import android.net.Uri;
+
 public class Video {
 
     private String Title;
-    private String FileURL;
+    private byte[]  FileURL;
     private String search;
 
     private String Topics;
@@ -26,7 +28,7 @@ public class Video {
         this.Tags = Tags;
     }
 
-    public Video(String title, String fileURL, String tags, String topics) {
+    public Video(String title, byte[]  fileURL, String tags, String topics) {
         this.Title = title;
         this.FileURL = fileURL;
         this.Tags = tags;
@@ -41,11 +43,11 @@ public class Video {
         this.Title = Title;
     }
 
-    public String getFileURL() {
+    public byte[]  getFileURL() {
         return FileURL;
     }
 
-    public void setFileURL(String FileURL) {
+    public void setFileURL(byte[] FileURL) {
         this.FileURL = FileURL;
     }
 

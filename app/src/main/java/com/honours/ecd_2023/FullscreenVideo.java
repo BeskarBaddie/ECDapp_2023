@@ -71,6 +71,8 @@ public class FullscreenVideo extends AppCompatActivity {
 
     String title, downloadurl, check;
 
+    byte[] videoData;
+
 
 
 
@@ -92,6 +94,7 @@ public class FullscreenVideo extends AppCompatActivity {
         Intent intent = getIntent();
         url = intent.getExtras().getString("ur");
         title = intent.getExtras().getString("nm");
+        videoData = getIntent().getByteArrayExtra("videoData");
         actionBar.setTitle(title);
 
         fullscreenButton = playerView.findViewById(R.id.exo_fullscreen_icon);
@@ -157,34 +160,27 @@ public class FullscreenVideo extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private MediaSource buildMediaSource(Uri uri){
+    private MediaSource buildMediaSource(byte[] videoData){
         DataSource.Factory datasourcefactory =
                 new DefaultHttpDataSource.Factory();//might be a problem 13 mins
-        return new ProgressiveMediaSource.Factory(datasourcefactory).createMediaSource(MediaItem.fromUri(uri));//problem
+        return new ProgressiveMediaSource.Factory(datasourcefactory).createMediaSource(MediaItem.fromUri(String.valueOf(videoData)));//problem
 
         //DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(this,
                 //Util.getUserAgent(this, "YourAppName")); // Replace "YourAppName" with your app's name.
         //return new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(MediaItem.fromUri(uri));
     }
 
-    private void initializeplayer(){
-
-
+    private void initializeplayer(byte[] videoData){
 
         player = new ExoPlayer.Builder(getApplication()).build();
         playerView.setPlayer(player);
-        MediaItem mediaItem = MediaItem.fromUri(url);//might be a problem
+        MediaItem mediaItem = MediaItem.fromUri(String.valueOf(videoData));//might be a problem
         player.addMediaItems(Collections.singletonList(mediaItem));
         //player.prepare();
         player.setVideoScalingMode(C.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING);
         player.setPlayWhenReady(playwhenready);
         player.seekTo(currentwindow,playbackposition);
         player.prepare();
-
-
-
-
-
 
 
         downloadBtn.setOnClickListener(new View.OnClickListener() {
@@ -206,9 +202,6 @@ public class FullscreenVideo extends AppCompatActivity {
                     downloadurl = intent.getExtras().getString("ur");
                     startDownloading(downloadurl,title);
                 }
-
-
-
 
             }
         });
@@ -274,7 +267,11 @@ public class FullscreenVideo extends AppCompatActivity {
         super.onStart();
 
         if (Util.SDK_INT>=26){
-            initializeplayer();
+            if (videoData != null) {
+                initializeplayer(videoData);
+            } else {
+                // Handle case when video data is not available
+            }
         }
     }
 

@@ -133,7 +133,7 @@ public class VideoContent extends AppCompatActivity {
                     progressBar.setVisibility(View.INVISIBLE);
                         Toast.makeText(VideoContent.this, "Data Saved ", Toast.LENGTH_SHORT).show();
                     video.setTitle(videoName);
-                    video.setFileURL(downloadUrl.toString());
+                   // video.setFileURL(downloadUrl);
                     video.setSearch(search);
                     video.setTags("video");
                     video.setTopics("Community Content");
