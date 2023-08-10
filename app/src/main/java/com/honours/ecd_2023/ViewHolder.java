@@ -87,6 +87,26 @@ public class ViewHolder extends RecyclerView.ViewHolder {
         }
     }
 
+    public void setContentIcon(Application application, String topic) {
+        ImageView cardImage = itemView.findViewById(R.id.card_image);
+
+        if ("Baby Health".equals(topic)) {
+            cardImage.setImageResource(R.drawable.baby_health_picture); // Change this to the appropriate play icon for topic1
+        } else if ("Baby Development".equals(topic)) {
+            cardImage.setImageResource(R.drawable.baby_picture); // Change this to the appropriate play icon for topic2
+        }
+        else if ("Child Entertainment".equals(topic)) {
+            cardImage.setImageResource(R.drawable.baby_picture);
+        }
+        else if ("Parent Health".equals(topic)) {
+            cardImage.setImageResource(R.drawable.parent_picture);
+        }
+        else if ("Community Content".equals(topic)) {
+            cardImage.setImageResource(R.drawable.community_picture);
+        }
+    }
+
+
 
 
     public void setExoplayer(Application application, String name, String Videourl, String tag, String Topics){
