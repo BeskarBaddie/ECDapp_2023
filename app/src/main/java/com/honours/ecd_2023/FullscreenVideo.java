@@ -161,13 +161,25 @@ public class FullscreenVideo extends AppCompatActivity {
     }
 
     private MediaSource buildMediaSource(byte[] videoData){
-        DataSource.Factory datasourcefactory =
-                new DefaultHttpDataSource.Factory();//might be a problem 13 mins
-        return new ProgressiveMediaSource.Factory(datasourcefactory).createMediaSource(MediaItem.fromUri(String.valueOf(videoData)));//problem
+       // DataSource.Factory datasourcefactory =
+               // new DefaultHttpDataSource.Factory();//might be a problem 13 mins
+       // return new ProgressiveMediaSource.Factory(datasourcefactory).createMediaSource(MediaItem.fromUri(String.valueOf(videoData)));//problem
 
         //DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(this,
                 //Util.getUserAgent(this, "YourAppName")); // Replace "YourAppName" with your app's name.
         //return new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(MediaItem.fromUri(uri));
+
+        DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(this,
+                Util.getUserAgent(this, "ECD_2023"));
+
+        MediaItem mediaItem = new MediaItem.Builder()
+                .setUri(Uri.parse("memory://video.mp4")) // Use a placeholder URI
+                .setMimeType("video/mp4")
+                .setMediaId("video") // Set a unique media ID
+                .build();
+
+        ProgressiveMediaSource.Factory mediaSourceFactory = new ProgressiveMediaSource.Factory(dataSourceFactory);
+        return mediaSourceFactory.createMediaSource(mediaItem);
     }
 
     private void initializeplayer(byte[] videoData){
