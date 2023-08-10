@@ -161,6 +161,7 @@ public class ShowVideo extends AppCompatActivity {
 
                 holder.setExoplayer(getApplication(), model.getTitle(), model.getFileURL(), model.getTags(), model.getTopics());
                 holder.setDownloadButtonIcon(getApplication(), model.getTitle());
+                holder.setContentIcon(getApplication(),model.getTopics());
                 holder.setOnClickListener(new ViewHolder.clicklistener() {
                     @Override
                     public void onItemClick(View view, int position) {
@@ -230,6 +231,7 @@ public class ShowVideo extends AppCompatActivity {
 
                     holder.setExoplayer(getApplication(), model.getTitle(), model.getFileURL(), model.getTags(), model.getTopics());
                 holder.setDownloadButtonIcon(getApplication(), model.getTitle());
+                holder.setContentIcon(getApplication(),model.getTopics());
                     holder.setOnClickListener(new ViewHolder.clicklistener() {
                         @Override
                         public void onItemClick(View view, int position) {
@@ -327,6 +329,7 @@ public class ShowVideo extends AppCompatActivity {
 
                 holder.setExoplayer(getApplication(), model.getTitle(), model.getFileURL(), model.getTags(), model.getTopics());
                 holder.setDownloadButtonIcon(getApplication(), model.getTitle());
+                holder.setContentIcon(getApplication(),model.getTopics());
                 holder.setOnClickListener(new ViewHolder.clicklistener() {
                     @Override
                     public void onItemClick(View view, int position) {
