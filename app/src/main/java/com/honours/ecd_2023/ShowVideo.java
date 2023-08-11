@@ -1,19 +1,10 @@
 package com.honours.ecd_2023;
 
-import android.Manifest;
-import android.app.DownloadManager;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -29,40 +20,41 @@ import androidx.core.view.MenuItemCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.google.firebase.database.Query;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-
 import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
+
+
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 
 public class ShowVideo extends AppCompatActivity {
 
     private Spinner spinnerTags;
     private String selectedTopic;
+
+    private ApiService apiService;
 
     private static final int PERMISSION_STORAGE_CODE = 1000;
     DatabaseReference databaseReference;
@@ -79,6 +71,8 @@ public class ShowVideo extends AppCompatActivity {
     PlayerView playerView;
 
     public ExoPlayer player;
+
+    private List<Video> contentList = new ArrayList<>();
 
 
 
@@ -234,73 +228,36 @@ public class ShowVideo extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        new Thread(new Runnable() {
+        try{
+
+        Call<List<Video>> content = ApiService.getInterface().getAllContent();
+
+        content.enqueue(new retrofit2.Callback<List<Video>>() {
             @Override
-            public void run() {
-                Database database = new Database();
-                Connection connection = database.getConnection();
+            public void onResponse(Call<List<Video>> call, retrofit2.Response<List<Video>> response) {
+                if(response.isSuccessful()){
+                    String message = "Response succesful";
+                    Toast.makeText(ShowVideo.this, message, Toast.LENGTH_LONG).show();
 
-                if (connection != null) {
-                    try {
-                        Statement statement = connection.createStatement();
-                        String query = "SELECT * FROM \"Content\"";
-                        ResultSet resultSet = null;
-                        try{
-                            resultSet = statement.executeQuery(query);
-
-                        }catch(Exception ex){
-                            System.out.println(ex);
-                        }
-
-
-
-                        List<Video> videoList = new ArrayList<>();
-                        System.out.println("ello");
-
-                        // Process the ResultSet and populate your RecyclerView as needed
-                        while (resultSet.next()) {
-                            System.out.println("eello");
-                            String title = resultSet.getString("title");
-                            byte[] videoData = resultSet.getBytes("file");
-                            String tags = resultSet.getString("tag");
-                            String topics = resultSet.getString("topics");
-
-                            // Create a Video object with retrieved data and add it to your RecyclerView
-                            Video video = new Video(title, videoData, tags, topics);
-                            videoList.add(video);
-                        }
-
-                        connection.close();
-
-                        // Update the adapter with the new videoList on the UI thread
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                // Create the VideoListAdapter and set it to the RecyclerView
-                                adapter = new VideoListAdapter(ShowVideo.this, videoList);
-                                recyclerView.setAdapter(adapter);
-
-                                adapter.setOnItemClickListener(new VideoListAdapter.OnItemClickListener() {
-                                    @Override
-                                    public void onItemClick(int position) {
-                                        Video video = videoList.get(position);
-                                        openFullscreenActivity(video);
-                                    }
-                                });
-                            }
-                        });
-
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                        System.out.println("ello" + e);
-
-                    }
-                } else {
-                    // Handle connection error
+            }else{
+                    String message = "An error occured";
+                    Toast.makeText(ShowVideo.this, message, Toast.LENGTH_LONG).show();
                 }
             }
-        }).start();
 
+            @Override
+            public void onFailure(Call<List<Video>> call, Throwable t) {
+
+                String message = t.getLocalizedMessage();
+                Toast.makeText(ShowVideo.this, message, Toast.LENGTH_LONG).show();
+
+            }
+        });
+
+        }catch(Exception ex)
+        {
+            System.out.println("THE ERROR IS " + ex);
+        }
 
 
 
@@ -325,12 +282,22 @@ public class ShowVideo extends AppCompatActivity {
 
         okHttpClient.newCall(request).enqueue(new Callback() {
             @Override
+            public void onResponse(@NonNull okhttp3.Call call, @NonNull Response response) throws IOException {
+
+            }
+
+            @Override
+            public void onFailure(@NonNull okhttp3.Call call, @NonNull IOException e) {
+
+            }
+
+
             public void onFailure(Call call, IOException e) {
                 // Handle download failure
                 runOnUiThread(() -> Toast.makeText(ShowVideo.this, "Download failed", Toast.LENGTH_SHORT).show());
             }
 
-            @Override
+
             public void onResponse(Call call, Response response) throws IOException {
                 if (response.isSuccessful() && response.body() != null) {
                     try (InputStream inputStream = response.body().byteStream();
