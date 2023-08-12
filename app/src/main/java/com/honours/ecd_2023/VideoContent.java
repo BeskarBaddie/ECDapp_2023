@@ -46,7 +46,7 @@ public class VideoContent extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_content);
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
-        video = new Video();
+        //video = new Video();
         storageReference = FirebaseStorage.getInstance().getReference("Video");
         databaseReference = FirebaseDatabase.getInstance().getReference("content");
 
@@ -133,7 +133,7 @@ public class VideoContent extends AppCompatActivity {
                     progressBar.setVisibility(View.INVISIBLE);
                         Toast.makeText(VideoContent.this, "Data Saved ", Toast.LENGTH_SHORT).show();
                     video.setTitle(videoName);
-                    video.setFileURL(downloadUrl.toString());
+                   // video.setFileURL(downloadUrl);
                     video.setSearch(search);
                     video.setTags("video");
                     video.setTopics("Community Content");
