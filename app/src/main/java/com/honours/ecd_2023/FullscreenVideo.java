@@ -196,11 +196,11 @@ public class FullscreenVideo extends AppCompatActivity {
 
                         requestPermissions(new String[]{permission},PERMISSION_STORAGE_CODE);
                     }else{
-                        downloadurl = intent.getExtras().getString("ur");
+                        downloadurl = intent.getExtras().getString("videoData");
                         startDownloading(downloadurl,title);
                     }
                 }else{
-                    downloadurl = intent.getExtras().getString("ur");
+                    downloadurl = intent.getExtras().getString("videoData");
                     startDownloading(downloadurl,title);
                 }
 
