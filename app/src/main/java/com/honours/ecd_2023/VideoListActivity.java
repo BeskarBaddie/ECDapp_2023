@@ -26,16 +26,24 @@ public class VideoListActivity extends AppCompatActivity implements VideoListAda
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         // Get the list of video files from the internal storage
-        videoFilesList = getVideoFilesFromInternalStorage();
+        videoFilesList = getFilesFromInternalStorage();
+
+        List<Video> videoList = new ArrayList<>();
+        for (File file : videoFilesList) {
+            Video video = new Video(file.getName(), file.getAbsolutePath(), "Tag", "Topics"); // Assuming Video has a constructor like this
+            videoList.add(video);
+        }
+
+
 
         // Initialize and set up the RecyclerView adapter
-        //adapter = new VideoListAdapter(this, videoFilesList);
+        adapter = new VideoListAdapter(this, videoList);
         adapter.setOnItemClickListener(this);
         recyclerView.setAdapter(adapter);
     }
 
     // Method to retrieve video files from internal storage
-    private List<File> getVideoFilesFromInternalStorage() {
+    private List<File> getFilesFromInternalStorage() {
         List<File> videoFiles = new ArrayList<>();
         File internalStorageDir = getApplicationContext().getFilesDir();
         File[] files = internalStorageDir.listFiles();
@@ -43,7 +51,8 @@ public class VideoListActivity extends AppCompatActivity implements VideoListAda
         // Add all video files to the list
         if (files != null) {
             for (File file : files) {
-                if (file.isFile() && file.getName().endsWith(".mp4")) {
+                //if (file.isFile() && file.getName().endsWith(".mp4"))
+                if (file.isFile()) {
                     videoFiles.add(file);
                 }
             }
@@ -60,7 +69,7 @@ public class VideoListActivity extends AppCompatActivity implements VideoListAda
         Uri videoUri = Uri.fromFile(selectedVideoFile);
 
         Intent intent = new Intent(this, FullscreenVideo.class);
-        intent.putExtra("ur", videoUri.toString());
+        intent.putExtra("videoData", videoUri.toString());
         intent.putExtra("nm", selectedVideoFile.getName());
         startActivity(intent);
     }

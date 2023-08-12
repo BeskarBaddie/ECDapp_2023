@@ -196,12 +196,12 @@ public class FullscreenVideo extends AppCompatActivity {
 
                         requestPermissions(new String[]{permission},PERMISSION_STORAGE_CODE);
                     }else{
-                        downloadurl = intent.getExtras().getString("videoData");
-                        startDownloading(downloadurl,title);
+
+                        startDownloading(file,title);
                     }
                 }else{
-                    downloadurl = intent.getExtras().getString("videoData");
-                    startDownloading(downloadurl,title);
+
+                    startDownloading(file,title);
                 }
 
             }
@@ -215,7 +215,7 @@ public class FullscreenVideo extends AppCompatActivity {
             return;
         }
 
-        String fileName = title + ".mp4";
+        String fileName = title;
         File internalStorageDir = getApplicationContext().getFilesDir();
         File videoFile = new File(internalStorageDir, fileName);
 

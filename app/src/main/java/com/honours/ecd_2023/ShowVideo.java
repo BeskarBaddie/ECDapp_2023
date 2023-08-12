@@ -59,7 +59,7 @@ public class ShowVideo extends AppCompatActivity {
     private static final int PERMISSION_STORAGE_CODE = 1000;
     DatabaseReference databaseReference;
     RecyclerView recyclerView;
-    FirebaseDatabase database;
+
 
     private VideoListAdapter adapter;
     Button toUpload;
@@ -90,7 +90,7 @@ public class ShowVideo extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerview_Showvideo);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        Database db = new Database();
+
         toUpload = findViewById(R.id.uploadVideoScreen);
 
         spinnerTags = findViewById(R.id.spinner_tags);
@@ -138,6 +138,14 @@ public class ShowVideo extends AppCompatActivity {
         startActivity(intent);
     }
 
+    private void openFullscreenActivityPDF(Video video) {
+        Intent intent = new Intent(ShowVideo.this, PDFViewerActivity.class);
+        intent.putExtra("nm", video.getTitle());
+        intent.putExtra("ur", video.getFile());
+        // ... Add more data as needed
+        startActivity(intent);
+    }
+
 
 
 
@@ -154,39 +162,7 @@ public class ShowVideo extends AppCompatActivity {
 
 
     private void filterVideos(String topic){
-        String table = "admin.Content";
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Database database = new Database();
-                Connection connection = database.getConnection();
 
-                if (connection != null) {
-                    try {
-                        Statement statement = connection.createStatement();
-                        String query = "SELECT * FROM \"Content\"";
-                        ResultSet resultSet = statement.executeQuery(query);
-
-                        // Process the ResultSet and populate your RecyclerView as needed
-                        while (resultSet.next()) {
-                            String title = resultSet.getString("title");
-                            String fileURL = resultSet.getString("file");
-                            String tags = resultSet.getString("tag");
-                            String topics = resultSet.getString("topics");
-
-                            // Create a Video object with retrieved data and add it to your RecyclerView
-                            // ...
-                        }
-
-                        connection.close();
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    // Handle connection error
-                }
-            }
-        }).start();
     }
 
 
@@ -255,7 +231,13 @@ public class ShowVideo extends AppCompatActivity {
                             @Override
                             public void onItemClick(int position) {
                                 Video video = videoList.get(position);
-                                openFullscreenActivity(video); // Open full-screen activity with the clicked video
+                                if(video.getTags().equals("video")) {
+                                    openFullscreenActivity(video); // Open full-screen activity with the clicked video
+                                }
+                                if(video.getTags().equals("pdf")) {
+                                    openFullscreenActivityPDF(video); // Open full-screen activity with the clicked video
+                                }
+
                             }
                         });
                     } else {
