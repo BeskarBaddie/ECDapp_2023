@@ -7,6 +7,6 @@ import retrofit2.http.GET;
 
 public interface ApiInterface {
 
-    @GET("content/")
+    @GET("get_all_content/")
     Call<List<Video>> getAllContent();
 }
