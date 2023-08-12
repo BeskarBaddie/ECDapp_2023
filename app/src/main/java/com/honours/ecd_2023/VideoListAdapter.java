@@ -14,12 +14,12 @@ import java.util.List;
 
 public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.VideoViewHolder> {
     private Context context;
-    private List<Video> videoFiles;
+    private List<Video> videoList;
     private OnItemClickListener onItemClickListener;
 
-    public VideoListAdapter(Context context, List<Video> videoFiles) {
+    public VideoListAdapter(Context context, List<Video> videoList) {
         this.context = context;
-        this.videoFiles = videoFiles;
+        this.videoList = videoList;
     }
 
     public interface OnItemClickListener {
@@ -37,9 +37,14 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.Vide
         return new VideoViewHolder(view, onItemClickListener);
     }
 
+    public void updateVideoList(List<Video> newVideoList) {
+        videoList.clear();
+        videoList.addAll(newVideoList);
+    }
+
     @Override
     public void onBindViewHolder(@NonNull VideoViewHolder holder, int position) {
-        Video videoFile = videoFiles.get(position);
+        Video videoFile = videoList.get(position);
         holder.videoTitle.setText(videoFile.getTitle());
         holder.videoTag.setText(videoFile.getTags());
 
@@ -59,7 +64,7 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.Vide
 
     @Override
     public int getItemCount() {
-        return videoFiles.size();
+        return videoList.size();
     }
 
     static class VideoViewHolder extends RecyclerView.ViewHolder {

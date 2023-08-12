@@ -133,7 +133,7 @@ public class ShowVideo extends AppCompatActivity {
     private void openFullscreenActivity(Video video) {
         Intent intent = new Intent(ShowVideo.this, FullscreenVideo.class);
         intent.putExtra("nm", video.getTitle());
-        intent.putExtra("videoData", video.getFileURL());
+        intent.putExtra("videoData", video.getFile());
         // ... Add more data as needed
         startActivity(intent);
     }
@@ -232,12 +232,36 @@ public class ShowVideo extends AppCompatActivity {
 
         Call<List<Video>> content = ApiService.getInterface().getAllContent();
 
+        adapter = new VideoListAdapter(ShowVideo.this, new ArrayList<>());
+        recyclerView.setAdapter(adapter);
+
         content.enqueue(new retrofit2.Callback<List<Video>>() {
             @Override
             public void onResponse(Call<List<Video>> call, retrofit2.Response<List<Video>> response) {
                 if(response.isSuccessful()){
                     String message = "Response succesful";
                     Toast.makeText(ShowVideo.this, message, Toast.LENGTH_LONG).show();
+
+                    List<Video> videoList = response.body();
+
+                    if (videoList != null && !videoList.isEmpty()) {
+                        // Update your RecyclerView adapter with the new videoList
+                        adapter.updateVideoList(videoList);
+
+                        // Optionally, notify the adapter about the data change
+                        adapter.notifyDataSetChanged();
+
+                        adapter.setOnItemClickListener(new VideoListAdapter.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(int position) {
+                                Video video = videoList.get(position);
+                                openFullscreenActivity(video); // Open full-screen activity with the clicked video
+                            }
+                        });
+                    } else {
+                        String message1 = "No videos found";
+                        Toast.makeText(ShowVideo.this, message1, Toast.LENGTH_LONG).show();
+                    }
 
             }else{
                     String message = "An error occured";

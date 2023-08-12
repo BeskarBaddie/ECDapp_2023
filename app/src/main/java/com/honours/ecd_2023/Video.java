@@ -4,51 +4,51 @@ import android.net.Uri;
 
 public class Video {
 
-    private String Title;
-    private byte[]  FileURL;
+    private String title;
+    private String file;
     private String search;
 
-    private String Topics;
+    private String topics;
 
-    private String Tags;
+    private String tag;
 
     public String getTopics() {
-        return Topics;
+        return topics;
     }
 
-    public void setTopics(String Topics) {
-        this.Topics = Topics;
+    public void setTopics(String topics) {
+        this.topics = topics;
     }
 
     public String getTags() {
-        return Tags;
+        return tag;
     }
 
-    public void setTags(String Tags) {
-        this.Tags = Tags;
+    public void setTags(String tag) {
+        this.tag = tag;
     }
 
-    public Video(String title, byte[]  fileURL, String tags, String topics) {
-        this.Title = title;
-        this.FileURL = fileURL;
-        this.Tags = tags;
-        this.Topics = topics;
+    public Video(String title, String  file, String tag, String topics) {
+        this.title = title;
+        this.file = file;
+        this.tag = tag;
+        this.topics = topics;
     }
 
     public String getTitle() {
-        return Title;
+        return title;
     }
 
-    public void setTitle(String Title) {
-        this.Title = Title;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public byte[]  getFileURL() {
-        return FileURL;
+    public String  getFile() {
+        return file;
     }
 
-    public void setFileURL(byte[] FileURL) {
-        this.FileURL = FileURL;
+    public void setFile(String file) {
+        this.file = file;
     }
 
     public String getSearch() {

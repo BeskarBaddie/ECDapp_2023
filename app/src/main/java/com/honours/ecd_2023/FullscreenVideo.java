@@ -71,7 +71,7 @@ public class FullscreenVideo extends AppCompatActivity {
 
     String title, downloadurl, check;
 
-    byte[] videoData;
+    String file;
 
 
 
@@ -94,7 +94,7 @@ public class FullscreenVideo extends AppCompatActivity {
         Intent intent = getIntent();
         url = intent.getExtras().getString("ur");
         title = intent.getExtras().getString("nm");
-        videoData = getIntent().getByteArrayExtra("videoData");
+        file = intent.getExtras().getString("videoData");
         actionBar.setTitle(title);
 
         fullscreenButton = playerView.findViewById(R.id.exo_fullscreen_icon);
@@ -161,32 +161,21 @@ public class FullscreenVideo extends AppCompatActivity {
     }
 
     private MediaSource buildMediaSource(byte[] videoData){
-       // DataSource.Factory datasourcefactory =
-               // new DefaultHttpDataSource.Factory();//might be a problem 13 mins
-       // return new ProgressiveMediaSource.Factory(datasourcefactory).createMediaSource(MediaItem.fromUri(String.valueOf(videoData)));//problem
+        DataSource.Factory datasourcefactory =
+                new DefaultHttpDataSource.Factory();//might be a problem 13 mins
+        return new ProgressiveMediaSource.Factory(datasourcefactory).createMediaSource(MediaItem.fromUri(String.valueOf(videoData)));//problem
 
         //DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(this,
                 //Util.getUserAgent(this, "YourAppName")); // Replace "YourAppName" with your app's name.
         //return new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(MediaItem.fromUri(uri));
 
-        DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(this,
-                Util.getUserAgent(this, "ECD_2023"));
-
-        MediaItem mediaItem = new MediaItem.Builder()
-                .setUri(Uri.parse("memory://video.mp4")) // Use a placeholder URI
-                .setMimeType("video/mp4")
-                .setMediaId("video") // Set a unique media ID
-                .build();
-
-        ProgressiveMediaSource.Factory mediaSourceFactory = new ProgressiveMediaSource.Factory(dataSourceFactory);
-        return mediaSourceFactory.createMediaSource(mediaItem);
     }
 
-    private void initializeplayer(byte[] videoData){
+    private void initializeplayer(String file){
 
         player = new ExoPlayer.Builder(getApplication()).build();
         playerView.setPlayer(player);
-        MediaItem mediaItem = MediaItem.fromUri(String.valueOf(videoData));//might be a problem
+        MediaItem mediaItem = MediaItem.fromUri(file);//might be a problem
         player.addMediaItems(Collections.singletonList(mediaItem));
         //player.prepare();
         player.setVideoScalingMode(C.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING);
@@ -279,8 +268,8 @@ public class FullscreenVideo extends AppCompatActivity {
         super.onStart();
 
         if (Util.SDK_INT>=26){
-            if (videoData != null) {
-                initializeplayer(videoData);
+            if (file != null) {
+                initializeplayer(file);
             } else {
                 // Handle case when video data is not available
             }
