@@ -1,19 +1,10 @@
 package com.honours.ecd_2023;
 
-import android.Manifest;
-import android.app.DownloadManager;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -29,25 +20,33 @@ import androidx.core.view.MenuItemCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.google.firebase.database.Query;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
-import okhttp3.Call;
+import retrofit2.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+
+
+
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 
 public class ShowVideo extends AppCompatActivity {
@@ -55,11 +54,14 @@ public class ShowVideo extends AppCompatActivity {
     private Spinner spinnerTags;
     private String selectedTopic;
 
+    private ApiService apiService;
+
     private static final int PERMISSION_STORAGE_CODE = 1000;
     DatabaseReference databaseReference;
     RecyclerView recyclerView;
-    FirebaseDatabase database;
 
+
+    private VideoListAdapter adapter;
     Button toUpload;
 
     ImageButton downloadBtn;
@@ -69,6 +71,8 @@ public class ShowVideo extends AppCompatActivity {
     PlayerView playerView;
 
     public ExoPlayer player;
+
+    private List<Video> contentList = new ArrayList<>();
 
 
 
@@ -86,8 +90,7 @@ public class ShowVideo extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerview_Showvideo);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        database = FirebaseDatabase.getInstance();
-        databaseReference = database.getReference("content");
+
         toUpload = findViewById(R.id.uploadVideoScreen);
 
         spinnerTags = findViewById(R.id.spinner_tags);
@@ -127,6 +130,25 @@ public class ShowVideo extends AppCompatActivity {
         });
     }
 
+    private void openFullscreenActivity(Video video) {
+        Intent intent = new Intent(ShowVideo.this, FullscreenVideo.class);
+        intent.putExtra("nm", video.getTitle());
+        intent.putExtra("videoData", video.getFile());
+        // ... Add more data as needed
+        startActivity(intent);
+    }
+
+    private void openFullscreenActivityPDF(Video video) {
+        Intent intent = new Intent(ShowVideo.this, PDFViewerActivity.class);
+        intent.putExtra("nm", video.getTitle());
+        intent.putExtra("ur", video.getFile());
+        // ... Add more data as needed
+        startActivity(intent);
+    }
+
+
+
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -140,146 +162,12 @@ public class ShowVideo extends AppCompatActivity {
 
 
     private void filterVideos(String topic){
-        Query query;
-        if ("All".equals(topic)) {
-            // Fetch all videos if "All" is selected
-            query = databaseReference.orderByChild("tags");
-        } else {
-            // Fetch videos with the selected tag
-            query = databaseReference.orderByChild("topics").equalTo(topic);
-        }
-
-
-        FirebaseRecyclerOptions<Video> options = new FirebaseRecyclerOptions.Builder<Video>()
-                .setQuery(query, Video.class)
-                .build();
-
-        FirebaseRecyclerAdapter<Video,ViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Video, ViewHolder>(options) {
-            @Override
-            protected void onBindViewHolder(@NonNull ViewHolder holder, int position, @NonNull Video model) {
-
-
-                holder.setExoplayer(getApplication(), model.getTitle(), model.getFileURL(), model.getTags(), model.getTopics());
-                holder.setDownloadButtonIcon(getApplication(), model.getTitle());
-                holder.setContentIcon(getApplication(),model.getTopics());
-                holder.setOnClickListener(new ViewHolder.clicklistener() {
-                    @Override
-                    public void onItemClick(View view, int position) {
-
-                        name = getItem(position).getTitle();
-                        url = getItem(position).getFileURL();
-                        tag = getItem(position).getTags();
-                        if(tag.equals("video")){
-                            Intent intent = new Intent(ShowVideo.this, FullscreenVideo.class);
-                            intent.putExtra("nm", name);
-                            intent.putExtra("ur", url);
-                            intent.putExtra("tg", tag);
-                            startActivity(intent);
-
-                        }
-                        if(tag.equals("pdf")){
-                            Intent intent = new Intent(ShowVideo.this, PDFViewerActivity.class);
-                            intent.putExtra("nm", name);
-                            intent.putExtra("ur", url);
-                            intent.putExtra("tg", tag);
-                            startActivity(intent);
-
-                        }
-
-
-
-                    }
-
-                    @Override
-                    public void onItemLongClick(View view, int position) {
-
-                    }
-                });
-
-            }
-
-            @NonNull
-            @Override
-            public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item,parent,false);
-                return new ViewHolder(view);
-            }
-        };
-        firebaseRecyclerAdapter.startListening();
-        recyclerView.setAdapter(firebaseRecyclerAdapter);
-
-
-
 
     }
 
 
 
-    private void firebaseSearch(String searchText){
-        String query = searchText.toLowerCase();
-        Query firebaseQuery = databaseReference.orderByChild("search").startAt(query)
-                .endAt(query + "\uf8ff");
 
-        FirebaseRecyclerOptions<Video> options = new FirebaseRecyclerOptions.Builder<Video>()
-                .setQuery(firebaseQuery, Video.class)
-                .build();
-
-        FirebaseRecyclerAdapter<Video,ViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Video, ViewHolder>(options) {
-            @Override
-            protected void onBindViewHolder(@NonNull ViewHolder holder, int position, @NonNull Video model) {
-
-
-                    holder.setExoplayer(getApplication(), model.getTitle(), model.getFileURL(), model.getTags(), model.getTopics());
-                holder.setDownloadButtonIcon(getApplication(), model.getTitle());
-                holder.setContentIcon(getApplication(),model.getTopics());
-                    holder.setOnClickListener(new ViewHolder.clicklistener() {
-                        @Override
-                        public void onItemClick(View view, int position) {
-
-                            name = getItem(position).getTitle();
-                            url = getItem(position).getFileURL();
-                            tag = getItem(position).getTags();
-                            if(tag.equals("video")){
-                                Intent intent = new Intent(ShowVideo.this, FullscreenVideo.class);
-                                intent.putExtra("nm", name);
-                                intent.putExtra("ur", url);
-                                intent.putExtra("tg", tag);
-                                startActivity(intent);
-
-                            }
-                            if(tag.equals("pdf")){
-                                Intent intent = new Intent(ShowVideo.this, PDFViewerActivity.class);
-                                intent.putExtra("nm", name);
-                                intent.putExtra("ur", url);
-                                intent.putExtra("tg", tag);
-                                startActivity(intent);
-
-                            }
-
-                        }
-
-                        @Override
-                        public void onItemLongClick(View view, int position) {
-
-                        }
-                    });
-
-            }
-
-            @NonNull
-            @Override
-            public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item,parent,false);
-                return new ViewHolder(view);
-            }
-        };
-        firebaseRecyclerAdapter.startListening();
-        recyclerView.setAdapter(firebaseRecyclerAdapter);
-
-
-
-
-    }
     @Override
     public void onBackPressed() {
         super.onBackPressed();
@@ -311,68 +199,71 @@ public class ShowVideo extends AppCompatActivity {
     }
 
 
+
     @Override
     protected void onStart() {
         super.onStart();
 
+        try{
 
-        Query query = databaseReference.orderByChild("tags");
+        Call<List<Video>> content = ApiService.getInterface().getAllContent();
 
+        adapter = new VideoListAdapter(ShowVideo.this, new ArrayList<>());
+        recyclerView.setAdapter(adapter);
 
-        FirebaseRecyclerOptions<Video> options = new FirebaseRecyclerOptions.Builder<Video>()
-                .setQuery(query, Video.class)
-                .build();
-
-        FirebaseRecyclerAdapter<Video,ViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Video, ViewHolder>(options) {
+        content.enqueue(new retrofit2.Callback<List<Video>>() {
             @Override
-            protected void onBindViewHolder(@NonNull ViewHolder holder, int position, @NonNull Video model) {
+            public void onResponse(Call<List<Video>> call, retrofit2.Response<List<Video>> response) {
+                if(response.isSuccessful()){
+                    String message = "Response succesful";
+                    Toast.makeText(ShowVideo.this, message, Toast.LENGTH_LONG).show();
 
-                holder.setExoplayer(getApplication(), model.getTitle(), model.getFileURL(), model.getTags(), model.getTopics());
-                holder.setDownloadButtonIcon(getApplication(), model.getTitle());
-                holder.setContentIcon(getApplication(),model.getTopics());
-                holder.setOnClickListener(new ViewHolder.clicklistener() {
-                    @Override
-                    public void onItemClick(View view, int position) {
-                        name = getItem(position).getTitle();
-                        url = getItem(position).getFileURL();
-                        tag = getItem(position).getTags();
-                        if(tag.equals("video")){
-                            Intent intent = new Intent(ShowVideo.this, FullscreenVideo.class);
-                            intent.putExtra("nm", name);
-                            intent.putExtra("ur", url);
-                            intent.putExtra("tg", tag);
-                            startActivity(intent);
+                    List<Video> videoList = response.body();
 
-                        }
-                        if(tag.equals("pdf")){
-                            Intent intent = new Intent(ShowVideo.this, PDFViewerActivity.class);
-                            intent.putExtra("nm", name);
-                            intent.putExtra("ur", url);
-                            intent.putExtra("tg", tag);
-                            startActivity(intent);
+                    if (videoList != null && !videoList.isEmpty()) {
+                        // Update your RecyclerView adapter with the new videoList
+                        adapter.updateVideoList(videoList);
 
-                        }
+                        // Optionally, notify the adapter about the data change
+                        adapter.notifyDataSetChanged();
 
+                        adapter.setOnItemClickListener(new VideoListAdapter.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(int position) {
+                                Video video = videoList.get(position);
+                                if(video.getTags().equals("video")) {
+                                    openFullscreenActivity(video); // Open full-screen activity with the clicked video
+                                }
+                                if(video.getTags().equals("pdf")) {
+                                    openFullscreenActivityPDF(video); // Open full-screen activity with the clicked video
+                                }
+
+                            }
+                        });
+                    } else {
+                        String message1 = "No videos found";
+                        Toast.makeText(ShowVideo.this, message1, Toast.LENGTH_LONG).show();
                     }
 
-                    @Override
-                    public void onItemLongClick(View view, int position) {
-
-                    }
-                });
-
+            }else{
+                    String message = "An error occured";
+                    Toast.makeText(ShowVideo.this, message, Toast.LENGTH_LONG).show();
+                }
             }
 
-            @NonNull
             @Override
-            public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item,parent,false);
-                return new ViewHolder(view);
-            }
-        };
-        firebaseRecyclerAdapter.startListening();
-        recyclerView.setAdapter(firebaseRecyclerAdapter);
+            public void onFailure(Call<List<Video>> call, Throwable t) {
 
+                String message = t.getLocalizedMessage();
+                Toast.makeText(ShowVideo.this, message, Toast.LENGTH_LONG).show();
+
+            }
+        });
+
+        }catch(Exception ex)
+        {
+            System.out.println("THE ERROR IS " + ex);
+        }
 
 
 
@@ -397,12 +288,22 @@ public class ShowVideo extends AppCompatActivity {
 
         okHttpClient.newCall(request).enqueue(new Callback() {
             @Override
+            public void onResponse(@NonNull okhttp3.Call call, @NonNull Response response) throws IOException {
+
+            }
+
+            @Override
+            public void onFailure(@NonNull okhttp3.Call call, @NonNull IOException e) {
+
+            }
+
+
             public void onFailure(Call call, IOException e) {
                 // Handle download failure
                 runOnUiThread(() -> Toast.makeText(ShowVideo.this, "Download failed", Toast.LENGTH_SHORT).show());
             }
 
-            @Override
+
             public void onResponse(Call call, Response response) throws IOException {
                 if (response.isSuccessful() && response.body() != null) {
                     try (InputStream inputStream = response.body().byteStream();
@@ -443,13 +344,13 @@ public class ShowVideo extends AppCompatActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                firebaseSearch(query);
+
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                firebaseSearch(newText);
+
                 return false;
             }
         });
