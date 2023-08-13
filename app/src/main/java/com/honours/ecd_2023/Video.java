@@ -12,6 +12,16 @@ public class Video {
 
     private String tag;
 
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
+    private String language;
+
     public String getTopics() {
         return topics;
     }
@@ -28,11 +38,12 @@ public class Video {
         this.tag = tag;
     }
 
-    public Video(String title, String  file, String tag, String topics) {
+    public Video(String title, String  file, String tag, String topics, String language) {
         this.title = title;
         this.file = file;
         this.tag = tag;
         this.topics = topics;
+        this.language = language;
     }
 
     public String getTitle() {

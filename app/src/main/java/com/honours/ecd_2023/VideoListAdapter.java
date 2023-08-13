@@ -47,6 +47,7 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.Vide
         Video videoFile = videoList.get(position);
         holder.videoTitle.setText(videoFile.getTitle());
         holder.videoTag.setText(videoFile.getTags());
+        holder.videoLangauage.setText(videoFile.getLanguage());
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,10 +72,13 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.Vide
         TextView videoTitle;
         TextView videoTag;
 
+        TextView videoLangauage;
+
         VideoViewHolder(@NonNull View itemView, final OnItemClickListener listener) {
             super(itemView);
             videoTitle = itemView.findViewById(R.id.tv_item);
             videoTag = itemView.findViewById(R.id.tag_item);
+            videoLangauage = itemView.findViewById(R.id.language_item);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

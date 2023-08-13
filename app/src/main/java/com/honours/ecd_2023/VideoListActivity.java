@@ -30,7 +30,7 @@ public class VideoListActivity extends AppCompatActivity implements VideoListAda
 
         List<Video> videoList = new ArrayList<>();
         for (File file : videoFilesList) {
-            Video video = new Video(file.getName(), file.getAbsolutePath(), "Tag", "Topics"); // Assuming Video has a constructor like this
+            Video video = new Video(file.getName(), file.getAbsolutePath(), "Tag", "Topics","Language"); // Assuming Video has a constructor like this
             videoList.add(video);
         }
 
