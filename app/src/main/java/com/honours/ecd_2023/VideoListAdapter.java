@@ -3,10 +3,12 @@ package com.honours.ecd_2023;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Application;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.io.File;
@@ -16,6 +18,8 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.Vide
     private Context context;
     private List<Video> videoList;
     private OnItemClickListener onItemClickListener;
+
+
 
     public VideoListAdapter(Context context, List<Video> videoList) {
         this.context = context;
@@ -42,12 +46,47 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.Vide
         videoList.addAll(newVideoList);
     }
 
+    private boolean isVideoInLocalMemory(String videoFileName) {
+        File internalStorageDir = context.getApplicationContext().getFilesDir();
+        File videoFile = new File(internalStorageDir, videoFileName);
+        return videoFile.exists(); // Returns true if the video file exists in local memory
+    }
+
+
     @Override
     public void onBindViewHolder(@NonNull VideoViewHolder holder, int position) {
         Video videoFile = videoList.get(position);
         holder.videoTitle.setText(videoFile.getTitle());
         holder.videoTag.setText(videoFile.getTags());
         holder.videoLangauage.setText(videoFile.getLanguage());
+
+
+        boolean isVideoStoredLocally = isVideoInLocalMemory(videoFile.getTitle());
+
+        // Set the appropriate download image based on the video's storage status
+        if (isVideoStoredLocally) {
+            holder.downloadBtn.setImageResource(R.drawable.download_green);
+        } else {
+            holder.downloadBtn.setImageResource(R.drawable.download_black);
+        }
+
+
+        if ("Baby Health".equals(videoFile.getTopics())) {
+            holder.cardImage.setImageResource(R.drawable.baby_health_picture); // Change this to the appropriate play icon for topic1
+        } else if ("Baby Development".equals(videoFile.getTopics())) {
+            holder.cardImage.setImageResource(R.drawable.baby_picture); // Change this to the appropriate play icon for topic2
+        }
+        else if ("Child Entertainment".equals(videoFile.getTopics())) {
+            holder.cardImage.setImageResource(R.drawable.baby_picture);
+        }
+        else if ("Parent Health".equals(videoFile.getTopics())) {
+            holder.cardImage.setImageResource(R.drawable.parent_picture);
+        }
+        else if ("Community Content".equals(videoFile.getTopics())) {
+            holder.cardImage.setImageResource(R.drawable.community_picture);
+        }
+
+
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,17 +107,29 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.Vide
         return videoList.size();
     }
 
+
+
     static class VideoViewHolder extends RecyclerView.ViewHolder {
         TextView videoTitle;
         TextView videoTag;
 
         TextView videoLangauage;
 
+        ImageView cardImage;
+
+        ImageView downloadBtn;
+
+
+
         VideoViewHolder(@NonNull View itemView, final OnItemClickListener listener) {
             super(itemView);
             videoTitle = itemView.findViewById(R.id.tv_item);
             videoTag = itemView.findViewById(R.id.tag_item);
             videoLangauage = itemView.findViewById(R.id.language_item);
+            cardImage = itemView.findViewById(R.id.card_image);
+            downloadBtn = itemView.findViewById(R.id.download_button_icon);
+
+
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
