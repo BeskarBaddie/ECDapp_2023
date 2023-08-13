@@ -60,6 +60,8 @@ public class ShowVideo extends AppCompatActivity {
     DatabaseReference databaseReference;
     RecyclerView recyclerView;
 
+    List<Video> videoList = null;
+
 
     private VideoListAdapter adapter;
     Button toUpload;
@@ -107,8 +109,12 @@ public class ShowVideo extends AppCompatActivity {
                 // Get the selected tag
                 selectedTopic = parent.getItemAtPosition(position).toString();
 
-                // Call the filterVideos method with the selected tag
-                filterVideos(selectedTopic);
+                if (videoList != null) { // Add this null check
+                    filterVideos(selectedTopic);
+                } else {
+                    // Handle the case where videoList is null (e.g., API call failed)
+                    // Display an appropriate message to the user or take necessary action
+                }
             }
 
             @Override
@@ -162,6 +168,34 @@ public class ShowVideo extends AppCompatActivity {
 
 
     private void filterVideos(String topic){
+
+        adapter = new VideoListAdapter(ShowVideo.this, new ArrayList<>());
+        recyclerView.setAdapter(adapter);
+        // Call the API or fetch videos based on the selected topic
+
+        // After fetching the videos, filter them based on the selected topic
+        List<Video> filteredVideoList = new ArrayList<>();
+        for (Video video : videoList) {
+            if (video.getTopics().equals(topic)) {
+                filteredVideoList.add(video);
+            }
+        }
+
+        // Update your RecyclerView adapter with the filtered video list
+        adapter.updateVideoList(filteredVideoList);
+        adapter.notifyDataSetChanged();
+
+        // Set an item click listener for the filtered video list
+        adapter.setOnItemClickListener(position -> {
+            Video video = filteredVideoList.get(position);
+            if (video.getTags().equals("video")) {
+                openFullscreenActivity(video); // Open full-screen activity with the clicked video
+            }
+            if (video.getTags().equals("pdf")) {
+                openFullscreenActivityPDF(video); // Open full-screen activity with the clicked video
+            }
+        });
+
 
     }
 
@@ -218,7 +252,7 @@ public class ShowVideo extends AppCompatActivity {
                     String message = "Response succesful";
                     Toast.makeText(ShowVideo.this, message, Toast.LENGTH_LONG).show();
 
-                    List<Video> videoList = response.body();
+                    videoList = response.body();
 
                     if (videoList != null && !videoList.isEmpty()) {
                         // Update your RecyclerView adapter with the new videoList
