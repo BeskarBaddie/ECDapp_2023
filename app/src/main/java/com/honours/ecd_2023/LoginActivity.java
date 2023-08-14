@@ -2,6 +2,7 @@ package com.honours.ecd_2023;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -59,6 +60,9 @@ public class LoginActivity extends AppCompatActivity {
                     // Store the authToken securely
                     storeAuthToken(authToken);
                     // Navigate to the main screen
+                    Intent intent = new Intent(LoginActivity.this,ShowVideo.class);
+                    startActivity(intent);
+
                     Toast.makeText(LoginActivity.this, "success", Toast.LENGTH_LONG).show();
                 } else {
                     // Handle login error
