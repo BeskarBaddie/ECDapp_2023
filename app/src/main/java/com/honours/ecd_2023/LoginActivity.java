@@ -41,6 +41,8 @@ public class LoginActivity extends AppCompatActivity {
 
         Call<AuthTokenResponse> auth = ApiService.getInterface().login(loginRequest);
 
+        try{
+
         auth.enqueue(new Callback<AuthTokenResponse>() {
             @Override
             public void onResponse(Call<AuthTokenResponse> call, Response<AuthTokenResponse> response) {
@@ -49,7 +51,7 @@ public class LoginActivity extends AppCompatActivity {
                     String authToken = authTokenResponse.getAuthToken();
                     // Store the authToken securely
                     // Navigate to the main screen
-                    Toast.makeText(LoginActivity.this, "Success", Toast.LENGTH_LONG).show();
+                    Toast.makeText(LoginActivity.this, "success", Toast.LENGTH_LONG).show();
                 } else {
                     // Handle login error
                 }
@@ -60,6 +62,9 @@ public class LoginActivity extends AppCompatActivity {
                 // Handle network failure
             }
         });
+        }catch(Exception ex){
+            System.out.println("THE ERROR IS " + ex);
+        }
 
 }
 }
