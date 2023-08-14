@@ -20,7 +20,7 @@
         tools:replace="android:appComponentFactory"
         tools:targetApi="31">
         <activity
-            android:name=".ShowVideo"
+            android:name=".LoginActivity"
             android:exported="false" />
         <activity
             android:name=".PDFViewerActivity"
@@ -59,7 +59,7 @@
             android:name=".Dashboard"
             android:exported="false" />
         <activity
-            android:name=".LoginActivity"
+            android:name=".ShowVideo"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

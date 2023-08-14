@@ -1,9 +1,10 @@
 package com.honours.ecd_2023;
 
 public class AuthTokenResponse {
-    private String authToken;
+    private String token;
+
 
     public String getAuthToken() {
-        return authToken;
+        return token;
     }
 }

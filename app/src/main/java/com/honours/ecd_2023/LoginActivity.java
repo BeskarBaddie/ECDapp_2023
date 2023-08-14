@@ -7,6 +7,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -14,6 +15,9 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+
+import android.content.Context;
+import android.content.SharedPreferences;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -39,7 +43,10 @@ public class LoginActivity extends AppCompatActivity {
 
         LoginRequest loginRequest = new LoginRequest(username, password);
 
+
+
         Call<AuthTokenResponse> auth = ApiService.getInterface().login(loginRequest);
+        //Call<AuthTokenResponse> auth = ApiService.getInterface().login(loginRequest);
 
         try{
 
@@ -50,6 +57,7 @@ public class LoginActivity extends AppCompatActivity {
                     AuthTokenResponse authTokenResponse = response.body();
                     String authToken = authTokenResponse.getAuthToken();
                     // Store the authToken securely
+                    storeAuthToken(authToken);
                     // Navigate to the main screen
                     Toast.makeText(LoginActivity.this, "success", Toast.LENGTH_LONG).show();
                 } else {
@@ -67,6 +75,22 @@ public class LoginActivity extends AppCompatActivity {
         }
 
 }
+
+    private void storeAuthToken(String authToken) {
+        SharedPreferences sharedPreferences = getSharedPreferences("auth_prefs", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        // Encrypt and store the token securely
+        editor.putString("auth_token", authToken);
+
+        // Commit the changes
+        editor.apply();
+    }
 }
+
+   // private String retrieveAuthToken() {
+     //   SharedPreferences sharedPreferences = getSharedPreferences("auth_prefs", Context.MODE_PRIVATE);
+       // return sharedPreferences.getString("auth_token", null);
+    //}
 
 
