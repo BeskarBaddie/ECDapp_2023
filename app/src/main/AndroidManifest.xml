@@ -23,6 +23,9 @@
             android:name=".ShowVideo"
             android:exported="false" />
         <activity
+            android:name=".ShowAssignedContent"
+            android:exported="false" />
+        <activity
             android:name=".PDFViewerActivity"
             android:exported="false" />
         <activity

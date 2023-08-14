@@ -16,5 +16,8 @@ public interface ApiInterface {
     Call<AuthTokenResponse> login(@Body LoginRequest loginRequest);
     //Call<AuthTokenResponse> login(@Body LoginRequest loginRequest);
 
+    @GET("get_assigned_content/")
+    Call<List<Video>> getAssignedContent(@Body String token);
+
 
 }
