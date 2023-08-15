@@ -1,6 +1,8 @@
 package com.honours.ecd_2023;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -49,7 +51,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 
-public class ShowVideo extends AppCompatActivity {
+public class ShowAssignedContent extends AppCompatActivity {
 
     private Spinner spinnerTags;
     private String selectedTopic;
@@ -137,17 +139,10 @@ public class ShowVideo extends AppCompatActivity {
 
             }
         });
-
-        assigned_content.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goToAssignedContent();
-            }
-        });
     }
 
     private void openFullscreenActivity(Video video) {
-        Intent intent = new Intent(ShowVideo.this, FullscreenVideo.class);
+        Intent intent = new Intent(ShowAssignedContent.this, FullscreenVideo.class);
         intent.putExtra("nm", video.getTitle());
         intent.putExtra("videoData", video.getFile());
         // ... Add more data as needed
@@ -155,7 +150,7 @@ public class ShowVideo extends AppCompatActivity {
     }
 
     private void openFullscreenActivityPDF(Video video) {
-        Intent intent = new Intent(ShowVideo.this, PDFViewerActivity.class);
+        Intent intent = new Intent(ShowAssignedContent.this, PDFViewerActivity.class);
         intent.putExtra("nm", video.getTitle());
         intent.putExtra("ur", video.getFile());
         // ... Add more data as needed
@@ -179,7 +174,7 @@ public class ShowVideo extends AppCompatActivity {
 
     private void filterVideos(String topic){
 
-        adapter = new VideoListAdapter(ShowVideo.this, new ArrayList<>());
+        adapter = new VideoListAdapter(ShowAssignedContent.this, new ArrayList<>());
         recyclerView.setAdapter(adapter);
         // Call the API or fetch videos based on the selected topic
 
@@ -236,18 +231,15 @@ public class ShowVideo extends AppCompatActivity {
 
     public void goToUpload() {
 
-        Intent intent = new Intent(ShowVideo.this,VideoContent.class);
+        Intent intent = new Intent(ShowAssignedContent.this,VideoContent.class);
         startActivity(intent);
 
 
     }
 
-    public void goToAssignedContent() {
-
-        Intent intent = new Intent(ShowVideo.this,ShowAssignedContent.class);
-        startActivity(intent);
-
-
+    private String retrieveAuthToken() {
+      SharedPreferences sharedPreferences = getSharedPreferences("auth_prefs", Context.MODE_PRIVATE);
+      return sharedPreferences.getString("auth_token", null);
     }
 
 
@@ -258,59 +250,71 @@ public class ShowVideo extends AppCompatActivity {
 
         try{
 
-        Call<List<Video>> content = ApiService.getInterface().getAllContent();
+            String token = retrieveAuthToken();
 
-        adapter = new VideoListAdapter(ShowVideo.this, new ArrayList<>());
-        recyclerView.setAdapter(adapter);
+            Call<List<Video>> content = ApiService.getInterface().getAssignedContent("Token " + token);
 
-        content.enqueue(new retrofit2.Callback<List<Video>>() {
-            @Override
-            public void onResponse(Call<List<Video>> call, retrofit2.Response<List<Video>> response) {
-                if(response.isSuccessful()){
-                    String message = "Response succesful";
-                    Toast.makeText(ShowVideo.this, message, Toast.LENGTH_LONG).show();
+            adapter = new VideoListAdapter(ShowAssignedContent.this, new ArrayList<>());
+            recyclerView.setAdapter(adapter);
 
-                    videoList = response.body();
+            try{
 
-                    if (videoList != null && !videoList.isEmpty()) {
-                        // Update your RecyclerView adapter with the new videoList
-                        adapter.updateVideoList(videoList);
+            content.enqueue(new retrofit2.Callback<List<Video>>() {
+                @Override
+                public void onResponse(Call<List<Video>> call, retrofit2.Response<List<Video>> response) {
+                    if(response.isSuccessful()){
+                        String message = "Response succesful";
+                        Toast.makeText(ShowAssignedContent.this, message, Toast.LENGTH_LONG).show();
 
-                        // Optionally, notify the adapter about the data change
-                        adapter.notifyDataSetChanged();
+                        videoList = response.body();
 
-                        adapter.setOnItemClickListener(new VideoListAdapter.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(int position) {
-                                Video video = videoList.get(position);
-                                if(video.getTags().equals("video")) {
-                                    openFullscreenActivity(video); // Open full-screen activity with the clicked video
+                        if (videoList != null && !videoList.isEmpty()) {
+                            // Update your RecyclerView adapter with the new videoList
+                            adapter.updateVideoList(videoList);
+
+                            // Optionally, notify the adapter about the data change
+                            adapter.notifyDataSetChanged();
+
+                            adapter.setOnItemClickListener(new VideoListAdapter.OnItemClickListener() {
+                                @Override
+                                public void onItemClick(int position) {
+                                    Video video = videoList.get(position);
+                                    if(video.getTags().equals("video")) {
+                                        openFullscreenActivity(video); // Open full-screen activity with the clicked video
+                                    }
+                                    if(video.getTags().equals("pdf")) {
+                                        openFullscreenActivityPDF(video); // Open full-screen activity with the clicked video
+                                    }
+
                                 }
-                                if(video.getTags().equals("pdf")) {
-                                    openFullscreenActivityPDF(video); // Open full-screen activity with the clicked video
-                                }
+                            });
+                        } else {
+                            String message1 = "No videos found";
+                            Toast.makeText(ShowAssignedContent.this, message1, Toast.LENGTH_LONG).show();
+                        }
 
-                            }
-                        });
-                    } else {
-                        String message1 = "No videos found";
-                        Toast.makeText(ShowVideo.this, message1, Toast.LENGTH_LONG).show();
+                    }else{
+                        try {
+                            String errorBody = response.errorBody().string();
+                            // Display or log the error body for debugging purposes
+                            Toast.makeText(ShowAssignedContent.this, "Error: " + errorBody, Toast.LENGTH_LONG).show();
+                            System.out.println("THE ERROR IS "+ errorBody);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
-
-            }else{
-                    String message = "An error occured";
-                    Toast.makeText(ShowVideo.this, message, Toast.LENGTH_LONG).show();
                 }
+
+                @Override
+                public void onFailure(Call<List<Video>> call, Throwable t) {
+
+                    String message = t.getLocalizedMessage();
+                    Toast.makeText(ShowAssignedContent.this, message, Toast.LENGTH_LONG).show();
+
+                }
+            });}catch(Exception ex ){
+                System.out.println("THE ERROR IS " + ex);
             }
-
-            @Override
-            public void onFailure(Call<List<Video>> call, Throwable t) {
-
-                String message = t.getLocalizedMessage();
-                Toast.makeText(ShowVideo.this, message, Toast.LENGTH_LONG).show();
-
-            }
-        });
 
         }catch(Exception ex)
         {
@@ -352,7 +356,7 @@ public class ShowVideo extends AppCompatActivity {
 
             public void onFailure(Call call, IOException e) {
                 // Handle download failure
-                runOnUiThread(() -> Toast.makeText(ShowVideo.this, "Download failed", Toast.LENGTH_SHORT).show());
+                runOnUiThread(() -> Toast.makeText(ShowAssignedContent.this, "Download failed", Toast.LENGTH_SHORT).show());
             }
 
 
@@ -369,17 +373,17 @@ public class ShowVideo extends AppCompatActivity {
 
                         runOnUiThread(() -> {
                             // File downloaded successfully, do additional processing if needed
-                            Toast.makeText(ShowVideo.this, "Download completed", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ShowAssignedContent.this, "Download completed", Toast.LENGTH_SHORT).show();
                             // Now you can use the videoFile for offline playback within the app
                             // E.g., you can pass the videoFile's path to the ExoPlayer to play the video.
                         });
                     } catch (IOException e) {
                         // Handle download error
-                        runOnUiThread(() -> Toast.makeText(ShowVideo.this, "Error while saving the file", Toast.LENGTH_SHORT).show());
+                        runOnUiThread(() -> Toast.makeText(ShowAssignedContent.this, "Error while saving the file", Toast.LENGTH_SHORT).show());
                     }
                 } else {
                     // Handle download error
-                    runOnUiThread(() -> Toast.makeText(ShowVideo.this, "Download failed", Toast.LENGTH_SHORT).show());
+                    runOnUiThread(() -> Toast.makeText(ShowAssignedContent.this, "Download failed", Toast.LENGTH_SHORT).show());
                 }
             }
         });
@@ -412,7 +416,7 @@ public class ShowVideo extends AppCompatActivity {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 // Open the activity where the downloads are saved
-                Intent downloadsIntent = new Intent(ShowVideo.this, VideoListActivity.class);
+                Intent downloadsIntent = new Intent(ShowAssignedContent.this, VideoListActivity.class);
                 startActivity(downloadsIntent);
                 return true;
             }
