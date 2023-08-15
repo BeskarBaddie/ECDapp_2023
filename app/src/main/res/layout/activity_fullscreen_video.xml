@@ -2,38 +2,56 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@android:color/background_light"
     tools:context=".FullscreenVideo">
+
     <TextView
         android:id="@+id/tv_fullscreen"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:text="name"
-        android:textSize="24dp"
+        android:text="Video Title"
+        android:textSize="20sp"
+        android:textColor="@android:color/black"
         android:textStyle="bold" />
 
-    <com.google.android.exoplayer2.ui.PlayerView
-        android:layout_width="match_parent"
-        android:layout_height="230dp"
-        android:id="@+id/exoplayer_fullscreen"
-        app:controller_layout_id="@layout/exoplayer_custom_control"
-        android:layout_margin="3dp"
-        app:use_controller="true"
-        app:resize_mode="fill">
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginTop="16dp"
+        android:background="@android:color/black">
+
+        <com.google.android.exoplayer2.ui.PlayerView
+            android:id="@+id/exoplayer_fullscreen"
+            android:layout_width="match_parent"
+            android:layout_height="230dp"
+            app:controller_layout_id="@layout/exoplayer_custom_control"
+            app:resize_mode="fill"
+            app:show_buffering="always"
+            app:use_controller="true" />
 
 
-    </com.google.android.exoplayer2.ui.PlayerView>
+        <ProgressBar
+            android:id="@+id/exo_buffering"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone" />
+
+    </FrameLayout>
 
     <Button
         android:id="@+id/download_button_viewholder"
         android:layout_width="150dp"
-        android:layout_height="50dp"
+        android:layout_height="48dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="16dp"
         android:text="Download"
-        android:backgroundTint="@color/purple_200"
-        android:layout_gravity="center"></Button>
-
+        android:textColor="@android:color/white"
+        android:backgroundTint="@android:color/holo_blue_light" />
 
 </LinearLayout>
