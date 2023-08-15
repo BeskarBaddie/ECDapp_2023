@@ -252,10 +252,12 @@ public class ShowAssignedContent extends AppCompatActivity {
 
             String token = retrieveAuthToken();
 
-            Call<List<Video>> content = ApiService.getInterface().getAssignedContent(token);
+            Call<List<Video>> content = ApiService.getInterface().getAssignedContent("Token " + token);
 
             adapter = new VideoListAdapter(ShowAssignedContent.this, new ArrayList<>());
             recyclerView.setAdapter(adapter);
+
+            try{
 
             content.enqueue(new retrofit2.Callback<List<Video>>() {
                 @Override
@@ -292,8 +294,14 @@ public class ShowAssignedContent extends AppCompatActivity {
                         }
 
                     }else{
-                        String message = "An error occured";
-                        Toast.makeText(ShowAssignedContent.this, message, Toast.LENGTH_LONG).show();
+                        try {
+                            String errorBody = response.errorBody().string();
+                            // Display or log the error body for debugging purposes
+                            Toast.makeText(ShowAssignedContent.this, "Error: " + errorBody, Toast.LENGTH_LONG).show();
+                            System.out.println("THE ERROR IS "+ errorBody);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
 
@@ -304,7 +312,9 @@ public class ShowAssignedContent extends AppCompatActivity {
                     Toast.makeText(ShowAssignedContent.this, message, Toast.LENGTH_LONG).show();
 
                 }
-            });
+            });}catch(Exception ex ){
+                System.out.println("THE ERROR IS " + ex);
+            }
 
         }catch(Exception ex)
         {

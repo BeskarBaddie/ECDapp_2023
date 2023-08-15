@@ -5,6 +5,7 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.POST;
 
 public interface ApiInterface {
@@ -17,7 +18,7 @@ public interface ApiInterface {
     //Call<AuthTokenResponse> login(@Body LoginRequest loginRequest);
 
     @GET("get_assigned_content/")
-    Call<List<Video>> getAssignedContent(@Body String token);
+    Call<List<Video>> getAssignedContent(@Header("Authorization")String token);
 
 
 }
