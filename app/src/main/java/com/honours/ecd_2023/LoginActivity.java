@@ -60,7 +60,7 @@ public class LoginActivity extends AppCompatActivity {
                     // Store the authToken securely
                     storeAuthToken(authToken);
                     // Navigate to the main screen
-                    Intent intent = new Intent(LoginActivity.this,ShowVideo.class);
+                    Intent intent = new Intent(LoginActivity.this,Dashboard.class);
                     startActivity(intent);
 
                     Toast.makeText(LoginActivity.this, "success", Toast.LENGTH_LONG).show();
