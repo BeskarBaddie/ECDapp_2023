@@ -97,8 +97,8 @@ public class ShowAssignedContent extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        toUpload = findViewById(R.id.uploadVideoScreen);
-        assigned_content = findViewById(R.id.assigned_content);
+        //toUpload = findViewById(R.id.uploadVideoScreen);
+        //assigned_content = findViewById(R.id.assigned_content);
 
         spinnerTags = findViewById(R.id.spinner_tags);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(

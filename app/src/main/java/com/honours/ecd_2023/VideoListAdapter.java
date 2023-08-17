@@ -86,6 +86,17 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.Vide
             holder.cardImage.setImageResource(R.drawable.community_picture);
         }
 
+        if ("Baby Health".equals(videoFile.getTopics())) {
+            holder.itemView.setBackgroundResource(R.color.baby_health_green);}
+
+        if ("Baby Development".equals(videoFile.getTopics())) {
+            holder.itemView.setBackgroundResource(R.color.baby_development_orange);}
+
+        if ("Parent Health".equals(videoFile.getTopics())) {
+            holder.itemView.setBackgroundResource(R.color.parent_health_purple);}
+
+
+
 
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
