@@ -242,6 +242,12 @@ public class ShowAssignedContent extends AppCompatActivity {
       return sharedPreferences.getString("auth_token", null);
     }
 
+    private String retrieveUsername() {
+        SharedPreferences sharedPreferences = getSharedPreferences("username_prefs", Context.MODE_PRIVATE);
+        return sharedPreferences.getString("username", null);
+    }
+
+
 
 
     @Override

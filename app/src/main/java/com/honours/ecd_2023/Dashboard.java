@@ -21,20 +21,23 @@ public class Dashboard extends AppCompatActivity {
 
     CardView videoCard;
     private FirebaseAnalytics mFirebaseAnalytics;
-    CardView articlesCard;
+    CardView assignedContent;
+
+    CardView allContent;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
-        articlesCard = findViewById(R.id.cardArticle);
-        videoCard = findViewById(R.id.cardContent);
+        assignedContent = findViewById(R.id.card_assigned_content);
+        allContent = findViewById(R.id.card_all_content);
 
-        videoCard.setOnClickListener(new View.OnClickListener() {
+
+        allContent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                goToVideoContent();
+                goToAllContent();
                 Bundle bundle = new Bundle();
                 bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "video_card");
                 bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "video_button");
@@ -42,14 +45,10 @@ public class Dashboard extends AppCompatActivity {
             }
         });
 
-        articlesCard.setOnClickListener(new View.OnClickListener() {
+        assignedContent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                goToArticles();
-                Bundle bundle = new Bundle();
-                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "articles_card");
-                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "articles_button");
-                mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+                goToAssignedContent();
             }
         });
 
@@ -60,7 +59,7 @@ public class Dashboard extends AppCompatActivity {
 
 
 
-    public void goToVideoContent() {
+    public void goToAllContent() {
 
         Intent intent = new Intent(Dashboard.this,ShowVideo.class);
         startActivity(intent);
@@ -68,9 +67,9 @@ public class Dashboard extends AppCompatActivity {
 
     }
 
-    public void goToArticles() {
+    public void goToAssignedContent() {
 
-        Intent intent = new Intent(Dashboard.this,Articles.class);
+        Intent intent = new Intent(Dashboard.this,ShowAssignedContent.class);
         startActivity(intent);
 
 
