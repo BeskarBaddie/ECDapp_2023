@@ -44,6 +44,8 @@ public class LoginActivity extends AppCompatActivity {
 
         LoginRequest loginRequest = new LoginRequest(username, password);
 
+        storeUsername(username);
+
 
 
         Call<AuthTokenResponse> auth = ApiService.getInterface().login(loginRequest);
@@ -86,6 +88,17 @@ public class LoginActivity extends AppCompatActivity {
 
         // Encrypt and store the token securely
         editor.putString("auth_token", authToken);
+
+        // Commit the changes
+        editor.apply();
+    }
+
+    private void storeUsername(String username) {
+        SharedPreferences sharedPreferences = getSharedPreferences("username_prefs", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        // Encrypt and store the token securely
+        editor.putString("username", username);
 
         // Commit the changes
         editor.apply();
