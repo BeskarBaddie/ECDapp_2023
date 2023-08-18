@@ -128,17 +128,6 @@ public class ShowAssignedContent extends AppCompatActivity {
             }
         });
 
-
-
-
-
-        toUpload.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goToUpload();
-
-            }
-        });
     }
 
     private void openFullscreenActivity(Video video) {
@@ -243,13 +232,7 @@ public class ShowAssignedContent extends AppCompatActivity {
     }
 
     private String retrieveUsername() {
-        SharedPreferences sharedPreferences = getSharedPreferences("username_prefs", Context.MODE_PRIVATE);
-        return sharedPreferences.getString("username", null);
-    }
-
-
-    private String retrieveUserName() {
-        SharedPreferences sharedPreferences = getSharedPreferences("username", Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences("auth_prefs", Context.MODE_PRIVATE);
         return sharedPreferences.getString("username", null);
     }
 
@@ -260,8 +243,8 @@ public class ShowAssignedContent extends AppCompatActivity {
         try{
 
             String token = retrieveAuthToken();
-            String username = retrieveUserName();
-            Log.d("usr", username);
+            String user = retrieveUsername();
+            System.out.println("THE USER IS " + user);
             Call<List<Video>> content = ApiService.getInterface().getAssignedContent("Token " + token);
 
             adapter = new VideoListAdapter(ShowAssignedContent.this, new ArrayList<>());
