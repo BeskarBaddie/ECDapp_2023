@@ -1,12 +1,17 @@
 package com.honours.ecd_2023;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
+import androidx.core.view.MenuItemCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -20,6 +25,12 @@ public class VideoListActivity extends AppCompatActivity implements VideoListAda
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        ActionBar actionBar = getSupportActionBar();
+
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
         setContentView(R.layout.activity_video_list);
 
         recyclerView = findViewById(R.id.recycler_view);
@@ -41,6 +52,21 @@ public class VideoListActivity extends AppCompatActivity implements VideoListAda
         adapter.setOnItemClickListener(this);
         recyclerView.setAdapter(adapter);
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == android.R.id.home) {
+            // Handle the back button action
+            onBackPressed();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+
 
     // Method to retrieve video files from internal storage
     private List<File> getFilesFromInternalStorage() {
