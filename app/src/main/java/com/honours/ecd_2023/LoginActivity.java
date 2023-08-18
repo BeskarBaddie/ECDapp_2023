@@ -67,7 +67,7 @@ public class LoginActivity extends AppCompatActivity {
                     // Store the authToken securely
                     storeCredentials(username, authToken);
                     // Navigate to the main screen
-                    Intent intent = new Intent(LoginActivity.this,Dashboard.class);
+                    Intent intent = new Intent(LoginActivity.this,ShowVideo.class);
                     startActivity(intent);
 
                     Toast.makeText(LoginActivity.this, "success", Toast.LENGTH_LONG).show();
@@ -87,14 +87,23 @@ public class LoginActivity extends AppCompatActivity {
 
 }
 
-
-
-    private void storeCredentials(String username, String authToken) {
+    private void storeAuthToken(String authToken) {
         SharedPreferences sharedPreferences = getSharedPreferences("auth_prefs", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
         // Encrypt and store the token securely
         editor.putString("auth_token", authToken);
+        editor.putString("username", username);
+
+        // Commit the changes
+        editor.apply();
+    }
+
+    private void storeUsername(String username) {
+        SharedPreferences sharedPreferences = getSharedPreferences("username", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        // Encrypt and store the token securely
         editor.putString("username", username);
 
         // Commit the changes

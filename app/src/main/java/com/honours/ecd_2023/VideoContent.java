@@ -5,7 +5,9 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -140,7 +142,9 @@ public class VideoContent extends AppCompatActivity {
 
                     String i = databaseReference.push().getKey();
                     databaseReference.child(i).setValue(video);
-                    logVideoUploadedEvent(videoName, downloadUrl.toString());
+
+                    String username = retrieveUserName();
+                    logVideoUploadedEvent(videoName, username);
 
                     }else{
                         Toast.makeText(VideoContent.this, "Failed", Toast.LENGTH_SHORT).show();
@@ -155,11 +159,17 @@ public class VideoContent extends AppCompatActivity {
         }
 
     }
-    private void logVideoUploadedEvent(String videoName, String downloadUrl) {
+    private void logVideoUploadedEvent(String videoName, String username) {
         Bundle params = new Bundle();
         params.putString(FirebaseAnalytics.Param.ITEM_NAME, "Video Uploaded");
         params.putString("video_name", videoName);
-        params.putString("download_url", downloadUrl);
+        params.putString("username", retrieveUserName());
         mFirebaseAnalytics.logEvent("video_uploaded", params);
     }
+
+    private String retrieveUserName() {
+        SharedPreferences sharedPreferences = getSharedPreferences("username", Context.MODE_PRIVATE);
+        return sharedPreferences.getString("username", null);
+    }
+
 }

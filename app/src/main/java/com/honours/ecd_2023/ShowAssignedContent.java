@@ -24,6 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ui.PlayerView;
+import com.google.android.exoplayer2.util.Log;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -79,7 +80,6 @@ public class ShowAssignedContent extends AppCompatActivity {
     public ExoPlayer player;
 
     private List<Video> contentList = new ArrayList<>();
-
 
 
     @Override
@@ -248,7 +248,10 @@ public class ShowAssignedContent extends AppCompatActivity {
     }
 
 
-
+    private String retrieveUserName() {
+        SharedPreferences sharedPreferences = getSharedPreferences("username", Context.MODE_PRIVATE);
+        return sharedPreferences.getString("username", null);
+    }
 
     @Override
     protected void onStart() {
@@ -257,7 +260,8 @@ public class ShowAssignedContent extends AppCompatActivity {
         try{
 
             String token = retrieveAuthToken();
-
+            String username = retrieveUserName();
+            Log.d("usr", username);
             Call<List<Video>> content = ApiService.getInterface().getAssignedContent("Token " + token);
 
             adapter = new VideoListAdapter(ShowAssignedContent.this, new ArrayList<>());

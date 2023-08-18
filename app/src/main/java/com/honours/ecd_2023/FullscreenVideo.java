@@ -11,6 +11,7 @@ import android.app.Application;
 import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -30,12 +31,14 @@ import android.widget.Toast;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.MediaItem;
+import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.ProgressiveMediaSource;
 import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSource;
+import com.google.android.exoplayer2.util.Log;
 import com.google.android.exoplayer2.util.Util;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
@@ -64,8 +67,9 @@ public class FullscreenVideo extends AppCompatActivity {
     boolean fullscreen = false;
     ImageView fullscreenButton;
 
-    private FirebaseAnalytics firebaseAnalytics;
-
+    private FirebaseAnalytics mFirebaseAnalytics;
+//    private final Context context = getApplicationContext();
+    private long videoStartTime = 0;
     Button downloadBtn;
 
 
@@ -74,14 +78,13 @@ public class FullscreenVideo extends AppCompatActivity {
 
     String file;
 
-
+//    String username = retrieveUserName();
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fullscreen_video);
-
         ActionBar actionBar = getSupportActionBar();
 
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -90,7 +93,7 @@ public class FullscreenVideo extends AppCompatActivity {
         playerView = findViewById(R.id.exoplayer_fullscreen);
         textView = findViewById(R.id.tv_fullscreen);
 
-        firebaseAnalytics = FirebaseAnalytics.getInstance(this);
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
         Intent intent = getIntent();
         url = intent.getExtras().getString("ur");
@@ -186,11 +189,41 @@ public class FullscreenVideo extends AppCompatActivity {
         player.setPlayWhenReady(playwhenready);
         player.seekTo(currentwindow,playbackposition);
         player.prepare();
-
+        player.addListener(new Player.Listener() {
+            public void onPlaybackStateChanged(int state) {
+                if (state == Player.STATE_READY) {
+                    videoStartTime = System.currentTimeMillis();
+                    Bundle videoPlayParams = new Bundle();
+//                    videoPlayParams.putString("username", username);
+                    videoPlayParams.putString("video_name", title);
+                    mFirebaseAnalytics.logEvent("video_played", videoPlayParams);
+//                    Log.d("video", username);
+                } else if (state == Player.STATE_ENDED) {
+                    Bundle videoEndParams = new Bundle();
+//                    videoEndParams.putString("username", username);
+                    videoEndParams.putString("video_name", title);
+                    long watchDuration = player.getCurrentPosition();
+                    videoEndParams.putLong("watch_duration", watchDuration);
+                    mFirebaseAnalytics.logEvent("video_play_completed", videoEndParams);
+                } else if (state == Player.STATE_IDLE || state == Player.STATE_ENDED) {
+                    long watchDuration = (player.getCurrentPosition() - videoStartTime)/1000;
+                    Bundle videoEndParams = new Bundle();
+//                    videoEndParams.putString("username", username);
+                    videoEndParams.putString("video_name", title);
+                    videoEndParams.putLong("watch_duration", watchDuration);
+                    mFirebaseAnalytics.logEvent("video_watched", videoEndParams);
+                    videoStartTime = 0;
+                }
+            }
+        });
 
         downloadBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Bundle downloadParams = new Bundle();
+//                downloadParams.putString("username", username);
+                downloadParams.putString("video_name", title);
+                mFirebaseAnalytics.logEvent("download_video", downloadParams);
                 Intent intent = getIntent();
                 Toast.makeText(FullscreenVideo.this, "Download Started", Toast.LENGTH_SHORT).show();
                 if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
@@ -321,7 +354,14 @@ public class FullscreenVideo extends AppCompatActivity {
 
         player.stop();
         releasePlayer();
-
+        long watchDuration = (System.currentTimeMillis() - videoStartTime)/1000;
+        if (watchDuration > 0) {
+            Bundle videoEndParams = new Bundle();
+//            videoEndParams.putString("username", username);
+            videoEndParams.putString("video_name", title);
+            videoEndParams.putLong("watch_duration", watchDuration);
+            mFirebaseAnalytics.logEvent("video_watched", videoEndParams);
+        }
         final Intent intent = new Intent();
         setResult(RESULT_OK,intent);
         finish();
@@ -348,4 +388,8 @@ public class FullscreenVideo extends AppCompatActivity {
             }
         }
     }
+//    private String retrieveUserName() {
+//        SharedPreferences sharedPreferences = context.getSharedPreferences("username", Context.MODE_PRIVATE);
+//        return sharedPreferences.getString("username", null);
+//    }
 }
