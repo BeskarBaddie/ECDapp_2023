@@ -100,7 +100,7 @@ public class ShowVideo extends AppCompatActivity {
 
         spinnerTags = findViewById(R.id.spinner_tags);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
-                this, R.array.tag_options, android.R.layout.simple_spinner_item
+                this, R.array.tag_options, R.layout.custom_spinner_item
         );
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerTags.setAdapter(adapter);
