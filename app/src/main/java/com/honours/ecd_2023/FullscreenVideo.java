@@ -78,7 +78,7 @@ public class FullscreenVideo extends AppCompatActivity {
 
     String file;
 
-//    String username = retrieveUserName();
+    String username = retrieveUserName();
 
 
     @Override
@@ -194,13 +194,13 @@ public class FullscreenVideo extends AppCompatActivity {
                 if (state == Player.STATE_READY) {
                     videoStartTime = System.currentTimeMillis();
                     Bundle videoPlayParams = new Bundle();
-//                    videoPlayParams.putString("username", username);
+                    videoPlayParams.putString("username", username);
                     videoPlayParams.putString("video_name", title);
                     mFirebaseAnalytics.logEvent("video_played", videoPlayParams);
-//                    Log.d("video", username);
+                    Log.d("video", username);
                 } else if (state == Player.STATE_ENDED) {
                     Bundle videoEndParams = new Bundle();
-//                    videoEndParams.putString("username", username);
+                    videoEndParams.putString("username", username);
                     videoEndParams.putString("video_name", title);
                     long watchDuration = player.getCurrentPosition();
                     videoEndParams.putLong("watch_duration", watchDuration);
@@ -208,7 +208,7 @@ public class FullscreenVideo extends AppCompatActivity {
                 } else if (state == Player.STATE_IDLE || state == Player.STATE_ENDED) {
                     long watchDuration = (player.getCurrentPosition() - videoStartTime)/1000;
                     Bundle videoEndParams = new Bundle();
-//                    videoEndParams.putString("username", username);
+                    videoEndParams.putString("username", username);
                     videoEndParams.putString("video_name", title);
                     videoEndParams.putLong("watch_duration", watchDuration);
                     mFirebaseAnalytics.logEvent("video_watched", videoEndParams);
@@ -388,8 +388,8 @@ public class FullscreenVideo extends AppCompatActivity {
             }
         }
     }
-//    private String retrieveUserName() {
-//        SharedPreferences sharedPreferences = context.getSharedPreferences("username", Context.MODE_PRIVATE);
-//        return sharedPreferences.getString("username", null);
-//    }
+    private String retrieveUserName() {
+        SharedPreferences sharedPreferences = getSharedPreferences("auth_prefs", Context.MODE_PRIVATE);
+        return sharedPreferences.getString("username", null);
+    }
 }
