@@ -4,7 +4,9 @@ package com.honours.ecd_2023;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import android.util.Log;
@@ -22,6 +24,8 @@ public class Dashboard extends AppCompatActivity {
     CardView videoCard;
     private FirebaseAnalytics mFirebaseAnalytics;
     CardView assignedContent;
+
+    Button btnLogout;
 
     CardView allContent;
     @Override
@@ -52,9 +56,35 @@ public class Dashboard extends AppCompatActivity {
             }
         });
 
+        btnLogout = findViewById(R.id.btn_logout); // Initialize the logout button
+
+        btnLogout.setOnClickListener(v -> logout());
 
 
 
+
+    }
+
+    private void logout() {
+        // Clear the stored credentials
+        clearCredentials();
+
+        // Navigate back to the login screen
+        Intent intent = new Intent(Dashboard.this, LoginActivity.class);
+        startActivity(intent);
+        finish(); // Prevents the user from going back to the dashboard using the back button
+    }
+
+    private void clearCredentials() {
+        SharedPreferences sharedPreferences = getSharedPreferences("auth_prefs", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        // Remove the stored credentials
+        editor.remove("auth_token");
+        editor.remove("username");
+
+        // Commit the changes
+        editor.apply();
     }
 
 
