@@ -8,8 +8,10 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.util.List;
@@ -96,6 +98,17 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.Vide
             holder.itemView.setBackgroundResource(R.color.parent_health_purple);}
 
 
+        holder.delete_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deleteVideoFile(v.getContext(),videoFile.getTitle());
+            }
+        });
+
+
+
+
+
 
 
 
@@ -124,6 +137,19 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.Vide
         return videoList.size();
     }
 
+    private void deleteVideoFile(Context context, String videoName) {
+        File internalStorageDir = context.getFilesDir();
+        File videoFile = new File(internalStorageDir, videoName );
+        if (videoFile.exists()) {
+            if (videoFile.delete()) {
+                Toast.makeText(context, "Video deleted", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(context, "Unable to delete video", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+
 
 
     static class VideoViewHolder extends RecyclerView.ViewHolder {
@@ -136,6 +162,8 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.Vide
 
         ImageView downloadBtn;
 
+        Button delete_button;
+
 
 
         VideoViewHolder(@NonNull View itemView, final OnItemClickListener listener) {
@@ -145,6 +173,7 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.Vide
             videoLangauage = itemView.findViewById(R.id.language_item);
             cardImage = itemView.findViewById(R.id.card_image);
             downloadBtn = itemView.findViewById(R.id.download_button_icon);
+            delete_button = itemView.findViewById(R.id.delete_button);
 
 
 

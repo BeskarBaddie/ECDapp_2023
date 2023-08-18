@@ -188,6 +188,10 @@ public class ShowVideo extends AppCompatActivity {
         for (Video video : videoList) {
             if (video.getTopics().equals(topic)) {
                 filteredVideoList.add(video);
+            } else if (topic.equals("All")) {
+                filteredVideoList.add(video);
+
+
             }
         }
 
