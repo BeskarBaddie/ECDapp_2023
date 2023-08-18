@@ -95,8 +95,8 @@ public class ShowVideo extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        toUpload = findViewById(R.id.uploadVideoScreen);
-        assigned_content = findViewById(R.id.assigned_content);
+        //toUpload = findViewById(R.id.uploadVideoScreen);
+        //assigned_content = findViewById(R.id.assigned_content);
 
         spinnerTags = findViewById(R.id.spinner_tags);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
@@ -130,20 +130,20 @@ public class ShowVideo extends AppCompatActivity {
 
 
 
-        toUpload.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goToUpload();
+       // toUpload.setOnClickListener(new View.OnClickListener() {
+        //    @Override
+       //     public void onClick(View v) {
+       //         goToUpload();
 
-            }
-        });
+       //     }
+     //   });
 
-        assigned_content.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goToAssignedContent();
-            }
-        });
+       // assigned_content.setOnClickListener(new View.OnClickListener() {
+        //    @Override
+        //    public void onClick(View v) {
+       //         goToAssignedContent();
+        //    }
+       // });
     }
 
     private void openFullscreenActivity(Video video) {

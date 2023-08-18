@@ -7,4 +7,9 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="baby_health_green">#00bfa0</color>
+    <color name="baby_development_orange">#ffa300</color>
+    <color name="parent_health_purple">#9b19f5</color>
+
 </resources>
