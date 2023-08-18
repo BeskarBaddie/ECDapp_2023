@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -32,6 +33,8 @@ public class ViewHolder extends RecyclerView.ViewHolder {
 
     ImageView downloadBtn;
 
+    Button delete_button;
+
 
 
     public void setExoPlayer(ExoPlayer player) {
@@ -45,6 +48,8 @@ public class ViewHolder extends RecyclerView.ViewHolder {
         super(itemView);
 
         downloadBtn = itemView.findViewById(R.id.download_button_icon);
+
+        delete_button = itemView.findViewById(R.id.delete_button);
 
         downloadBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,6 +74,8 @@ public class ViewHolder extends RecyclerView.ViewHolder {
                 return false;
             }
         });
+
+
 
 
 
