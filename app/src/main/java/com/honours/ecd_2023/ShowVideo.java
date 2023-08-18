@@ -407,7 +407,8 @@ public class ShowVideo extends AppCompatActivity {
             @Override
             public boolean onQueryTextChange(String newText) {
 
-                return false;
+                filterVideosByName(newText);
+                return true;
             }
         });
 
@@ -423,5 +424,18 @@ public class ShowVideo extends AppCompatActivity {
         });
 
         return super.onCreateOptionsMenu(menu);
+    }
+
+    private void filterVideosByName(String query) {
+        if (videoList != null) {
+            List<Video> filteredVideoList = new ArrayList<>();
+            for (Video video : videoList) {
+                if (video.getTitle().toLowerCase().contains(query.toLowerCase())) {
+                    filteredVideoList.add(video);
+                }
+            }
+            adapter.updateVideoList(filteredVideoList);
+            adapter.notifyDataSetChanged();
+        }
     }
 }
