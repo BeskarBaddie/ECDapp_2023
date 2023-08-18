@@ -87,7 +87,7 @@ public class LoginActivity extends AppCompatActivity {
 
 }
 
-    private void storeAuthToken(String authToken) {
+    private void storeCredentials(String username, String authToken) {
         SharedPreferences sharedPreferences = getSharedPreferences("auth_prefs", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
