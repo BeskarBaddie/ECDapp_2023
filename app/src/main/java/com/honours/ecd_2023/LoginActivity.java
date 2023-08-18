@@ -36,6 +36,11 @@ public class LoginActivity extends AppCompatActivity {
         Button btnLogin = findViewById(R.id.btn_login);
         btnLogin.setOnClickListener(v -> performLogin());
 
+        if (isUserLoggedIn()) {
+            Intent intent = new Intent(LoginActivity.this,Dashboard.class);
+            startActivity(intent);
+        }
+
     }
 
     private void performLogin() {
@@ -44,7 +49,7 @@ public class LoginActivity extends AppCompatActivity {
 
         LoginRequest loginRequest = new LoginRequest(username, password);
 
-        storeUsername(username);
+
 
 
 
@@ -60,7 +65,7 @@ public class LoginActivity extends AppCompatActivity {
                     AuthTokenResponse authTokenResponse = response.body();
                     String authToken = authTokenResponse.getAuthToken();
                     // Store the authToken securely
-                    storeAuthToken(authToken);
+                    storeCredentials(username, authToken);
                     // Navigate to the main screen
                     Intent intent = new Intent(LoginActivity.this,Dashboard.class);
                     startActivity(intent);
@@ -82,26 +87,23 @@ public class LoginActivity extends AppCompatActivity {
 
 }
 
-    private void storeAuthToken(String authToken) {
+
+
+    private void storeCredentials(String username, String authToken) {
         SharedPreferences sharedPreferences = getSharedPreferences("auth_prefs", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
         // Encrypt and store the token securely
         editor.putString("auth_token", authToken);
+        editor.putString("username", username);
 
         // Commit the changes
         editor.apply();
     }
 
-    private void storeUsername(String username) {
-        SharedPreferences sharedPreferences = getSharedPreferences("username_prefs", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-
-        // Encrypt and store the token securely
-        editor.putString("username", username);
-
-        // Commit the changes
-        editor.apply();
+    private boolean isUserLoggedIn() {
+        SharedPreferences sharedPreferences = getSharedPreferences("auth_prefs", Context.MODE_PRIVATE);
+        return sharedPreferences.contains("auth_token") && sharedPreferences.contains("username");
     }
 }
 
