@@ -15,6 +15,7 @@
         app:cardElevation="4dp"
         app:cardUseCompatPadding="true"
         android:layout_margin="16dp"
+        android:backgroundTint="#D8B8F3"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

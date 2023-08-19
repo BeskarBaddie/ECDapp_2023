@@ -3,7 +3,6 @@ package com.honours.ecd_2023;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.Application;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
