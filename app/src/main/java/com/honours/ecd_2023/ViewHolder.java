@@ -84,7 +84,7 @@ public class ViewHolder extends RecyclerView.ViewHolder {
     public void setDownloadButtonIcon(Application application, String name) {
         ImageView downloadBtn = itemView.findViewById(R.id.download_button_icon);
         File internalStorageDir = application.getApplicationContext().getFilesDir();
-        File videoFile = new File(internalStorageDir, name + ".mp4");
+        File videoFile = new File(internalStorageDir, name + " (Download)");
         if (videoFile.exists()) {
             // If the video file exists in internal storage, show a different icon
             downloadBtn.setImageResource(R.drawable.download_green);

@@ -78,7 +78,7 @@ public class FullscreenVideo extends AppCompatActivity {
 
     String file;
 
-    String username = retrieveUserName();
+    String username;
 
 
     @Override
@@ -100,6 +100,8 @@ public class FullscreenVideo extends AppCompatActivity {
         title = intent.getExtras().getString("nm");
         file = intent.getExtras().getString("videoData");
         actionBar.setTitle(title);
+
+        username = retrieveUserName();
 
         fullscreenButton = playerView.findViewById(R.id.exo_fullscreen_icon);
 
@@ -252,7 +254,7 @@ public class FullscreenVideo extends AppCompatActivity {
             return;
         }
 
-        String fileName = title;
+        String fileName = title + " (Download)";
         File internalStorageDir = getApplicationContext().getFilesDir();
         File videoFile = new File(internalStorageDir, fileName);
 

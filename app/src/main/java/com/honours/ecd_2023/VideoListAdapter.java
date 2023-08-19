@@ -50,8 +50,13 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.Vide
 
     private boolean isVideoInLocalMemory(String videoFileName) {
         File internalStorageDir = context.getApplicationContext().getFilesDir();
-        File videoFile = new File(internalStorageDir, videoFileName);
-        return videoFile.exists(); // Returns true if the video file exists in local memory
+        if(videoFileName.endsWith(" (Download)")){
+            File videoFile = new File(internalStorageDir, (videoFileName));
+            return videoFile.exists();
+
+        }else{
+        File videoFile = new File(internalStorageDir, (videoFileName + " (Download)"));
+        return videoFile.exists();} // Returns true if the video file exists in local memory
     }
 
 
@@ -68,8 +73,10 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.Vide
         // Set the appropriate download image based on the video's storage status
         if (isVideoStoredLocally) {
             holder.downloadBtn.setImageResource(R.drawable.download_green);
+            holder.delete_button.setVisibility(View.VISIBLE);
         } else {
             holder.downloadBtn.setImageResource(R.drawable.download_black);
+            holder.delete_button.setVisibility(View.INVISIBLE);
         }
 
 

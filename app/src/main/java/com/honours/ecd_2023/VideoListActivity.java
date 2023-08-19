@@ -77,7 +77,7 @@ public class VideoListActivity extends AppCompatActivity implements VideoListAda
         // Add all video files to the list
         if (files != null) {
             for (File file : files) {
-                //if (file.isFile() && file.getName().endsWith(".mp4"))
+                if (file.isFile() && file.getName().endsWith(" (Download)"))
                 if (file.isFile()) {
                     videoFiles.add(file);
                 }
