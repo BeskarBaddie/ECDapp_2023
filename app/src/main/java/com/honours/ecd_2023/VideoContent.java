@@ -42,7 +42,7 @@ public class VideoContent extends AppCompatActivity {
     DatabaseReference databaseReference;
     Video video;
     UploadTask uploadTask;
-
+    String user ="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,7 +51,7 @@ public class VideoContent extends AppCompatActivity {
         //video = new Video();
         storageReference = FirebaseStorage.getInstance().getReference("Video");
         databaseReference = FirebaseDatabase.getInstance().getReference("content");
-
+        user = retrieveUserName();
         videoView = findViewById(R.id.videoview_main);
         button = findViewById(R.id.button_upload_main);
         progressBar = findViewById(R.id.progressbar_main);
@@ -143,8 +143,7 @@ public class VideoContent extends AppCompatActivity {
                     String i = databaseReference.push().getKey();
                     databaseReference.child(i).setValue(video);
 
-                    String username = retrieveUserName();
-                    logVideoUploadedEvent(videoName, username);
+                    logVideoUploadedEvent(videoName, user);
 
                     }else{
                         Toast.makeText(VideoContent.this, "Failed", Toast.LENGTH_SHORT).show();
@@ -159,11 +158,11 @@ public class VideoContent extends AppCompatActivity {
         }
 
     }
-    private void logVideoUploadedEvent(String videoName, String username) {
+    private void logVideoUploadedEvent(String videoName, String user) {
         Bundle params = new Bundle();
         params.putString(FirebaseAnalytics.Param.ITEM_NAME, "Video Uploaded");
         params.putString("video_name", videoName);
-        params.putString("username", retrieveUserName());
+        params.putString("username", user);
         mFirebaseAnalytics.logEvent("video_uploaded", params);
     }
 

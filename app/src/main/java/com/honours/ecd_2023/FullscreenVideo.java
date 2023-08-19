@@ -72,13 +72,12 @@ public class FullscreenVideo extends AppCompatActivity {
     private long videoStartTime = 0;
     Button downloadBtn;
 
-
+    String user ="";
 
     String title, downloadurl, check;
 
     String file;
 
-    String username;
 
 
     @Override
@@ -86,6 +85,8 @@ public class FullscreenVideo extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fullscreen_video);
         ActionBar actionBar = getSupportActionBar();
+
+        user = retrieveUsername();
 
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -100,8 +101,6 @@ public class FullscreenVideo extends AppCompatActivity {
         title = intent.getExtras().getString("nm");
         file = intent.getExtras().getString("videoData");
         actionBar.setTitle(title);
-
-        username = retrieveUserName();
 
         fullscreenButton = playerView.findViewById(R.id.exo_fullscreen_icon);
 
@@ -196,13 +195,13 @@ public class FullscreenVideo extends AppCompatActivity {
                 if (state == Player.STATE_READY) {
                     videoStartTime = System.currentTimeMillis();
                     Bundle videoPlayParams = new Bundle();
-                    videoPlayParams.putString("username", username);
+                    videoPlayParams.putString("username", user);
                     videoPlayParams.putString("video_name", title);
                     mFirebaseAnalytics.logEvent("video_played", videoPlayParams);
-                    Log.d("video", username);
+                    Log.d("video", user);
                 } else if (state == Player.STATE_ENDED) {
                     Bundle videoEndParams = new Bundle();
-                    videoEndParams.putString("username", username);
+                    videoEndParams.putString("username", user);
                     videoEndParams.putString("video_name", title);
                     long watchDuration = player.getCurrentPosition();
                     videoEndParams.putLong("watch_duration", watchDuration);
@@ -210,7 +209,7 @@ public class FullscreenVideo extends AppCompatActivity {
                 } else if (state == Player.STATE_IDLE || state == Player.STATE_ENDED) {
                     long watchDuration = (player.getCurrentPosition() - videoStartTime)/1000;
                     Bundle videoEndParams = new Bundle();
-                    videoEndParams.putString("username", username);
+                    videoEndParams.putString("username", user);
                     videoEndParams.putString("video_name", title);
                     videoEndParams.putLong("watch_duration", watchDuration);
                     mFirebaseAnalytics.logEvent("video_watched", videoEndParams);
@@ -223,7 +222,7 @@ public class FullscreenVideo extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Bundle downloadParams = new Bundle();
-//                downloadParams.putString("username", username);
+                downloadParams.putString("user", user);
                 downloadParams.putString("video_name", title);
                 mFirebaseAnalytics.logEvent("download_video", downloadParams);
                 Intent intent = getIntent();
@@ -359,7 +358,7 @@ public class FullscreenVideo extends AppCompatActivity {
         long watchDuration = (System.currentTimeMillis() - videoStartTime)/1000;
         if (watchDuration > 0) {
             Bundle videoEndParams = new Bundle();
-//            videoEndParams.putString("username", username);
+            videoEndParams.putString("username", user);
             videoEndParams.putString("video_name", title);
             videoEndParams.putLong("watch_duration", watchDuration);
             mFirebaseAnalytics.logEvent("video_watched", videoEndParams);
@@ -390,7 +389,7 @@ public class FullscreenVideo extends AppCompatActivity {
             }
         }
     }
-    private String retrieveUserName() {
+    private String retrieveUsername() {
         SharedPreferences sharedPreferences = getSharedPreferences("auth_prefs", Context.MODE_PRIVATE);
         return sharedPreferences.getString("username", null);
     }
