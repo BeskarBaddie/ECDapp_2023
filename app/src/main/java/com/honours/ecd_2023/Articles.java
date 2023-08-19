@@ -5,7 +5,9 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -36,7 +38,7 @@ public class Articles extends AppCompatActivity {
 
     StorageReference storageReference;
     DatabaseReference databaseReference;
-
+    String user ="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,7 +52,7 @@ public class Articles extends AppCompatActivity {
 //should be disabled before you click a pdf
         upload.setEnabled(false);
 
-
+        user = retrieveUsername();
         //upload the pdf
         edit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -148,6 +150,7 @@ public class Articles extends AppCompatActivity {
     }
     private void logPdfUploadedEvent(String pdfTitle, String downloadUrl) {
         Bundle params = new Bundle();
+        params.putString("username", user);
         params.putString(FirebaseAnalytics.Param.ITEM_NAME, "PDF Uploaded");
         params.putString("pdf_title", pdfTitle);
         params.putString("download_url", downloadUrl);
@@ -162,12 +165,16 @@ public class Articles extends AppCompatActivity {
 
     private void logPdfViewedEvent(String pdfTitle) {
         Bundle params = new Bundle();
+        params.putString("username", user);
         params.putString(FirebaseAnalytics.Param.ITEM_NAME, "PDF Viewed");
         params.putString("pdf_title", pdfTitle);
         mFirebaseAnalytics.logEvent("pdf_viewed", params);
         Log.d("pdf_viewed", "PDF Viewed: " + pdfTitle);
     }
 
-
+    private String retrieveUsername() {
+        SharedPreferences sharedPreferences = getSharedPreferences("auth_prefs", Context.MODE_PRIVATE);
+        return sharedPreferences.getString("username", null);
+    }
 
 }
