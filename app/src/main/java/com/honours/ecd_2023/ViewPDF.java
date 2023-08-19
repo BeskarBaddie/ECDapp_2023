@@ -5,7 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -30,10 +32,11 @@ public class ViewPDF extends AppCompatActivity {
     private DatabaseReference pdfReference;
     Query query;
     ProgressBar progressBar;
-
+    String user ="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        user = retrieveUserName();
         setContentView(R.layout.activity_view_pdf);
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         displayPDFs();
@@ -105,6 +108,7 @@ public class ViewPDF extends AppCompatActivity {
                             intent.setData(Uri.parse(model.getUrl()));
                             startActivity(intent);
                             Bundle params = new Bundle();
+                            params.putString("username", user);
                             params.putString(FirebaseAnalytics.Param.ITEM_NAME, "PDF Opened");
                             params.putString("pdf_title", model.getFileName());
                             mFirebaseAnalytics.logEvent("pdf_opened", params);
@@ -147,5 +151,8 @@ public class ViewPDF extends AppCompatActivity {
         super.onBackPressed();
 
     }
-
+    private String retrieveUserName() {
+        SharedPreferences sharedPreferences = getSharedPreferences("auth_prefs", Context.MODE_PRIVATE);
+        return sharedPreferences.getString("username", null);
+    }
 }
