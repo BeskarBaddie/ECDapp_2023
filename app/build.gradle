@@ -72,8 +72,13 @@ dependencies {
 
     implementation 'com.squareup.okhttp3:logging-interceptor:4.11.0'
 
+    //snackbar
+    implementation 'com.google.android.material:material:1.9.0'
+
 
     testImplementation 'org.mockito:mockito-core:4.1.0'
+
+
 
 
 

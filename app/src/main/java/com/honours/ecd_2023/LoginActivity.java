@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -19,6 +20,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+
+import com.google.android.material.snackbar.Snackbar;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -70,9 +73,10 @@ public class LoginActivity extends AppCompatActivity {
                     Intent intent = new Intent(LoginActivity.this,Dashboard.class);
                     startActivity(intent);
 
-                    Toast.makeText(LoginActivity.this, "success", Toast.LENGTH_LONG).show();
+                    Snackbar.make(findViewById(android.R.id.content), "Login succesful!", Snackbar.LENGTH_LONG).show();
                 } else {
-                    // Handle login error
+                    Snackbar.make(findViewById(android.R.id.content), "Login failed. Please check your credentials.", Snackbar.LENGTH_LONG).show();
+                    hideKeyboard();
                 }
             }
 
@@ -108,6 +112,11 @@ public class LoginActivity extends AppCompatActivity {
 
         // Commit the changes
         editor.apply();
+    }
+
+    private void hideKeyboard() {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(etPassword.getWindowToken(), 0);
     }
 
     private boolean isUserLoggedIn() {
