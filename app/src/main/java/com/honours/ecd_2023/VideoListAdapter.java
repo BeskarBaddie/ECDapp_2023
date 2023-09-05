@@ -20,11 +20,14 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.Vide
     private List<Video> videoList;
     private OnItemClickListener onItemClickListener;
 
+    private boolean showDeleteButton;
 
 
-    public VideoListAdapter(Context context, List<Video> videoList) {
+
+    public VideoListAdapter(Context context, List<Video> videoList, boolean showDeleteButton) {
         this.context = context;
         this.videoList = videoList;
+        this.showDeleteButton = showDeleteButton;
     }
 
     public interface OnItemClickListener {
@@ -67,7 +70,9 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.Vide
         holder.videoLangauage.setText(videoFile.getLanguage());
 
 
+
         boolean isVideoStoredLocally = isVideoInLocalMemory(videoFile.getTitle());
+
 
         // Set the appropriate download image based on the video's storage status
         if (isVideoStoredLocally) {
@@ -75,6 +80,12 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.Vide
             holder.delete_button.setVisibility(View.VISIBLE);
         } else {
             holder.downloadBtn.setImageResource(R.drawable.download_black);
+            holder.delete_button.setVisibility(View.INVISIBLE);
+        }
+
+        if (showDeleteButton==true) {
+            holder.delete_button.setVisibility(View.VISIBLE);
+        } else {
             holder.delete_button.setVisibility(View.INVISIBLE);
         }
 

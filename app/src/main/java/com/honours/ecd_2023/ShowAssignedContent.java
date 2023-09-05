@@ -163,7 +163,7 @@ public class ShowAssignedContent extends AppCompatActivity {
 
     private void filterVideos(String topic){
 
-        adapter = new VideoListAdapter(ShowAssignedContent.this, new ArrayList<>());
+        adapter = new VideoListAdapter(ShowAssignedContent.this, new ArrayList<>(),false);
         recyclerView.setAdapter(adapter);
         // Call the API or fetch videos based on the selected topic
 
@@ -247,7 +247,7 @@ public class ShowAssignedContent extends AppCompatActivity {
             System.out.println("THE USER IS " + user);
             Call<List<Video>> content = ApiService.getInterface().getAssignedContent("Token " + token);
 
-            adapter = new VideoListAdapter(ShowAssignedContent.this, new ArrayList<>());
+            adapter = new VideoListAdapter(ShowAssignedContent.this, new ArrayList<>(),false);
             recyclerView.setAdapter(adapter);
 
             try{
