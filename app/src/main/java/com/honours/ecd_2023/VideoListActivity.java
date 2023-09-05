@@ -48,7 +48,7 @@ public class VideoListActivity extends AppCompatActivity implements VideoListAda
 
 
         // Initialize and set up the RecyclerView adapter
-        adapter = new VideoListAdapter(this, videoList);
+        adapter = new VideoListAdapter(this, videoList,true);
         adapter.setOnItemClickListener(this);
         recyclerView.setAdapter(adapter);
     }

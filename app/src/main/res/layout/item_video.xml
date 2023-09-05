@@ -101,13 +101,16 @@
                         android:src="@drawable/download_black"
                         />
 
-                    <Button
-                        android:id="@+id/delete_button"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Delete"></Button>
                 </LinearLayout>
 
+                <Button
+                    android:id="@+id/delete_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:elevation="15dp"
+                    android:layout_marginBottom="3dp"
+                    android:backgroundTint="@android:color/holo_red_light"
+                    android:text="Delete Item"></Button>
 
 
             </LinearLayout>

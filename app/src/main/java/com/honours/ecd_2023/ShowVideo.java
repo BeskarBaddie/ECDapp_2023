@@ -179,7 +179,7 @@ public class ShowVideo extends AppCompatActivity {
 
     private void filterVideos(String topic){
 
-        adapter = new VideoListAdapter(ShowVideo.this, new ArrayList<>());
+        adapter = new VideoListAdapter(ShowVideo.this, new ArrayList<>(),false);
         recyclerView.setAdapter(adapter);
         // Call the API or fetch videos based on the selected topic
 
@@ -264,7 +264,7 @@ public class ShowVideo extends AppCompatActivity {
 
         Call<List<Video>> content = ApiService.getInterface().getAllContent();
 
-        adapter = new VideoListAdapter(ShowVideo.this, new ArrayList<>());
+        adapter = new VideoListAdapter(ShowVideo.this, new ArrayList<>(),false);
         recyclerView.setAdapter(adapter);
 
         content.enqueue(new retrofit2.Callback<List<Video>>() {
