@@ -24,7 +24,7 @@ public class ApiService {
                 .build();
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://yayb.onrender.com/") // Replace with your Django API base URL
+                .baseUrl("https://yayb.onrender.com/") // http:/bbp-1.cs.uct.ac.za/ https://yayb.onrender.com/
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(okHttpClient)
                 .build();
