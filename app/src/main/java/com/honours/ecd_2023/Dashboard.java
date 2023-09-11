@@ -21,7 +21,7 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import java.util.ArrayList;
 
 
-public class Dashboard extends AppCompatActivity {
+public class Dashboard extends AppCompatActivity implements ButtonAdapter.OnItemClickListener {
 
 
 
@@ -32,6 +32,8 @@ public class Dashboard extends AppCompatActivity {
     Button btnLogout;
 
     CardView allContent;
+
+    private String clickedItemText;
 
     RecyclerView rv;
     ArrayList<String> dataSource;
@@ -54,10 +56,13 @@ public class Dashboard extends AppCompatActivity {
         dataSource.add("Downloads");
         dataSource.add("About");
 
+
+
         linearLayoutManager = new LinearLayoutManager(Dashboard.this,LinearLayoutManager.HORIZONTAL,false);
-        buttonAdapter = new ButtonAdapter(dataSource);
+        buttonAdapter = new ButtonAdapter(dataSource, this);
         rv.setLayoutManager(linearLayoutManager);
         rv.setAdapter(buttonAdapter);
+
 
 
 
@@ -88,6 +93,18 @@ public class Dashboard extends AppCompatActivity {
 
 
     }
+
+
+    public void goToDownloads() {
+
+        Intent intent = new Intent(Dashboard.this,VideoListActivity.class);
+        startActivity(intent);
+
+
+    }
+    
+
+
 
     private void logout() {
         // Clear the stored credentials
@@ -126,6 +143,28 @@ public class Dashboard extends AppCompatActivity {
         Intent intent = new Intent(Dashboard.this,ShowAssignedContent.class);
         startActivity(intent);
 
+
+    }
+
+    @Override
+    public void onItemClick(String itemText) {
+        switch (itemText) {
+            case "Logout":
+                logout();
+                break;
+            case "Website":
+
+                break;
+            case "Downloads":
+                goToDownloads();
+                break;
+            case "About":
+
+                break;
+            default:
+                // Handle other cases if needed
+                break;
+        }
 
     }
 }
