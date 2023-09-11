@@ -84,6 +84,7 @@ public class VideoListActivity extends AppCompatActivity implements VideoListAda
             }
         }
         return videoFiles;
+
     }
 
     // RecyclerView item click event handler

@@ -3,6 +3,8 @@ package com.honours.ecd_2023;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.Intent;
@@ -16,6 +18,8 @@ import android.widget.Button;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
 
+import java.util.ArrayList;
+
 
 public class Dashboard extends AppCompatActivity {
 
@@ -28,6 +32,11 @@ public class Dashboard extends AppCompatActivity {
     Button btnLogout;
 
     CardView allContent;
+
+    RecyclerView rv;
+    ArrayList<String> dataSource;
+    LinearLayoutManager linearLayoutManager;
+    ButtonAdapter buttonAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,6 +44,21 @@ public class Dashboard extends AppCompatActivity {
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         assignedContent = findViewById(R.id.card_assigned_content);
         allContent = findViewById(R.id.card_all_content);
+
+
+        rv = findViewById(R.id.horizontal_recycler_view);
+        //Setting dataSource
+        dataSource = new ArrayList<>();
+        dataSource.add("Logout");
+        dataSource.add("Website");
+        dataSource.add("Downloads");
+        dataSource.add("About");
+
+        linearLayoutManager = new LinearLayoutManager(Dashboard.this,LinearLayoutManager.HORIZONTAL,false);
+        buttonAdapter = new ButtonAdapter(dataSource);
+        rv.setLayoutManager(linearLayoutManager);
+        rv.setAdapter(buttonAdapter);
+
 
 
         allContent.setOnClickListener(new View.OnClickListener() {
