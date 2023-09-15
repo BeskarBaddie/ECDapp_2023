@@ -1,6 +1,8 @@
 package com.honours.ecd_2023;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -262,7 +264,9 @@ public class ShowVideo extends AppCompatActivity {
 
         try{
 
-        Call<List<Video>> content = ApiService.getInterface().getAllContent();
+            String token = retrieveAuthToken();
+
+        Call<List<Video>> content = ApiService.getInterface().getAllContent("Token " + token);
 
         adapter = new VideoListAdapter(ShowVideo.this, new ArrayList<>(),false);
         recyclerView.setAdapter(adapter);
@@ -425,6 +429,12 @@ public class ShowVideo extends AppCompatActivity {
 
         return super.onCreateOptionsMenu(menu);
     }
+
+    private String retrieveAuthToken() {
+        SharedPreferences sharedPreferences = getSharedPreferences("auth_prefs", Context.MODE_PRIVATE);
+        return sharedPreferences.getString("auth_token", null);
+    }
+
 
     private void filterVideosByName(String query) {
         if (videoList != null) {
