@@ -11,7 +11,7 @@ import retrofit2.http.POST;
 public interface ApiInterface {
 
     @GET("get_all_content/")
-    Call<List<Video>> getAllContent();
+    Call<List<Video>> getAllContent(@Header("Authorization")String token);
 
     @POST("android_login/") // Replace with your API endpoint
     Call<AuthTokenResponse> login(@Body LoginRequest loginRequest);
