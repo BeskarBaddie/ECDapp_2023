@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 
 import android.util.Log;
@@ -51,10 +52,10 @@ public class Dashboard extends AppCompatActivity implements ButtonAdapter.OnItem
         rv = findViewById(R.id.horizontal_recycler_view);
         //Setting dataSource
         dataSource = new ArrayList<>();
-        dataSource.add("Logout");
-        dataSource.add("Website");
         dataSource.add("Downloads");
-        dataSource.add("About");
+        dataSource.add("Website");
+        dataSource.add("Contact Us");
+        dataSource.add("Logout");
 
 
 
@@ -85,10 +86,6 @@ public class Dashboard extends AppCompatActivity implements ButtonAdapter.OnItem
             }
         });
 
-        btnLogout = findViewById(R.id.btn_logout); // Initialize the logout button
-
-        btnLogout.setOnClickListener(v -> logout());
-
 
 
 
@@ -114,6 +111,29 @@ public class Dashboard extends AppCompatActivity implements ButtonAdapter.OnItem
         Intent intent = new Intent(Dashboard.this, LoginActivity.class);
         startActivity(intent);
         finish(); // Prevents the user from going back to the dashboard using the back button
+    }
+
+    private void openWebsite() {
+
+        String url = "https://bhabhisana.org.za/";
+        // Create an Intent with ACTION_VIEW and the URL
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+
+        // Check if there's a browser app to handle the intent
+
+            startActivity(browserIntent);
+
+    }
+
+    private void openContact() {
+
+        String url = "https://bhabhisana.org.za/contact-us/";
+        // Create an Intent with ACTION_VIEW and the URL
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+
+
+            startActivity(browserIntent);
+
     }
 
     private void clearCredentials() {
@@ -153,12 +173,14 @@ public class Dashboard extends AppCompatActivity implements ButtonAdapter.OnItem
                 logout();
                 break;
             case "Website":
+                openWebsite();
 
                 break;
             case "Downloads":
                 goToDownloads();
                 break;
-            case "About":
+            case "Contact Us":
+                openContact();
 
                 break;
             default:

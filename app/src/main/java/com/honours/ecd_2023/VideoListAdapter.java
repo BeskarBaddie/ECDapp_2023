@@ -1,5 +1,6 @@
 package com.honours.ecd_2023;
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
@@ -22,16 +23,32 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.Vide
 
     private boolean showDeleteButton;
 
+    private String currentActivityName;
+
 
 
     public VideoListAdapter(Context context, List<Video> videoList, boolean showDeleteButton) {
         this.context = context;
         this.videoList = videoList;
         this.showDeleteButton = showDeleteButton;
+
     }
 
     public interface OnItemClickListener {
         void onItemClick(int position);
+    }
+
+    public void updateCardLayoutParams(CardView cardView) {
+        if ("ShowVideo".equals(currentActivityName)) {
+            // Set layout parameters for YourActivityName1
+            cardView.setLayoutParams(new CardView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        } else if ("VideoListActivity".equals(currentActivityName)) {
+            // Set layout parameters for YourActivityName2
+            cardView.setLayoutParams(new CardView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        } else {
+            // Default layout parameters if no match is found
+            cardView.setLayoutParams(new CardView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        }
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {
@@ -68,6 +85,8 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.Vide
         holder.videoTitle.setText(videoFile.getTitle());
         holder.videoTag.setText(videoFile.getTags());
         holder.videoLangauage.setText(videoFile.getLanguage());
+
+        updateCardLayoutParams(holder.cardView);
 
 
 
@@ -182,6 +201,8 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.Vide
 
         Button delete_button;
 
+        CardView cardView;
+
 
 
         VideoViewHolder(@NonNull View itemView, final OnItemClickListener listener) {
@@ -192,6 +213,7 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.Vide
             cardImage = itemView.findViewById(R.id.card_image);
             downloadBtn = itemView.findViewById(R.id.download_button_icon);
             delete_button = itemView.findViewById(R.id.delete_button);
+            cardView = itemView.findViewById(R.id.card_view);
 
 
 
