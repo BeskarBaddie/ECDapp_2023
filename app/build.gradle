@@ -13,7 +13,6 @@ android {
         targetSdk 33
         versionCode 1
         versionName "1.0"
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -23,6 +22,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -30,69 +30,44 @@ android {
 }
 
 dependencies {
-
+    // AndroidX Libraries
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.9.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+
+    // Firebase
     implementation 'com.google.firebase:firebase-firestore:24.7.0'
     implementation 'com.google.android.gms:play-services-measurement-api:21.3.0'
-    testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
-
-    //implementation 'androidx.lifecycle:lifecycle-viewmodel:2.4.1'
-
-    //exoplayer
-    implementation 'com.google.android.exoplayer:exoplayer-core:2.18.7'
-    implementation 'com.google.android.exoplayer:exoplayer-ui:2.18.7'
-
-    //firebase
-
-
     implementation 'com.google.firebase:firebase-database:20.2.2'
     implementation 'com.google.firebase:firebase-storage:20.2.1'
     implementation 'com.firebaseui:firebase-ui-database:8.0.2'
+    implementation platform("com.google.firebase:firebase-bom:32.2.0")
+    implementation "com.google.firebase:firebase-analytics-ktx" // Firebase Analytics
 
-   implementation(platform("com.google.firebase:firebase-bom:32.2.0"))
-
-    implementation("com.google.firebase:firebase-analytics-ktx")    // Add the dependency for the Analytics library
-
-
-    implementation 'com.google.android.flexbox:flexbox:3.0.0'
-
-
-    implementation 'com.squareup.okhttp3:okhttp:4.9.0'
-
-    implementation 'com.github.mhiew:android-pdf-viewer:3.2.0-beta.1'
-
-    implementation 'org.postgresql:postgresql:42.2.5'
-
-    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
-
-    implementation 'com.squareup.okhttp3:logging-interceptor:4.11.0'
-
-    //snackbar
-    implementation 'com.google.android.material:material:1.9.0'
-
-
+    // Testing Dependencies
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
     testImplementation 'org.mockito:mockito-core:4.1.0'
 
+    // ExoPlayer
+    implementation 'com.google.android.exoplayer:exoplayer-core:2.18.7'
+    implementation 'com.google.android.exoplayer:exoplayer-ui:2.18.7'
 
+    // Flexbox Layout
+    implementation 'com.google.android.flexbox:flexbox:3.0.0'
 
+    // PDF Viewer
+    implementation 'com.github.mhiew:android-pdf-viewer:3.2.0-beta.1'
 
+    // PostgreSQL JDBC Driver
+    implementation 'org.postgresql:postgresql:42.2.5'
 
+    // Retrofit HTTP Client
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.11.0'
 
-
-
-
-
-
-
-
-
-
-
-
-
+    // Snackbar
+    implementation 'com.google.android.material:material:1.9.0'
 }

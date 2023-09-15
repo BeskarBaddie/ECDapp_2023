@@ -17,7 +17,12 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+
+/**
+ * An activity to display a list of video files from internal storage.
+ */
 public class VideoListActivity extends AppCompatActivity implements VideoListAdapter.OnItemClickListener {
+
     private RecyclerView recyclerView;
     private VideoListAdapter adapter;
     private List<File> videoFilesList;
@@ -27,7 +32,6 @@ public class VideoListActivity extends AppCompatActivity implements VideoListAda
         super.onCreate(savedInstanceState);
 
         ActionBar actionBar = getSupportActionBar();
-
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
 
@@ -41,14 +45,13 @@ public class VideoListActivity extends AppCompatActivity implements VideoListAda
 
         List<Video> videoList = new ArrayList<>();
         for (File file : videoFilesList) {
-            Video video = new Video(file.getName(), file.getAbsolutePath(), "Tag", "Topics","Language"); // Assuming Video has a constructor like this
+            // Assuming Video has a constructor like this:
+            Video video = new Video(file.getName(), file.getAbsolutePath(), "Tag", "Topics", "Language");
             videoList.add(video);
         }
 
-
-
         // Initialize and set up the RecyclerView adapter
-        adapter = new VideoListAdapter(this, videoList,true);
+        adapter = new VideoListAdapter(this, videoList, true);
         adapter.setOnItemClickListener(this);
         recyclerView.setAdapter(adapter);
     }
@@ -66,9 +69,11 @@ public class VideoListActivity extends AppCompatActivity implements VideoListAda
         return super.onOptionsItemSelected(item);
     }
 
-
-
-    // Method to retrieve video files from internal storage
+    /**
+     * Retrieves video files from internal storage.
+     *
+     * @return A list of video files.
+     */
     private List<File> getFilesFromInternalStorage() {
         List<File> videoFiles = new ArrayList<>();
         File internalStorageDir = getApplicationContext().getFilesDir();
@@ -77,17 +82,21 @@ public class VideoListActivity extends AppCompatActivity implements VideoListAda
         // Add all video files to the list
         if (files != null) {
             for (File file : files) {
-                if (file.isFile() && file.getName().endsWith(" (Download)"))
-                if (file.isFile()) {
-                    videoFiles.add(file);
+                if (file.isFile() && file.getName().endsWith(" (Download)")) {
+                    if (file.isFile()) {
+                        videoFiles.add(file);
+                    }
                 }
             }
         }
         return videoFiles;
-
     }
 
-    // RecyclerView item click event handler
+    /**
+     * Handles item click events in the RecyclerView.
+     *
+     * @param position The position of the clicked item.
+     */
     @Override
     public void onItemClick(int position) {
         // Handle item click here

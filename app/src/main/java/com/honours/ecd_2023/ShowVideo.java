@@ -132,20 +132,20 @@ public class ShowVideo extends AppCompatActivity {
 
 
 
-       // toUpload.setOnClickListener(new View.OnClickListener() {
+        // toUpload.setOnClickListener(new View.OnClickListener() {
         //    @Override
-       //     public void onClick(View v) {
-       //         goToUpload();
+        //     public void onClick(View v) {
+        //         goToUpload();
 
-       //     }
-     //   });
+        //     }
+        //   });
 
-       // assigned_content.setOnClickListener(new View.OnClickListener() {
+        // assigned_content.setOnClickListener(new View.OnClickListener() {
         //    @Override
         //    public void onClick(View v) {
-       //         goToAssignedContent();
+        //         goToAssignedContent();
         //    }
-       // });
+        // });
     }
 
     private void openFullscreenActivity(Video video) {
@@ -266,59 +266,59 @@ public class ShowVideo extends AppCompatActivity {
 
             String token = retrieveAuthToken();
 
-        Call<List<Video>> content = ApiService.getInterface().getAllContent("Token " + token);
+            Call<List<Video>> content = ApiService.getInterface().getAllContent("Token " + token);
 
-        adapter = new VideoListAdapter(ShowVideo.this, new ArrayList<>(),false);
-        recyclerView.setAdapter(adapter);
+            adapter = new VideoListAdapter(ShowVideo.this, new ArrayList<>(),false);
+            recyclerView.setAdapter(adapter);
 
-        content.enqueue(new retrofit2.Callback<List<Video>>() {
-            @Override
-            public void onResponse(Call<List<Video>> call, retrofit2.Response<List<Video>> response) {
-                if(response.isSuccessful()){
-                    String message = "Response succesful";
-                    Toast.makeText(ShowVideo.this, message, Toast.LENGTH_LONG).show();
+            content.enqueue(new retrofit2.Callback<List<Video>>() {
+                @Override
+                public void onResponse(Call<List<Video>> call, retrofit2.Response<List<Video>> response) {
+                    if(response.isSuccessful()){
+                        String message = "Response succesful";
+                        Toast.makeText(ShowVideo.this, message, Toast.LENGTH_LONG).show();
 
-                    videoList = response.body();
+                        videoList = response.body();
 
-                    if (videoList != null && !videoList.isEmpty()) {
-                        // Update your RecyclerView adapter with the new videoList
-                        adapter.updateVideoList(videoList);
+                        if (videoList != null && !videoList.isEmpty()) {
+                            // Update your RecyclerView adapter with the new videoList
+                            adapter.updateVideoList(videoList);
 
-                        // Optionally, notify the adapter about the data change
-                        adapter.notifyDataSetChanged();
+                            // Optionally, notify the adapter about the data change
+                            adapter.notifyDataSetChanged();
 
-                        adapter.setOnItemClickListener(new VideoListAdapter.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(int position) {
-                                Video video = videoList.get(position);
-                                if(video.getTags().equals("video")) {
-                                    openFullscreenActivity(video); // Open full-screen activity with the clicked video
+                            adapter.setOnItemClickListener(new VideoListAdapter.OnItemClickListener() {
+                                @Override
+                                public void onItemClick(int position) {
+                                    Video video = videoList.get(position);
+                                    if(video.getTags().equals("video")) {
+                                        openFullscreenActivity(video); // Open full-screen activity with the clicked video
+                                    }
+                                    if(video.getTags().equals("pdf")) {
+                                        openFullscreenActivityPDF(video); // Open full-screen activity with the clicked video
+                                    }
+
                                 }
-                                if(video.getTags().equals("pdf")) {
-                                    openFullscreenActivityPDF(video); // Open full-screen activity with the clicked video
-                                }
+                            });
+                        } else {
+                            String message1 = "No videos found";
+                            Toast.makeText(ShowVideo.this, message1, Toast.LENGTH_LONG).show();
+                        }
 
-                            }
-                        });
-                    } else {
-                        String message1 = "No videos found";
-                        Toast.makeText(ShowVideo.this, message1, Toast.LENGTH_LONG).show();
+                    }else{
+                        String message = "An error occured";
+                        Toast.makeText(ShowVideo.this, message, Toast.LENGTH_LONG).show();
                     }
-
-            }else{
-                    String message = "An error occured";
-                    Toast.makeText(ShowVideo.this, message, Toast.LENGTH_LONG).show();
                 }
-            }
 
-            @Override
-            public void onFailure(Call<List<Video>> call, Throwable t) {
+                @Override
+                public void onFailure(Call<List<Video>> call, Throwable t) {
 
-                String message = t.getLocalizedMessage();
-                Toast.makeText(ShowVideo.this, message, Toast.LENGTH_LONG).show();
+                    String message = t.getLocalizedMessage();
+                    Toast.makeText(ShowVideo.this, message, Toast.LENGTH_LONG).show();
 
-            }
-        });
+                }
+            });
 
         }catch(Exception ex)
         {

@@ -1,3 +1,6 @@
+/**
+ * This class represents the FullscreenVideo activity in your Android app.
+ */
 package com.honours.ecd_2023;
 
 import androidx.annotation.NonNull;
@@ -56,6 +59,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class FullscreenVideo extends AppCompatActivity {
+    /** Request code for storage permission. */
     private static final int PERMISSION_STORAGE_CODE = 1000;
     private ExoPlayer player;
     private PlayerView playerView;
@@ -68,7 +72,6 @@ public class FullscreenVideo extends AppCompatActivity {
     ImageView fullscreenButton;
 
     private FirebaseAnalytics mFirebaseAnalytics;
-//    private final Context context = getApplicationContext();
     private long videoStartTime = 0;
     Button downloadBtn;
 
@@ -78,19 +81,19 @@ public class FullscreenVideo extends AppCompatActivity {
 
     String file;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fullscreen_video);
         ActionBar actionBar = getSupportActionBar();
 
+        // Get the user's username
         user = retrieveUsername();
 
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
 
+        // Initialize UI elements
         playerView = findViewById(R.id.exoplayer_fullscreen);
         textView = findViewById(R.id.tv_fullscreen);
 
@@ -108,17 +111,14 @@ public class FullscreenVideo extends AppCompatActivity {
 
         downloadBtn = findViewById(R.id.download_button_viewholder);
 
-
-
-
+        // Configure the fullscreen button
         fullscreenButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(fullscreen){
 
                     downloadBtn.setVisibility(View.VISIBLE);
-                    fullscreenButton.setImageDrawable(ContextCompat.getDrawable(FullscreenVideo.this,R.drawable.ic_fullscreen_open)
-                    );
+                    fullscreenButton.setImageDrawable(ContextCompat.getDrawable(FullscreenVideo.this,R.drawable.ic_fullscreen_open));
                     getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
                     if (getSupportActionBar() != null){
                         getSupportActionBar().show();
@@ -130,8 +130,7 @@ public class FullscreenVideo extends AppCompatActivity {
                     playerView.setLayoutParams(params);
                     fullscreen = false;
                 }else{
-                    fullscreenButton.setImageDrawable(ContextCompat.getDrawable(FullscreenVideo.this,R.drawable.ic_fullscreen_close)
-                    );
+                    fullscreenButton.setImageDrawable(ContextCompat.getDrawable(FullscreenVideo.this,R.drawable.ic_fullscreen_close));
                     downloadBtn.setVisibility(View.GONE);
 
                     getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN
@@ -147,16 +146,11 @@ public class FullscreenVideo extends AppCompatActivity {
                     fullscreen = true;
 
                 }
-
             }
         });
-
-
-
-
-
     }
 
+    // Handle options item selected (e.g., back button)
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -168,17 +162,15 @@ public class FullscreenVideo extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    // Build a media source for the video
     private MediaSource buildMediaSource(byte[] videoData){
         DataSource.Factory datasourcefactory =
                 new DefaultHttpDataSource.Factory();//might be a problem 13 mins
         return new ProgressiveMediaSource.Factory(datasourcefactory).createMediaSource(MediaItem.fromUri(String.valueOf(videoData)));//problem
 
-        //DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(this,
-                //Util.getUserAgent(this, "YourAppName")); // Replace "YourAppName" with your app's name.
-        //return new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(MediaItem.fromUri(uri));
-
     }
 
+    // Initialize the video player
     private void initializeplayer(String file){
 
         player = new ExoPlayer.Builder(getApplication()).build();
@@ -246,6 +238,7 @@ public class FullscreenVideo extends AppCompatActivity {
         });
     }
 
+    // Start downloading the video file
     private void startDownloading(String downloadurl, String title) {
         if (downloadurl == null) {
             // Handle the case when download URL is null
@@ -286,7 +279,7 @@ public class FullscreenVideo extends AppCompatActivity {
                             // File downloaded successfully, do additional processing if needed
                             Toast.makeText(FullscreenVideo.this, "Download completed", Toast.LENGTH_SHORT).show();
                             // Now you can use the videoFile for offline playback within the app
-                            // E.g., you can pass the videoFile's path to the ExoPlayer to play the video.
+
                         });
                     } catch (IOException e) {
                         // Handle download error
@@ -298,7 +291,6 @@ public class FullscreenVideo extends AppCompatActivity {
                 }
             }
         });
-
     }
 
     @Override
@@ -319,7 +311,7 @@ public class FullscreenVideo extends AppCompatActivity {
         super.onResume();
 
         if (Util.SDK_INT>=26 || player == null){
-            //initializeplayer();
+            //handle event if necessary
         }
     }
 
@@ -341,6 +333,7 @@ public class FullscreenVideo extends AppCompatActivity {
         }
     }
 
+    // Release the ExoPlayer instance
     private void releasePlayer() {
         if (player !=null){
 
@@ -350,6 +343,8 @@ public class FullscreenVideo extends AppCompatActivity {
             player = null;
         }
     }
+
+    // Handle the back button press
     public void onBackPressed(){
         super.onBackPressed();
 
@@ -368,14 +363,7 @@ public class FullscreenVideo extends AppCompatActivity {
         finish();
     }
 
-    public void goToDownloads() {
-
-        Intent intent = new Intent(FullscreenVideo.this,VideoListActivity.class);
-        startActivity(intent);
-
-
-    }
-
+    // Handle permission request results
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
@@ -385,10 +373,11 @@ public class FullscreenVideo extends AppCompatActivity {
                 } else {
                     Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
                 }
-
             }
         }
     }
+
+    // Retrieve the user's username from SharedPreferences
     private String retrieveUsername() {
         SharedPreferences sharedPreferences = getSharedPreferences("auth_prefs", Context.MODE_PRIVATE);
         return sharedPreferences.getString("username", null);

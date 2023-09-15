@@ -20,9 +20,6 @@
         tools:replace="android:appComponentFactory"
         tools:targetApi="31">
         <activity
-            android:name=".AboutActivity"
-            android:exported="false" />
-        <activity
             android:name=".ShowVideo"
             android:exported="false" />
         <activity
@@ -51,12 +48,6 @@
         <activity
             android:name=".FullscreenVideo"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:exported="false" />
-        <activity
-            android:name=".ViewPDF"
-            android:exported="false" />
-        <activity
-            android:name=".Articles"
             android:exported="false" />
         <activity
             android:name=".VideoContent"

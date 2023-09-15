@@ -1,4 +1,5 @@
 package com.honours.ecd_2023;
+
 import static android.content.ContentValues.TAG;
 
 import android.net.Uri;
@@ -11,6 +12,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+
 import com.github.barteksc.pdfviewer.PDFView;
 import com.github.barteksc.pdfviewer.listener.OnLoadCompleteListener;
 import com.github.barteksc.pdfviewer.listener.OnPageChangeListener;
@@ -40,25 +42,19 @@ public class PDFViewerActivity extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-
-        //loadPdfFromAssets("sample.pdf");
+        // Load the PDF from a URL
         String pdfUrl = getIntent().getExtras().getString("ur");
-
-
 
         if (pdfUrl != null) {
             Toast.makeText(this, "PDF Loading", Toast.LENGTH_SHORT).show();
-            //loadPdf(pdfUrl);
             try {
                 downloadAndDisplayPdf(pdfUrl);
-
-            }catch (Exception ex){
-                Log.e(TAG, "onCreate: ",ex );
+            } catch (Exception ex) {
+                Log.e(TAG, "onCreate: ", ex);
             }
-
         } else {
             // Handle case when PDF URL is not available
-            Toast.makeText(this, "No url passed", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "No URL passed", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -73,7 +69,11 @@ public class PDFViewerActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
+    /**
+     * Downloads and displays a PDF from a given URL.
+     *
+     * @param pdfUrl The URL of the PDF to be downloaded and displayed.
+     */
     private void downloadAndDisplayPdf(String pdfUrl) {
         new AsyncTask<String, Void, File>() {
             @Override
@@ -112,27 +112,17 @@ public class PDFViewerActivity extends AppCompatActivity {
             protected void onPostExecute(File pdfFile) {
                 if (pdfFile != null) {
                     // Load the downloaded PDF using PDFView
-                    pdfView.fromFile(pdfFile)
-                            .defaultPage(0)
-                            .enableSwipe(true)
-                            .swipeHorizontal(false)
-                            .onLoad(new OnLoadCompleteListener() {
-                                @Override
-                                public void loadComplete(int nbPages) {
-                                    // PDF loading complete, do additional processing if needed
-                                    Toast.makeText(PDFViewerActivity.this, "PDF has loaded", Toast.LENGTH_SHORT).show();
-                                }
-                            })
-                            .scrollHandle(new DefaultScrollHandle(PDFViewerActivity.this))
-                            .load();
+                    pdfView.fromFile(pdfFile).defaultPage(0).enableSwipe(true).swipeHorizontal(false).onLoad(new OnLoadCompleteListener() {
+                        @Override
+                        public void loadComplete(int nbPages) {
+                            // PDF loading complete, do additional processing if needed
+                            Toast.makeText(PDFViewerActivity.this, "PDF has loaded", Toast.LENGTH_SHORT).show();
+                        }
+                    }).scrollHandle(new DefaultScrollHandle(PDFViewerActivity.this)).load();
                 } else {
                     Toast.makeText(PDFViewerActivity.this, "Error downloading PDF", Toast.LENGTH_SHORT).show();
                 }
             }
         }.execute(pdfUrl);
     }
-
-
-
-
 }

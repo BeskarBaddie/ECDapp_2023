@@ -1,10 +1,10 @@
 package com.honours.ecd_2023;
+
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +16,9 @@ import android.widget.Toast;
 import java.io.File;
 import java.util.List;
 
+/**
+ * Adapter for the video list RecyclerView.
+ */
 public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.VideoViewHolder> {
     private Context context;
     private List<Video> videoList;
@@ -25,19 +28,31 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.Vide
 
     private String currentActivityName;
 
-
-
+    /**
+     * Constructor for VideoListAdapter.
+     *
+     * @param context          The context in which the adapter is used.
+     * @param videoList        The list of videos to display.
+     * @param showDeleteButton A flag indicating whether to show the delete button.
+     */
     public VideoListAdapter(Context context, List<Video> videoList, boolean showDeleteButton) {
         this.context = context;
         this.videoList = videoList;
         this.showDeleteButton = showDeleteButton;
-
     }
 
+    /**
+     * Interface for item click events.
+     */
     public interface OnItemClickListener {
         void onItemClick(int position);
     }
 
+    /**
+     * Updates the layout parameters for the CardView based on the current activity name.
+     *
+     * @param cardView The CardView to update.
+     */
     public void updateCardLayoutParams(CardView cardView) {
         if ("ShowVideo".equals(currentActivityName)) {
             // Set layout parameters for YourActivityName1
@@ -51,6 +66,11 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.Vide
         }
     }
 
+    /**
+     * Sets an item click listener for the RecyclerView.
+     *
+     * @param listener The item click listener to set.
+     */
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.onItemClickListener = listener;
     }
@@ -62,22 +82,32 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.Vide
         return new VideoViewHolder(view, onItemClickListener);
     }
 
+    /**
+     * Updates the video list with new data.
+     *
+     * @param newVideoList The new list of videos to display.
+     */
     public void updateVideoList(List<Video> newVideoList) {
         videoList.clear();
         videoList.addAll(newVideoList);
     }
 
+    /**
+     * Checks if a video is stored in local memory.
+     *
+     * @param videoFileName The name of the video file.
+     * @return True if the video is in local memory, false otherwise.
+     */
     private boolean isVideoInLocalMemory(String videoFileName) {
         File internalStorageDir = context.getApplicationContext().getFilesDir();
-        if(videoFileName.endsWith(" (Download)")){
-            File videoFile = new File(internalStorageDir, (videoFileName));
+        if (videoFileName.endsWith(" (Download)")) {
+            File videoFile = new File(internalStorageDir, videoFileName);
             return videoFile.exists();
-
-        }else{
-        File videoFile = new File(internalStorageDir, (videoFileName + " (Download)"));
-        return videoFile.exists();} // Returns true if the video file exists in local memory
+        } else {
+            File videoFile = new File(internalStorageDir, videoFileName + " (Download)");
+            return videoFile.exists();
+        }
     }
-
 
     @Override
     public void onBindViewHolder(@NonNull VideoViewHolder holder, int position) {
@@ -88,10 +118,7 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.Vide
 
         updateCardLayoutParams(holder.cardView);
 
-
-
         boolean isVideoStoredLocally = isVideoInLocalMemory(videoFile.getTitle());
-
 
         // Set the appropriate download image based on the video's storage status
         if (isVideoStoredLocally) {
@@ -102,57 +129,42 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.Vide
             holder.delete_button.setVisibility(View.INVISIBLE);
         }
 
-        if (showDeleteButton==true) {
+        if (showDeleteButton == true) {
             holder.delete_button.setVisibility(View.VISIBLE);
         } else {
             holder.delete_button.setVisibility(View.INVISIBLE);
         }
 
-
         if ("Baby Health".equals(videoFile.getTopics())) {
-            holder.cardImage.setImageResource(R.drawable.baby_health_picture); // Change this to the appropriate play icon for topic1
+            holder.cardImage.setImageResource(R.drawable.baby_health_picture);
         } else if ("Baby Development".equals(videoFile.getTopics())) {
-            holder.cardImage.setImageResource(R.drawable.baby_picture); // Change this to the appropriate play icon for topic2
-        }
-        else if ("Child Entertainment".equals(videoFile.getTopics())) {
             holder.cardImage.setImageResource(R.drawable.baby_picture);
-        }
-        else if ("Parent Health".equals(videoFile.getTopics())) {
+        } else if ("Child Entertainment".equals(videoFile.getTopics())) {
+            holder.cardImage.setImageResource(R.drawable.baby_picture);
+        } else if ("Parent Health".equals(videoFile.getTopics())) {
             holder.cardImage.setImageResource(R.drawable.parent_picture);
-        }
-        else if ("Community Content".equals(videoFile.getTopics())) {
+        } else if ("Community Content".equals(videoFile.getTopics())) {
             holder.cardImage.setImageResource(R.drawable.community_picture);
         }
 
         if ("Baby Health".equals(videoFile.getTopics())) {
-            holder.itemView.setBackgroundResource(R.color.baby_health_green);}
+            holder.itemView.setBackgroundResource(R.color.baby_health_green);
+        }
 
         if ("Baby Development".equals(videoFile.getTopics())) {
-            holder.itemView.setBackgroundResource(R.color.baby_development_orange);}
+            holder.itemView.setBackgroundResource(R.color.baby_development_orange);
+        }
 
         if ("Parent Health".equals(videoFile.getTopics())) {
-            holder.itemView.setBackgroundResource(R.color.parent_health_purple);}
-
+            holder.itemView.setBackgroundResource(R.color.parent_health_purple);
+        }
 
         holder.delete_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                deleteVideoFile(v.getContext(),videoFile.getTitle());
+                deleteVideoFile(v.getContext(), videoFile.getTitle());
             }
         });
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -163,8 +175,6 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.Vide
             }
         });
 
-
-
         // Set other video information as needed (e.g., thumbnail, duration, etc.).
     }
 
@@ -173,9 +183,15 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.Vide
         return videoList.size();
     }
 
+    /**
+     * Deletes a video file from local storage.
+     *
+     * @param context   The context.
+     * @param videoName The name of the video file to delete.
+     */
     private void deleteVideoFile(Context context, String videoName) {
         File internalStorageDir = context.getFilesDir();
-        File videoFile = new File(internalStorageDir, videoName );
+        File videoFile = new File(internalStorageDir, videoName);
         if (videoFile.exists()) {
             if (videoFile.delete()) {
                 Toast.makeText(context, "Video deleted", Toast.LENGTH_SHORT).show();
@@ -183,27 +199,16 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.Vide
                 Toast.makeText(context, "Unable to delete video", Toast.LENGTH_SHORT).show();
             }
         }
-
     }
-
-
-
 
     static class VideoViewHolder extends RecyclerView.ViewHolder {
         TextView videoTitle;
         TextView videoTag;
-
         TextView videoLangauage;
-
         ImageView cardImage;
-
         ImageView downloadBtn;
-
         Button delete_button;
-
         CardView cardView;
-
-
 
         VideoViewHolder(@NonNull View itemView, final OnItemClickListener listener) {
             super(itemView);
@@ -215,8 +220,6 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.Vide
             delete_button = itemView.findViewById(R.id.delete_button);
             cardView = itemView.findViewById(R.id.card_view);
 
-
-
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -224,7 +227,6 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.Vide
                         int position = getAdapterPosition();
                         if (position != RecyclerView.NO_POSITION) {
                             listener.onItemClick(position);
-
                         }
                     }
                 }

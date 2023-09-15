@@ -1,3 +1,6 @@
+/**
+ * This class represents the LoginActivity in your Android app.
+ */
 package com.honours.ecd_2023;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -39,58 +42,60 @@ public class LoginActivity extends AppCompatActivity {
         Button btnLogin = findViewById(R.id.btn_login);
         btnLogin.setOnClickListener(v -> performLogin());
 
+        // Check if the user is already logged in, if so, redirect to the Dashboard activity
         if (isUserLoggedIn()) {
-            Intent intent = new Intent(LoginActivity.this,Dashboard.class);
+            Intent intent = new Intent(LoginActivity.this, Dashboard.class);
             startActivity(intent);
         }
-
     }
 
+    /**
+     * Performs the login action when the login button is clicked.
+     */
     private void performLogin() {
         String username = etUsername.getText().toString();
         String password = etPassword.getText().toString();
 
         LoginRequest loginRequest = new LoginRequest(username, password);
 
-
-
-
-
         Call<AuthTokenResponse> auth = ApiService.getInterface().login(loginRequest);
-        //Call<AuthTokenResponse> auth = ApiService.getInterface().login(loginRequest);
 
-        try{
+        try {
+            auth.enqueue(new Callback<AuthTokenResponse>() {
+                @Override
+                public void onResponse(Call<AuthTokenResponse> call, Response<AuthTokenResponse> response) {
+                    if (response.isSuccessful()) {
+                        AuthTokenResponse authTokenResponse = response.body();
+                        String authToken = authTokenResponse.getAuthToken();
+                        // Store the authToken securely
+                        storeCredentials(username, authToken);
+                        // Navigate to the main screen
+                        Intent intent = new Intent(LoginActivity.this, Dashboard.class);
+                        startActivity(intent);
 
-        auth.enqueue(new Callback<AuthTokenResponse>() {
-            @Override
-            public void onResponse(Call<AuthTokenResponse> call, Response<AuthTokenResponse> response) {
-                if (response.isSuccessful()) {
-                    AuthTokenResponse authTokenResponse = response.body();
-                    String authToken = authTokenResponse.getAuthToken();
-                    // Store the authToken securely
-                    storeCredentials(username, authToken);
-                    // Navigate to the main screen
-                    Intent intent = new Intent(LoginActivity.this,Dashboard.class);
-                    startActivity(intent);
-
-                    Snackbar.make(findViewById(android.R.id.content), "Login succesful!", Snackbar.LENGTH_LONG).show();
-                } else {
-                    Snackbar.make(findViewById(android.R.id.content), "Login failed. Please check your credentials.", Snackbar.LENGTH_LONG).show();
-                    hideKeyboard();
+                        Snackbar.make(findViewById(android.R.id.content), "Login successful!", Snackbar.LENGTH_LONG).show();
+                    } else {
+                        Snackbar.make(findViewById(android.R.id.content), "Login failed. Please check your credentials.", Snackbar.LENGTH_LONG).show();
+                        hideKeyboard();
+                    }
                 }
-            }
 
-            @Override
-            public void onFailure(Call<AuthTokenResponse> call, Throwable t) {
-                // Handle network failure
-            }
-        });
-        }catch(Exception ex){
+                @Override
+                public void onFailure(Call<AuthTokenResponse> call, Throwable t) {
+                    // Handle network failure
+                }
+            });
+        } catch (Exception ex) {
             System.out.println("THE ERROR IS " + ex);
         }
+    }
 
-}
-
+    /**
+     * Stores the user's credentials securely.
+     *
+     * @param username  The user's username.
+     * @param authToken The authentication token.
+     */
     private void storeCredentials(String username, String authToken) {
         SharedPreferences sharedPreferences = getSharedPreferences("auth_prefs", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -103,31 +108,21 @@ public class LoginActivity extends AppCompatActivity {
         editor.apply();
     }
 
-    private void storeUsername(String username) {
-        SharedPreferences sharedPreferences = getSharedPreferences("username", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-
-        // Encrypt and store the token securely
-        editor.putString("username", username);
-
-        // Commit the changes
-        editor.apply();
-    }
-
+    /**
+     * Hides the virtual keyboard.
+     */
     private void hideKeyboard() {
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(etPassword.getWindowToken(), 0);
     }
 
+    /**
+     * Checks if the user is already logged in.
+     *
+     * @return True if the user is logged in; false otherwise.
+     */
     private boolean isUserLoggedIn() {
         SharedPreferences sharedPreferences = getSharedPreferences("auth_prefs", Context.MODE_PRIVATE);
         return sharedPreferences.contains("auth_token") && sharedPreferences.contains("username");
     }
 }
-
-   // private String retrieveAuthToken() {
-     //   SharedPreferences sharedPreferences = getSharedPreferences("auth_prefs", Context.MODE_PRIVATE);
-       // return sharedPreferences.getString("auth_token", null);
-    //}
-
-
