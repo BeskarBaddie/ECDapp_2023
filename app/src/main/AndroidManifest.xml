@@ -13,7 +13,7 @@
         android:appComponentFactory="androidx.core.app.CoreComponentFactory"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@drawable/yayb_logo"
+        android:icon="@drawable/bbp_logo_clear"
         android:label="You and Your Baby"
         android:supportsRtl="true"
         android:theme="@style/Theme.ECD_2023"

@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#d0eef5"
     android:orientation="vertical"
     android:padding="16dp"
     tools:context=".LoginActivity">
@@ -13,7 +14,7 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_gravity="center_horizontal"
-        android:src="@drawable/yayb_logo"
+        android:src="@drawable/bbp_logo_clear"
         />
 
     <EditText
@@ -41,6 +42,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
+        android:backgroundTint="@color/purple_200"
         android:text="Log In"
 
         android:textColor="@android:color/white"
