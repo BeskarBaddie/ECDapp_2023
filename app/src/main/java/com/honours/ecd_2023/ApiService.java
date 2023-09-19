@@ -31,8 +31,10 @@ public class ApiService {
                 .build();
 
         // Create a Retrofit instance with base URL, Gson converter, and OkHttpClient.
+        //http://bbp-1.cs.uct.ac.za/
+        //https://yayb.onrender.com/
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://yayb.onrender.com/") // Replace with your API's base URL
+                .baseUrl("http://bbp-1.cs.uct.ac.za/") // Replace with your API's base URL
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(okHttpClient)
                 .build();
