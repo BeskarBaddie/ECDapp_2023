@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -274,6 +275,7 @@ public class ShowVideo extends AppCompatActivity {
             content.enqueue(new retrofit2.Callback<List<Video>>() {
                 @Override
                 public void onResponse(Call<List<Video>> call, retrofit2.Response<List<Video>> response) {
+                    int statusCode = response.code();
                     if(response.isSuccessful()){
                         String message = "Response succesful";
                         Toast.makeText(ShowVideo.this, message, Toast.LENGTH_LONG).show();
@@ -306,7 +308,7 @@ public class ShowVideo extends AppCompatActivity {
                         }
 
                     }else{
-                        String message = "An error occured";
+                        String message = "An error occurred (HTTP " + statusCode + ")";
                         Toast.makeText(ShowVideo.this, message, Toast.LENGTH_LONG).show();
                     }
                 }
@@ -315,8 +317,8 @@ public class ShowVideo extends AppCompatActivity {
                 public void onFailure(Call<List<Video>> call, Throwable t) {
 
                     String message = t.getLocalizedMessage();
+                    Log.e("API Failure", "Error message: " + message); // Log the error message
                     Toast.makeText(ShowVideo.this, message, Toast.LENGTH_LONG).show();
-
                 }
             });
 
