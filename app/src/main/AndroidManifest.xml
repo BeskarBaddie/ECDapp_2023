@@ -13,10 +13,10 @@
         android:appComponentFactory="androidx.core.app.CoreComponentFactory"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
+        android:networkSecurityConfig="@xml/network_security_config"
         android:icon="@drawable/bbp_logo_clear"
         android:label="You and Your Baby"
         android:supportsRtl="true"
-        android:networkSecurityConfig="@xml/network_security_config"
         android:theme="@style/Theme.ECD_2023"
         tools:replace="android:appComponentFactory"
         tools:targetApi="31">

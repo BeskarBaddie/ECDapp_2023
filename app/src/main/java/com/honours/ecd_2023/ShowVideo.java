@@ -276,6 +276,8 @@ public class ShowVideo extends AppCompatActivity {
                 @Override
                 public void onResponse(Call<List<Video>> call, retrofit2.Response<List<Video>> response) {
                     int statusCode = response.code();
+
+                    System.out.println(statusCode + "STATUS");
                     if(response.isSuccessful()){
                         String message = "Response succesful";
                         Toast.makeText(ShowVideo.this, message, Toast.LENGTH_LONG).show();
