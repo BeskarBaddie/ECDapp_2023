@@ -105,6 +105,8 @@ public class FullscreenVideo extends AppCompatActivity {
         file = intent.getExtras().getString("videoData");
         actionBar.setTitle(title);
 
+        file = file.replace("127.0.0.1:8000","bbp-1.cs.uct.ac.za");
+
         fullscreenButton = playerView.findViewById(R.id.exo_fullscreen_icon);
 
         textView.setText(title);
