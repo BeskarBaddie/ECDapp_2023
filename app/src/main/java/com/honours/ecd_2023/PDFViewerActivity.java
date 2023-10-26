@@ -44,6 +44,7 @@ public class PDFViewerActivity extends AppCompatActivity {
 
         // Load the PDF from a URL
         String pdfUrl = getIntent().getExtras().getString("ur");
+        pdfUrl = pdfUrl.replace("127.0.0.1:8000","bbp-1.cs.uct.ac.za");
 
         if (pdfUrl != null) {
             Toast.makeText(this, "PDF Loading", Toast.LENGTH_SHORT).show();
